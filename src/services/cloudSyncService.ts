@@ -1,6 +1,12 @@
 import type { Table } from 'dexie';
 import { db } from '../db/database';
 import { getSupabaseClient, isSupabaseConfigured } from './supabaseClient';
+import {
+  buildPayloadKeySignature,
+  getRequiredParentRefs,
+  groupUpsertEntriesIntoBatches,
+  type BatchableUpsertItem
+} from '../utils/cloudSyncBatchUtils';
 import type {
   Club,
   ClubMember,
@@ -11,6 +17,7 @@ import type {
   SessionNote,
   SessionPhase,
   SessionTemplate,
+  SyncOutboxItem,
   Team,
   TeamMember,
   TrainingSession
@@ -20,6 +27,68 @@ export { isSupabaseConfigured };
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const LAST_SYNCED_STORAGE_KEY = 'handball_last_synced_at';
+const PULL_PAGE_SIZE = 1000;
+const IN_CHUNK_SIZE = 200;
+const UPSERT_BATCH_SIZE = 75;
+const UPSERT_BATCH_BYTES = 400_000;
+
+interface SupabaseQueryResult {
+  data: unknown[] | null;
+  error: { message: string } | null;
+}
+
+async function fetchAllPaginated<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<SupabaseQueryResult>
+): Promise<{ data: T[]; error: { message: string } | null }> {
+  const allRows: T[] = [];
+  let from = 0;
+
+  while (true) {
+    const to = from + PULL_PAGE_SIZE - 1;
+    const { data, error } = await fetchPage(from, to);
+    if (error) {
+      return { data: allRows, error };
+    }
+    const page = (data ?? []) as T[];
+    allRows.push(...page);
+    if (page.length < PULL_PAGE_SIZE) {
+      break;
+    }
+    from += PULL_PAGE_SIZE;
+  }
+
+  return { data: allRows, error: null };
+}
+
+async function fetchAllByInFilter<T>(
+  supabase: NonNullable<ReturnType<typeof getSupabaseClient>>,
+  table: string,
+  column: string,
+  ids: string[]
+): Promise<{ data: T[]; error: { message: string } | null }> {
+  if (ids.length === 0) {
+    return { data: [], error: null };
+  }
+
+  const allRows: T[] = [];
+  for (let i = 0; i < ids.length; i += IN_CHUNK_SIZE) {
+    const idChunk = ids.slice(i, i + IN_CHUNK_SIZE);
+    const res = await fetchAllPaginated<T>((from, to) =>
+      supabase
+        .from(table)
+        .select('*')
+        .in(column, idChunk)
+        .order('id', { ascending: true })
+        .range(from, to)
+    );
+    if (res.error) {
+      return { data: allRows, error: res.error };
+    }
+    allRows.push(...res.data);
+  }
+
+  return { data: allRows, error: null };
+}
 
 export function isValidUuid(value: string | undefined | null): boolean {
   return Boolean(value && UUID_REGEX.test(value));
@@ -196,11 +265,55 @@ async function ensureParentChainPushed(
   }
 }
 
+const LOCAL_TABLE_BY_NAME: Record<string, { get: (id: string) => Promise<unknown> }> = {
+  teams: db.teams,
+  club_members: db.clubMembers,
+  team_members: db.teamMembers,
+  multi_week_plans: db.multiWeekPlans,
+  plan_weeks: db.planWeeks,
+  training_sessions: db.trainingSessions,
+  session_phases: db.sessionPhases,
+  session_blocks: db.sessionBlocks,
+  session_notes: db.sessionNotes
+};
+
+async function isOrphanedChildUpsert(
+  entityTable: string,
+  entityId: string,
+  payload: Record<string, unknown>
+): Promise<boolean> {
+  const parentRefs = getRequiredParentRefs(entityTable, payload);
+  if (parentRefs.length === 0) return false;
+
+  const selfTable = LOCAL_TABLE_BY_NAME[entityTable];
+  if (selfTable) {
+    const localSelf = await selfTable.get(entityId);
+    if (!localSelf) return true;
+  }
+
+  for (const ref of parentRefs) {
+    const parentTable = LOCAL_TABLE_BY_NAME[ref.table];
+    if (parentTable) {
+      const localParent = await parentTable.get(ref.id);
+      if (!localParent) return true;
+    }
+  }
+
+  return false;
+}
+
+interface OutboxGroupedEntry {
+  latest: SyncOutboxItem;
+  supersededIds: number[];
+}
+
 /**
  * Flushes all pending local Sync-Outbox operations to Supabase PostgreSQL
  * using the authenticated user's session JWT.
  */
-export async function flushSyncOutboxToCloud(): Promise<{
+export async function flushSyncOutboxToCloud(options?: {
+  onProgress?: (processed: number, total: number) => void;
+}): Promise<{
   flushedCount: number;
   failedCount: number;
   lastErrorMessage?: string;
@@ -226,10 +339,7 @@ export async function flushSyncOutboxToCloud(): Promise<{
   }
 
   // Deduplicate multiple operations on the same entity: keep only the latest operation per (table, id)
-  const grouped = new Map<
-    string,
-    { latest: (typeof pendingItems)[number]; supersededIds: number[] }
-  >();
+  const grouped = new Map<string, OutboxGroupedEntry>();
   for (const item of pendingItems) {
     const key = `${item.entity_table}:${item.entity_id}`;
     const existing = grouped.get(key);
@@ -263,67 +373,145 @@ export async function flushSyncOutboxToCloud(): Promise<{
   let lastErrorMessage: string | undefined;
 
   async function markSynced(ids: (number | undefined)[]) {
-    for (const id of ids) {
-      if (id !== undefined) {
-        await db.syncOutbox.update(id, { synced: 1 });
-      }
-    }
+    const validIds = ids.filter((id): id is number => id !== undefined);
+    if (validIds.length === 0) return;
+    await db.syncOutbox.where('id').anyOf(validIds).modify({ synced: 1 });
   }
 
-  for (const { latest: item, supersededIds } of entries) {
+  const validUpsertItems: BatchableUpsertItem<OutboxGroupedEntry>[] = [];
+  const deleteEntries: OutboxGroupedEntry[] = [];
+
+  for (const entry of entries) {
+    const { latest: item, supersededIds } = entry;
     // Skip legacy non-UUID demo records so they never block real cloud sync
     if (!isValidUuid(item.entity_id)) {
       await markSynced([item.id, ...supersededIds]);
       continue;
     }
 
+    if (item.operation === 'DELETE') {
+      deleteEntries.push(entry);
+      continue;
+    }
+
     try {
-      if (item.operation === 'DELETE') {
-        const { error } = await supabase
-          .from(item.entity_table)
-          .delete()
-          .eq('id', item.entity_id);
-        if (!error) {
-          await markSynced([item.id, ...supersededIds]);
-          flushedCount++;
-        } else {
-          failedCount++;
-          lastErrorMessage = error.message;
-        }
+      const rawPayload = JSON.parse(item.payload_json) as Record<string, unknown>;
+      const { payload, hasInvalidRequiredFk } = sanitizeSyncPayload(rawPayload);
+
+      if (hasInvalidRequiredFk) {
+        // Record references a local demo ID and cannot exist in Supabase
+        await markSynced([item.id, ...supersededIds]);
+        continue;
+      }
+
+      if (await isOrphanedChildUpsert(item.entity_table, item.entity_id, payload)) {
+        // Child or its parent was already deleted locally; drop stale outbox UPSERT
+        await markSynced([item.id, ...supersededIds]);
+        continue;
+      }
+
+      validUpsertItems.push({
+        entry,
+        entityTable: item.entity_table,
+        payload,
+        byteSize: item.payload_json.length,
+        keySignature: buildPayloadKeySignature(payload)
+      });
+    } catch (err) {
+      failedCount++;
+      lastErrorMessage = err instanceof Error ? err.message : 'Ungültige Sync-Nutzlast';
+    }
+  }
+
+  const totalToSync = validUpsertItems.length + deleteEntries.length;
+  let processedCount = 0;
+
+  async function upsertSingleItem(bItem: BatchableUpsertItem<OutboxGroupedEntry>) {
+    const { latest: item, supersededIds } = bItem.entry;
+    try {
+      let { error } = await supabase!
+        .from(bItem.entityTable)
+        .upsert(bItem.payload, { onConflict: 'id' });
+
+      // Self-heal if a parent phase/session/plan was missing from Supabase
+      if (error) {
+        await ensureParentChainPushed(supabase!, bItem.entityTable, bItem.payload);
+        const retryRes = await supabase!
+          .from(bItem.entityTable)
+          .upsert(bItem.payload, { onConflict: 'id' });
+        error = retryRes.error;
+      }
+
+      if (!error) {
+        await markSynced([item.id, ...supersededIds]);
+        flushedCount++;
       } else {
-        const rawPayload = JSON.parse(item.payload_json) as Record<string, unknown>;
-        const { payload, hasInvalidRequiredFk } = sanitizeSyncPayload(rawPayload);
-
-        if (hasInvalidRequiredFk) {
-          // Record references a local demo ID and cannot exist in Supabase
-          await markSynced([item.id, ...supersededIds]);
-          continue;
-        }
-
-        let { error } = await supabase
-          .from(item.entity_table)
-          .upsert(payload, { onConflict: 'id' });
-
-        // Self-heal if a parent phase/session/plan was missing from Supabase
-        if (error) {
-          await ensureParentChainPushed(supabase, item.entity_table, payload);
-          const retryRes = await supabase
-            .from(item.entity_table)
-            .upsert(payload, { onConflict: 'id' });
-          error = retryRes.error;
-        }
-
-        if (!error) {
-          await markSynced([item.id, ...supersededIds]);
-          flushedCount++;
-        } else {
-          failedCount++;
-          lastErrorMessage = error.message;
-        }
+        failedCount++;
+        lastErrorMessage = error.message;
       }
     } catch (err) {
       failedCount++;
       lastErrorMessage = err instanceof Error ? err.message : 'Netzwerkfehler beim Sync';
+    } finally {
+      processedCount++;
+      options?.onProgress?.(processedCount, totalToSync);
+    }
+  }
+
+  const upsertBatches = groupUpsertEntriesIntoBatches(validUpsertItems, {
+    maxBatchSize: UPSERT_BATCH_SIZE,
+    maxBatchBytes: UPSERT_BATCH_BYTES
+  });
+
+  for (const batch of upsertBatches) {
+    if (batch.length === 1) {
+      await upsertSingleItem(batch[0]);
+      continue;
+    }
+
+    try {
+      const table = batch[0].entityTable;
+      const batchPayloads = batch.map((b) => b.payload);
+      const { error } = await supabase.from(table).upsert(batchPayloads, { onConflict: 'id' });
+
+      if (!error) {
+        const allOutboxIds = batch.flatMap((b) => [b.entry.latest.id, ...b.entry.supersededIds]);
+        await markSynced(allOutboxIds);
+        flushedCount += batch.length;
+        processedCount += batch.length;
+        options?.onProgress?.(processedCount, totalToSync);
+      } else {
+        // Fall back to single-row upsert so a missing parent or single bad row does not block the chunk
+        for (const bItem of batch) {
+          await upsertSingleItem(bItem);
+        }
+      }
+    } catch {
+      for (const bItem of batch) {
+        await upsertSingleItem(bItem);
+      }
+    }
+  }
+
+  for (const { latest: item, supersededIds } of deleteEntries) {
+    try {
+      const { error } = await supabase
+        .from(item.entity_table)
+        .delete()
+        .eq('id', item.entity_id);
+      if (!error) {
+        await markSynced([item.id, ...supersededIds]);
+        flushedCount++;
+      } else {
+        failedCount++;
+        lastErrorMessage = error.message;
+      }
+    } catch (err) {
+      failedCount++;
+      lastErrorMessage = err instanceof Error ? err.message : 'Netzwerkfehler beim Sync';
+    } finally {
+      processedCount++;
+      options?.onProgress?.(processedCount, totalToSync);
     }
   }
 
@@ -432,16 +620,20 @@ export async function syncWithSupabaseCloud(): Promise<CloudSyncResult> {
     await clearAllLocalDatabaseTables();
   }
 
-  // 3. Pull club-scoped tables
+  // 3. Pull club-scoped tables (paginated so > 1,000 rows are never truncated)
   const [clubsRes, membersRes, teamsRes, exercisesRes, templatesRes] = await Promise.all([
-    supabase.from('clubs').select('*').in('id', clubIds),
-    supabase.from('club_members').select('*').in('club_id', clubIds),
-    supabase.from('teams').select('*').in('club_id', clubIds),
-    supabase
-      .from('exercises')
-      .select('*')
-      .or(`club_id.in.(${clubIds.join(',')}),visibility.eq.PUBLIC`),
-    supabase.from('session_templates').select('*').in('club_id', clubIds)
+    fetchAllByInFilter<Club>(supabase, 'clubs', 'id', clubIds),
+    fetchAllByInFilter<ClubMember>(supabase, 'club_members', 'club_id', clubIds),
+    fetchAllByInFilter<Team>(supabase, 'teams', 'club_id', clubIds),
+    fetchAllPaginated<Exercise>((from, to) =>
+      supabase
+        .from('exercises')
+        .select('*')
+        .or(`club_id.in.(${clubIds.join(',')}),visibility.eq.PUBLIC`)
+        .order('id', { ascending: true })
+        .range(from, to)
+    ),
+    fetchAllByInFilter<SessionTemplate>(supabase, 'session_templates', 'club_id', clubIds)
   ]);
 
   const pullErrors: string[] = [];
@@ -450,11 +642,11 @@ export async function syncWithSupabaseCloud(): Promise<CloudSyncResult> {
   };
   [clubsRes, membersRes, teamsRes, exercisesRes, templatesRes].forEach(collectPullError);
 
-  const remoteClubs = (clubsRes.data ?? []) as Club[];
-  const remoteMembers = (membersRes.data ?? []) as ClubMember[];
-  const remoteTeams = (teamsRes.data ?? []) as Team[];
-  const remoteExercises = (exercisesRes.data ?? []) as Exercise[];
-  const remoteTemplates = (templatesRes.data ?? []) as SessionTemplate[];
+  const remoteClubs = clubsRes.data;
+  const remoteMembers = membersRes.data;
+  const remoteTeams = teamsRes.data;
+  const remoteExercises = exercisesRes.data;
+  const remoteTemplates = templatesRes.data;
 
   const teamIds = remoteTeams.map((t) => t.id);
 
@@ -464,25 +656,27 @@ export async function syncWithSupabaseCloud(): Promise<CloudSyncResult> {
 
   if (teamIds.length > 0) {
     const [tmRes, plansRes, sessionsRes] = await Promise.all([
-      supabase.from('team_members').select('*').in('team_id', teamIds),
-      supabase.from('multi_week_plans').select('*').in('team_id', teamIds),
-      supabase.from('training_sessions').select('*').in('team_id', teamIds)
+      fetchAllByInFilter<TeamMember>(supabase, 'team_members', 'team_id', teamIds),
+      fetchAllByInFilter<MultiWeekPlan>(supabase, 'multi_week_plans', 'team_id', teamIds),
+      fetchAllByInFilter<TrainingSession>(supabase, 'training_sessions', 'team_id', teamIds)
     ]);
     [tmRes, plansRes, sessionsRes].forEach(collectPullError);
-    remoteTeamMembers = (tmRes.data ?? []) as TeamMember[];
-    remotePlans = (plansRes.data ?? []) as MultiWeekPlan[];
-    remoteSessions = (sessionsRes.data ?? []) as TrainingSession[];
+    remoteTeamMembers = tmRes.data;
+    remotePlans = plansRes.data;
+    remoteSessions = sessionsRes.data;
   }
 
   const planIds = remotePlans.map((p) => p.id);
   let remotePlanWeeks: PlanWeek[] = [];
   if (planIds.length > 0) {
-    const pwRes = await supabase
-      .from('plan_weeks')
-      .select('*')
-      .in('multi_week_plan_id', planIds);
+    const pwRes = await fetchAllByInFilter<PlanWeek>(
+      supabase,
+      'plan_weeks',
+      'multi_week_plan_id',
+      planIds
+    );
     collectPullError(pwRes);
-    remotePlanWeeks = (pwRes.data ?? []) as PlanWeek[];
+    remotePlanWeeks = pwRes.data;
   }
 
   const sessionIds = remoteSessions.map((s) => s.id);
@@ -490,23 +684,25 @@ export async function syncWithSupabaseCloud(): Promise<CloudSyncResult> {
   let remoteNotes: SessionNote[] = [];
   if (sessionIds.length > 0) {
     const [phasesRes, notesRes] = await Promise.all([
-      supabase.from('session_phases').select('*').in('training_session_id', sessionIds),
-      supabase.from('session_notes').select('*').in('training_session_id', sessionIds)
+      fetchAllByInFilter<SessionPhase>(supabase, 'session_phases', 'training_session_id', sessionIds),
+      fetchAllByInFilter<SessionNote>(supabase, 'session_notes', 'training_session_id', sessionIds)
     ]);
     [phasesRes, notesRes].forEach(collectPullError);
-    remotePhases = (phasesRes.data ?? []) as SessionPhase[];
-    remoteNotes = (notesRes.data ?? []) as SessionNote[];
+    remotePhases = phasesRes.data;
+    remoteNotes = notesRes.data;
   }
 
   const phaseIds = remotePhases.map((p) => p.id);
   let remoteBlocks: SessionBlock[] = [];
   if (phaseIds.length > 0) {
-    const blocksRes = await supabase
-      .from('session_blocks')
-      .select('*')
-      .in('session_phase_id', phaseIds);
+    const blocksRes = await fetchAllByInFilter<SessionBlock>(
+      supabase,
+      'session_blocks',
+      'session_phase_id',
+      phaseIds
+    );
     collectPullError(blocksRes);
-    remoteBlocks = (blocksRes.data ?? []) as SessionBlock[];
+    remoteBlocks = blocksRes.data;
   }
 
   // Never merge/prune on partial data

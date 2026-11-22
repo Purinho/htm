@@ -43,7 +43,9 @@ export const FOCUS_TAG_LABELS: Record<HandballFocusTag, string> = {
   LOB_SPIN_SHOT: 'Technik: Heber / Dreher',
   FEINT_1V1: 'Technik: Täuschung (1gg1)',
   CROSSING_SCREEN: 'Technik: Kreuzen & Sperren',
-  FOOTWORK_DEFENSE: 'Technik: Beinarbeit & Abwehr'
+  FOOTWORK_DEFENSE: 'Technik: Beinarbeit & Abwehr',
+  ATHLETICS_CONDITIONING: 'Athletik, Koordination & Prävention',
+  REGENERATION_MOBILITY: 'Regeneration, Dehnen & Mobilisation'
 };
 
 export const TACTIC_FOCUS_TAGS: HandballFocusTag[] = [
@@ -75,6 +77,11 @@ export const TECHNIQUE_FOCUS_TAGS: HandballFocusTag[] = [
   'FEINT_1V1',
   'CROSSING_SCREEN',
   'FOOTWORK_DEFENSE'
+];
+
+export const ATHLETICS_RECOVERY_FOCUS_TAGS: HandballFocusTag[] = [
+  'ATHLETICS_CONDITIONING',
+  'REGENERATION_MOBILITY'
 ];
 
 export const COMPLEXITY_LABELS: Record<ComplexityLevel, string> = {

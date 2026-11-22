@@ -3,6 +3,7 @@ import {
   deleteTacticPath,
   evalQuadraticBezier,
   generateKeyframesFromPaths,
+  hasExplicitTacticAnimation,
   hasPathNumberingGaps,
   interpolateTacticBoardAtTime,
   mirrorPlayerLabel,
@@ -153,5 +154,34 @@ describe('tacticBoardUtils', () => {
     const rlMid = midFrame.nodes.find((n) => n.id === 'rl');
     expect(rlMid?.x).toBeGreaterThan(0.24);
     expect(rlMid?.x).toBeLessThan(0.36);
+  });
+
+  it('detects whether an explicit multi-frame animation exists', () => {
+    const baseBoard: TacticBoardData = {
+      version: 1,
+      courtTemplate: 'HALF_COURT_VERTICAL',
+      nodes: [],
+      paths: []
+    };
+
+    expect(hasExplicitTacticAnimation(undefined)).toBe(false);
+    expect(hasExplicitTacticAnimation(null)).toBe(false);
+    expect(hasExplicitTacticAnimation(baseBoard)).toBe(false);
+    expect(hasExplicitTacticAnimation({ ...baseBoard, keyframes: [] })).toBe(false);
+    expect(
+      hasExplicitTacticAnimation({
+        ...baseBoard,
+        keyframes: [{ id: 'kf-0', index: 0, durationMs: 1400, nodeStates: {} }]
+      })
+    ).toBe(false);
+    expect(
+      hasExplicitTacticAnimation({
+        ...baseBoard,
+        keyframes: [
+          { id: 'kf-0', index: 0, durationMs: 1400, nodeStates: {} },
+          { id: 'kf-1', index: 1, durationMs: 1400, nodeStates: {} }
+        ]
+      })
+    ).toBe(true);
   });
 });

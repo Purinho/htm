@@ -11,8 +11,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "RETREAT",
-        "PASSING_CATCHING"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -30,30 +29,96 @@
     "coaching_points": "- Tempo deutlich reduzieren: Jeder Spieler sollte sich dabei problemlos unterhalten können\n- Schultern bewusst hängen lassen und die Wurfarm-Muskulatur aktiv ausschütteln\n- Kein abruptes Stehenbleiben nach intensiven Zielspielen, um den Laktatabbau zu unterstützen",
     "variations_text": "- In Zweiergruppen nebeneinander auslaufen und dabei die Trainingseinheit reflektieren\n- Barfuß auf dem Hallenboden auslaufen (fördert die Fußmuskulatur-Entspannung)\n- Mit ruhiger, langsamer Musik im Hintergrund",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.20, "y": 0.14 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.50, "y": 0.14 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.80, "y": 0.14 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.80, "y": 0.86 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.20, "y": 0.86 }
+        {
+          "id": "a1",
+          "label": "S1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.2,
+          "y": 0.06
+        },
+        {
+          "id": "a2",
+          "label": "S2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.06
+        },
+        {
+          "id": "a3",
+          "label": "S3",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.8,
+          "y": 0.06
+        },
+        {
+          "id": "a4",
+          "label": "S4",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.8,
+          "y": 0.94
+        },
+        {
+          "id": "a5",
+          "label": "S5",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.2,
+          "y": 0.94
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
           "points": [
-            { "x": 0.20, "y": 0.14 },
-            { "x": 0.86, "y": 0.14 },
-            { "x": 0.86, "y": 0.86 },
-            { "x": 0.14, "y": 0.86 },
-            { "x": 0.14, "y": 0.14 }
-          ]
+            {
+              "x": 0.2,
+              "y": 0.06
+            },
+            {
+              "x": 0.94,
+              "y": 0.06
+            },
+            {
+              "x": 0.94,
+              "y": 0.94
+            },
+            {
+              "x": 0.06,
+              "y": 0.94
+            },
+            {
+              "x": 0.06,
+              "y": 0.06
+            },
+            {
+              "x": 0.2,
+              "y": 0.06
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.06
+            },
+            {
+              "x": 0.5,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 2,
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -68,8 +133,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "FOOTWORK_DEFENSE",
-        "JUMP_SHOT"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -94,13 +158,55 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "tr", "type": "COACH_FEEDER", "label": "TR", "x": 0.50, "y": 0.50 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.50, "y": 0.24 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.72, "y": 0.36 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.72, "y": 0.64 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.50, "y": 0.76 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.28, "y": 0.64 },
-        { "id": "a6", "type": "OFFENSE_PLAYER", "label": "S6", "x": 0.28, "y": 0.36 }
+        {
+          "id": "tr",
+          "type": "COACH_FEEDER",
+          "label": "TR",
+          "x": 0.5,
+          "y": 0.5
+        },
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.5,
+          "y": 0.24
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.72,
+          "y": 0.36
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.72,
+          "y": 0.64
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.5,
+          "y": 0.76
+        },
+        {
+          "id": "a5",
+          "type": "OFFENSE_PLAYER",
+          "label": "S5",
+          "x": 0.28,
+          "y": 0.64
+        },
+        {
+          "id": "a6",
+          "type": "OFFENSE_PLAYER",
+          "label": "S6",
+          "x": 0.28,
+          "y": 0.36
+        }
       ],
       "paths": []
     }
@@ -117,9 +223,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "SHOOTING",
-        "STANDING_THROW",
-        "JUMP_SHOT"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -139,10 +243,34 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.20, "y": 0.14 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.40, "y": 0.14 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.60, "y": 0.14 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.80, "y": 0.14 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.2,
+          "y": 0.14
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.4,
+          "y": 0.14
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.6,
+          "y": 0.14
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.8,
+          "y": 0.14
+        }
       ],
       "paths": []
     }
@@ -159,8 +287,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "FOOTWORK_DEFENSE",
-        "FAST_BREAK_1ST_WAVE"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -181,19 +308,67 @@
     "coaching_points": "- Sehr langsam und kontrolliert rollen (wie Zeitlupe), nicht hektisch hin- und herrollen\n- Im Cool-down eher Richtung Körpermitte (venöser Rückfluss) arbeiten\n- Niemals direkt über Gelenke, Knochenvorsprünge oder akute Verletzungen/Entzündungen rollen",
     "variations_text": "- Auf schmerzhaften Triggerpunkten für 15–20 Sekunden ruhig verharren und tief atmen\n- Zusätzlich die Brustwirbelsäule sanft über die Rolle mobilisieren\n- Bei begrenzter Rollenanzahl in Zweiergruppen abwechselnd rollen und statisch dehnen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "m1", "type": "EQUIPMENT_MAT", "label": "M1", "x": 0.30, "y": 0.35 },
-        { "id": "m2", "type": "EQUIPMENT_MAT", "label": "M2", "x": 0.70, "y": 0.35 },
-        { "id": "m3", "type": "EQUIPMENT_MAT", "label": "M3", "x": 0.30, "y": 0.65 },
-        { "id": "m4", "type": "EQUIPMENT_MAT", "label": "M4", "x": 0.70, "y": 0.65 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.30, "y": 0.35 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.70, "y": 0.35 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.30, "y": 0.65 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.70, "y": 0.65 }
+        {
+          "id": "m1",
+          "label": "M1",
+          "type": "EQUIPMENT_MAT",
+          "x": 0.27,
+          "y": 0.35
+        },
+        {
+          "id": "m2",
+          "label": "M2",
+          "type": "EQUIPMENT_MAT",
+          "x": 0.67,
+          "y": 0.35
+        },
+        {
+          "id": "m3",
+          "label": "M3",
+          "type": "EQUIPMENT_MAT",
+          "x": 0.27,
+          "y": 0.65
+        },
+        {
+          "id": "m4",
+          "label": "M4",
+          "type": "EQUIPMENT_MAT",
+          "x": 0.67,
+          "y": 0.65
+        },
+        {
+          "id": "a1",
+          "label": "S1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.33,
+          "y": 0.35
+        },
+        {
+          "id": "a2",
+          "label": "S2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.73,
+          "y": 0.35
+        },
+        {
+          "id": "a3",
+          "label": "S3",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.33,
+          "y": 0.65
+        },
+        {
+          "id": "a4",
+          "label": "S4",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.73,
+          "y": 0.65
+        }
       ],
-      "paths": []
+      "paths": [],
+      "version": 1
     }
   },
   {
@@ -208,9 +383,8 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "PASSING_CATCHING",
-        "PASSING",
-        "CATCHING"
+        "REGENERATION_MOBILITY",
+        "PASSING_CATCHING"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -234,38 +408,140 @@
     "coaching_points": "- Kein Leistungsdruck, keine harten Pässe: Fokus liegt auf lockerer Motorik und Pulsberuhigung\n- Lockeres Durchatmen und entspannte Atmosphäre zum Trainingsende fördern\n- Ideal für Jugendmannschaften, die reines Auslaufen ohne Ball oft unruhig absolvieren",
     "variations_text": "- In Dreiergruppen locker passen und Namen rufen\n- Im Mittelkreis im Sitzen den Ball ruhig herumgeben und dabei ein Trainings-Highlight nennen\n- Mit weichem Schaumstoffball für noch sanfteres Fangen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "A1", "x": 0.16, "y": 0.25, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "B1", "x": 0.16, "y": 0.42 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "A2", "x": 0.16, "y": 0.62, "hasBall": true },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "B2", "x": 0.16, "y": 0.78 }
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "A1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.06,
+          "y": 0.08
+        },
+        {
+          "id": "a2",
+          "label": "B1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.06,
+          "y": 0.23
+        },
+        {
+          "hasBall": true,
+          "id": "a3",
+          "label": "A2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.06,
+          "y": 0.77
+        },
+        {
+          "id": "a4",
+          "label": "B2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.06,
+          "y": 0.92
+        }
       ],
       "paths": [
         {
+          "fromNodeId": "a1",
           "id": "p1",
-          "type": "RUN_PATH",
+          "points": [
+            {
+              "x": 0.06,
+              "y": 0.08
+            },
+            {
+              "x": 0.94,
+              "y": 0.08
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a1",
-          "points": [{ "x": 0.16, "y": 0.25 }, { "x": 0.84, "y": 0.25 }]
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "a1",
           "id": "p2",
-          "type": "PASS_PATH",
+          "points": [
+            {
+              "x": 0.06,
+              "y": 0.08
+            },
+            {
+              "x": 0.06,
+              "y": 0.23
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a1",
           "toNodeId": "a2",
-          "points": [{ "x": 0.16, "y": 0.25 }, { "x": 0.16, "y": 0.42 }]
+          "type": "PASS_PATH"
         },
         {
-          "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a2",
-          "points": [{ "x": 0.16, "y": 0.42 }, { "x": 0.84, "y": 0.42 }]
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.06,
+              "y": 0.23
+            },
+            {
+              "x": 0.94,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 1,
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.06,
+              "y": 0.77
+            },
+            {
+              "x": 0.94,
+              "y": 0.77
+            }
+          ],
+          "stepNumber": 1,
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.06,
+              "y": 0.77
+            },
+            {
+              "x": 0.06,
+              "y": 0.92
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "a4",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "a4",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.06,
+              "y": 0.92
+            },
+            {
+              "x": 0.94,
+              "y": 0.92
+            }
+          ],
+          "stepNumber": 1,
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -280,8 +556,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "OFFENSE_INDIVIDUAL",
-        "DEFENSE_INDIVIDUAL"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -306,12 +581,48 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.25, "y": 0.35 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.50, "y": 0.35 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.75, "y": 0.35 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.25, "y": 0.65 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.50, "y": 0.65 },
-        { "id": "a6", "type": "OFFENSE_PLAYER", "label": "S6", "x": 0.75, "y": 0.65 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.25,
+          "y": 0.35
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.5,
+          "y": 0.35
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.75,
+          "y": 0.35
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.25,
+          "y": 0.65
+        },
+        {
+          "id": "a5",
+          "type": "OFFENSE_PLAYER",
+          "label": "S5",
+          "x": 0.5,
+          "y": 0.65
+        },
+        {
+          "id": "a6",
+          "type": "OFFENSE_PLAYER",
+          "label": "S6",
+          "x": 0.75,
+          "y": 0.65
+        }
       ],
       "paths": []
     }
@@ -328,8 +639,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "RETREAT",
-        "GOALKEEPER_TECHNIQUE"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -353,11 +663,41 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.20, "y": 0.22 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.40, "y": 0.22 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.60, "y": 0.22 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.80, "y": 0.22 },
-        { "id": "tr", "type": "COACH_FEEDER", "label": "TR", "x": 0.50, "y": 0.65 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.2,
+          "y": 0.22
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.4,
+          "y": 0.22
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.6,
+          "y": 0.22
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.8,
+          "y": 0.22
+        },
+        {
+          "id": "tr",
+          "type": "COACH_FEEDER",
+          "label": "TR",
+          "x": 0.5,
+          "y": 0.65
+        }
       ],
       "paths": []
     }
@@ -374,8 +714,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "SHOOTING",
-        "FOOTWORK_DEFENSE"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -399,12 +738,48 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "A1", "x": 0.25, "y": 0.35 },
-        { "id": "b1", "type": "DEFENSE_PLAYER", "label": "B1", "x": 0.25, "y": 0.45 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "A2", "x": 0.50, "y": 0.35 },
-        { "id": "b2", "type": "DEFENSE_PLAYER", "label": "B2", "x": 0.50, "y": 0.45 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "A3", "x": 0.75, "y": 0.35 },
-        { "id": "b3", "type": "DEFENSE_PLAYER", "label": "B3", "x": 0.75, "y": 0.45 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "A1",
+          "x": 0.25,
+          "y": 0.35
+        },
+        {
+          "id": "b1",
+          "type": "DEFENSE_PLAYER",
+          "label": "B1",
+          "x": 0.25,
+          "y": 0.45
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "A2",
+          "x": 0.5,
+          "y": 0.35
+        },
+        {
+          "id": "b2",
+          "type": "DEFENSE_PLAYER",
+          "label": "B2",
+          "x": 0.5,
+          "y": 0.45
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "A3",
+          "x": 0.75,
+          "y": 0.35
+        },
+        {
+          "id": "b3",
+          "type": "DEFENSE_PLAYER",
+          "label": "B3",
+          "x": 0.75,
+          "y": 0.45
+        }
       ],
       "paths": []
     }
@@ -421,8 +796,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "PASSING_CATCHING",
-        "OFFENSE_TEAM"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -447,10 +821,36 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "A1", "x": 0.25, "y": 0.50 },
-        { "id": "b1", "type": "DEFENSE_PLAYER", "label": "B1", "x": 0.32, "y": 0.50, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "A2", "x": 0.65, "y": 0.50 },
-        { "id": "b2", "type": "DEFENSE_PLAYER", "label": "B2", "x": 0.72, "y": 0.50, "hasBall": true }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "A1",
+          "x": 0.25,
+          "y": 0.5
+        },
+        {
+          "id": "b1",
+          "type": "DEFENSE_PLAYER",
+          "label": "B1",
+          "x": 0.32,
+          "y": 0.5,
+          "hasBall": true
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "A2",
+          "x": 0.65,
+          "y": 0.5
+        },
+        {
+          "id": "b2",
+          "type": "DEFENSE_PLAYER",
+          "label": "B2",
+          "x": 0.72,
+          "y": 0.5,
+          "hasBall": true
+        }
       ],
       "paths": []
     }
@@ -467,9 +867,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "GOALKEEPER_TECHNIQUE",
-        "FOOTWORK_DEFENSE",
-        "FEINT_1V1"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -494,12 +892,48 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.30, "y": 0.35 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.50, "y": 0.35 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.70, "y": 0.35 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.30, "y": 0.65 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.50, "y": 0.65 },
-        { "id": "a6", "type": "OFFENSE_PLAYER", "label": "S6", "x": 0.70, "y": 0.65 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.3,
+          "y": 0.35
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.5,
+          "y": 0.35
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.7,
+          "y": 0.35
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.3,
+          "y": 0.65
+        },
+        {
+          "id": "a5",
+          "type": "OFFENSE_PLAYER",
+          "label": "S5",
+          "x": 0.5,
+          "y": 0.65
+        },
+        {
+          "id": "a6",
+          "type": "OFFENSE_PLAYER",
+          "label": "S6",
+          "x": 0.7,
+          "y": 0.65
+        }
       ],
       "paths": []
     }
@@ -516,9 +950,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "SHOOTING",
-        "PASSING_CATCHING",
-        "LOB_SPIN_SHOT"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -537,10 +969,34 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.35, "y": 0.40 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.65, "y": 0.40 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.35, "y": 0.65 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.65, "y": 0.65 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.35,
+          "y": 0.4
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.65,
+          "y": 0.4
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.35,
+          "y": 0.65
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.65,
+          "y": 0.65
+        }
       ],
       "paths": []
     }
@@ -557,8 +1013,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "OFFENSE_TEAM",
-        "DEFENSE_GROUP"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -584,13 +1039,56 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "tr", "type": "COACH_FEEDER", "label": "TR", "x": 0.50, "y": 0.24, "hasBall": true },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.72, "y": 0.34 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.78, "y": 0.56 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.62, "y": 0.74 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.38, "y": 0.74 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.22, "y": 0.56 },
-        { "id": "a6", "type": "OFFENSE_PLAYER", "label": "S6", "x": 0.28, "y": 0.34 }
+        {
+          "id": "tr",
+          "type": "COACH_FEEDER",
+          "label": "TR",
+          "x": 0.5,
+          "y": 0.24,
+          "hasBall": true
+        },
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.72,
+          "y": 0.34
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.78,
+          "y": 0.56
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.62,
+          "y": 0.74
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.38,
+          "y": 0.74
+        },
+        {
+          "id": "a5",
+          "type": "OFFENSE_PLAYER",
+          "label": "S5",
+          "x": 0.22,
+          "y": 0.56
+        },
+        {
+          "id": "a6",
+          "type": "OFFENSE_PLAYER",
+          "label": "S6",
+          "x": 0.28,
+          "y": 0.34
+        }
       ],
       "paths": [
         {
@@ -599,7 +1097,16 @@
           "stepNumber": 1,
           "fromNodeId": "tr",
           "toNodeId": "a1",
-          "points": [{ "x": 0.50, "y": 0.24 }, { "x": 0.72, "y": 0.34 }]
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.24
+            },
+            {
+              "x": 0.72,
+              "y": 0.34
+            }
+          ]
         }
       ]
     }
@@ -616,8 +1123,7 @@
         "COOL_DOWN"
       ],
       "focus": [
-        "FOOTWORK_DEFENSE",
-        "FEINT_1V1"
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -638,9 +1144,27 @@
       "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.25, "y": 0.72 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.50, "y": 0.72 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.75, "y": 0.72 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.25,
+          "y": 0.72
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.5,
+          "y": 0.72
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.75,
+          "y": 0.72
+        }
       ],
       "paths": [
         {
@@ -648,21 +1172,48 @@
           "type": "RUN_PATH",
           "stepNumber": 1,
           "fromNodeId": "a1",
-          "points": [{ "x": 0.25, "y": 0.72 }, { "x": 0.25, "y": 0.38 }]
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.72
+            },
+            {
+              "x": 0.25,
+              "y": 0.38
+            }
+          ]
         },
         {
           "id": "p2",
           "type": "RUN_PATH",
           "stepNumber": 1,
           "fromNodeId": "a2",
-          "points": [{ "x": 0.50, "y": 0.72 }, { "x": 0.50, "y": 0.38 }]
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.72
+            },
+            {
+              "x": 0.5,
+              "y": 0.38
+            }
+          ]
         },
         {
           "id": "p3",
           "type": "RUN_PATH",
           "stepNumber": 1,
           "fromNodeId": "a3",
-          "points": [{ "x": 0.75, "y": 0.72 }, { "x": 0.75, "y": 0.38 }]
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.72
+            },
+            {
+              "x": 0.75,
+              "y": 0.38
+            }
+          ]
         }
       ]
     }
@@ -680,6 +1231,7 @@
         "SMALL_GAME"
       ],
       "focus": [
+        "REGENERATION_MOBILITY",
         "SHOOTING",
         "STANDING_THROW"
       ],
@@ -710,33 +1262,111 @@
     "coaching_points": "- Bewusst nur mit 50–60 % Wurfkraft werfen (Gefühl und Kontrolle statt Gewaltwürfe)\n- Sorgt für einen positiven, motivierenden Abschluss mit niedriger Herzfrequenz\n- Keine Torhüter ins Tor stellen, damit wirklich entspannt auf Ziele geworfen wird",
     "variations_text": "- Ausführung mit der schwachen Hand für zusätzlichen Spaßfaktor\n- Als Bodenpass-Zielwerfen auf Hütchen in der 6-Meter-Linie\n- Team-Challenge: Gemeinsam 5 Lattentreffer erzielen, bevor die Einheit endet",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "c1", "type": "EQUIPMENT_CONE", "x": 0.42, "y": 0.08 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "x": 0.58, "y": 0.08 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.38, "y": 0.44, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.50, "y": 0.46, "hasBall": true },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.62, "y": 0.44, "hasBall": true }
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.42,
+          "y": 0.05
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.47,
+          "y": 0.05
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.52,
+          "y": 0.05
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.57,
+          "y": 0.05
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "S1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.38,
+          "y": 0.38
+        },
+        {
+          "hasBall": true,
+          "id": "a2",
+          "label": "S2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.39
+        },
+        {
+          "hasBall": true,
+          "id": "a3",
+          "label": "S3",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.62,
+          "y": 0.38
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "SHOT_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.38,
+              "y": 0.38
+            },
+            {
+              "x": 0.42,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "c1",
-          "points": [{ "x": 0.38, "y": 0.44 }, { "x": 0.42, "y": 0.08 }]
+          "type": "SHOT_PATH"
         },
         {
+          "fromNodeId": "a2",
           "id": "p2",
-          "type": "SHOT_PATH",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.39
+            },
+            {
+              "x": 0.52,
+              "y": 0.05
+            }
+          ],
           "stepNumber": 1,
+          "toNodeId": "c3",
+          "type": "SHOT_PATH"
+        },
+        {
           "fromNodeId": "a3",
-          "toNodeId": "c2",
-          "points": [{ "x": 0.62, "y": 0.44 }, { "x": 0.58, "y": 0.08 }]
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.62,
+              "y": 0.38
+            },
+            {
+              "x": 0.57,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "c4",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   }
 ]

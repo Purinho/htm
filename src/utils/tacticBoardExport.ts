@@ -158,11 +158,11 @@ function drawBoardFrameToCanvas(
   ctx.fillRect(padX, padY, width - padX * 2, height - padY * 2);
   ctx.strokeRect(padX, padY, width - padX * 2, height - padY * 2);
 
-  // 6m & 9m arc for HALF_COURT_VERTICAL
-  if (board.courtTemplate === 'HALF_COURT_VERTICAL' || board.courtTemplate === 'GOAL_SECTOR_ZOOM') {
+  // Court markings matching SVG preview & editor templates
+  if (board.courtTemplate === 'HALF_COURT_VERTICAL') {
     ctx.save();
     ctx.beginPath();
-    ctx.ellipse(width * 0.5, padY, width * 0.29, height * 0.34, 0, 0, Math.PI);
+    ctx.ellipse(width * 0.5, padY, width * 0.24, height * 0.2, 0, 0, Math.PI);
     ctx.fillStyle = 'rgba(29, 78, 216, 0.45)';
     ctx.fill();
     ctx.strokeStyle = '#ffffff';
@@ -171,18 +171,143 @@ function drawBoardFrameToCanvas(
 
     ctx.beginPath();
     ctx.setLineDash([12, 8]);
-    ctx.ellipse(width * 0.5, padY, width * 0.4, height * 0.48, 0, 0, Math.PI);
+    ctx.ellipse(width * 0.5, padY, width * 0.37, height * 0.343, 0, 0, Math.PI);
     ctx.strokeStyle = '#93c5fd';
     ctx.lineWidth = 2.5;
     ctx.stroke();
     ctx.restore();
 
-    // Goal
+    ctx.save();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(width * 0.48, height * 0.164);
+    ctx.lineTo(width * 0.52, height * 0.164);
+    ctx.moveTo(width * 0.47, height * 0.286);
+    ctx.lineTo(width * 0.53, height * 0.286);
+    ctx.stroke();
+    ctx.restore();
+
     ctx.fillStyle = '#ef4444';
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2.5;
     ctx.fillRect(width * 0.425, 6, width * 0.15, 16);
     ctx.strokeRect(width * 0.425, 6, width * 0.15, 16);
+  } else if (board.courtTemplate === 'GOAL_SECTOR_ZOOM') {
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(width * 0.5, padY, width * 0.37, height * 0.371, 0, 0, Math.PI);
+    ctx.fillStyle = 'rgba(29, 78, 216, 0.45)';
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.setLineDash([12, 8]);
+    ctx.ellipse(width * 0.5, padY, width * 0.46, height * 0.593, 0, 0, Math.PI);
+    ctx.strokeStyle = '#93c5fd';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(width * 0.47, height * 0.236);
+    ctx.lineTo(width * 0.53, height * 0.236);
+    ctx.moveTo(width * 0.46, height * 0.486);
+    ctx.lineTo(width * 0.54, height * 0.486);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#ef4444';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.fillRect(width * 0.3875, 5, width * 0.225, 18);
+    ctx.strokeRect(width * 0.3875, 5, width * 0.225, 18);
+  } else if (board.courtTemplate === 'FULL_COURT') {
+    ctx.save();
+    // Left 6m & 9m
+    ctx.beginPath();
+    ctx.ellipse(padX, height * 0.5, width * 0.13, height * 0.243, 0, -Math.PI / 2, Math.PI / 2);
+    ctx.fillStyle = 'rgba(29, 78, 216, 0.45)';
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.setLineDash([10, 6]);
+    ctx.ellipse(padX, height * 0.5, width * 0.2, height * 0.35, 0, -Math.PI / 2, Math.PI / 2);
+    ctx.strokeStyle = '#93c5fd';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Right 6m & 9m
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.ellipse(width - padX, height * 0.5, width * 0.13, height * 0.243, 0, Math.PI / 2, (3 * Math.PI) / 2);
+    ctx.fillStyle = 'rgba(29, 78, 216, 0.45)';
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.setLineDash([10, 6]);
+    ctx.ellipse(width - padX, height * 0.5, width * 0.2, height * 0.35, 0, Math.PI / 2, (3 * Math.PI) / 2);
+    ctx.strokeStyle = '#93c5fd';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Vertical center line & center circle
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(width * 0.5, padY);
+    ctx.lineTo(width * 0.5, height - padY);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#93c5fd';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(width * 0.5, height * 0.5, width * 0.045, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#ef4444';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.fillRect(width * 0.01, height * 0.414, width * 0.03, height * 0.172);
+    ctx.strokeRect(width * 0.01, height * 0.414, width * 0.03, height * 0.172);
+    ctx.fillRect(width * 0.96, height * 0.414, width * 0.03, height * 0.172);
+    ctx.strokeRect(width * 0.96, height * 0.414, width * 0.03, height * 0.172);
+  } else if (board.courtTemplate === 'HALF_COURT_HORIZONTAL') {
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(width - padX, height * 0.5, width * 0.22, height * 0.343, 0, Math.PI / 2, (3 * Math.PI) / 2);
+    ctx.fillStyle = 'rgba(29, 78, 216, 0.45)';
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.setLineDash([12, 8]);
+    ctx.ellipse(width - padX, height * 0.5, width * 0.36, height * 0.457, 0, Math.PI / 2, (3 * Math.PI) / 2);
+    ctx.strokeStyle = '#93c5fd';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#ef4444';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.fillRect(width * 0.96, height * 0.393, width * 0.03, height * 0.214);
+    ctx.strokeRect(width * 0.96, height * 0.393, width * 0.03, height * 0.214);
   }
 
   // Zones

@@ -38,56 +38,216 @@
     "coaching_points": "- Keine überkreuzten Beine beim seitlichen Verschieben, sondern schnelle Gleitschritte\n- Beim Heraustreten tiefen Körperschwerpunkt halten und Arme aktiv in die Pass- und Wurfwege bringen\n- Ballferne Verteidiger sichern konsequent zum Zentrum hin ab\n- Klare Kommandos innerhalb der Kette („Schieben links!“, „Heraustreten!“)",
     "variations_text": "- Passrichtung durch akustische oder optische Trainersignale abrupt wechseln lassen\n- Mit einem zusätzlichen Kreisläufer spielen, der sich ballnah anbietet\n- Angriff darf nach jedem dritten Pass direkt in den Torabschluss gehen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "AL", "x": 0.18, "y": 0.25 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.32, "y": 0.31 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.44, "y": 0.33 },
-        { "id": "d4", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.56, "y": 0.33 },
-        { "id": "d5", "type": "DEFENSE_PLAYER", "label": "HR", "x": 0.68, "y": 0.31 },
-        { "id": "d6", "type": "DEFENSE_PLAYER", "label": "AR", "x": 0.82, "y": 0.25 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.26, "y": 0.56, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.60 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.74, "y": 0.56 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.28, "y": 0.45 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.48, "y": 0.45 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "AL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "d2",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d3",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d4",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "d5",
+          "label": "HR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "d6",
+          "label": "AR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "a0",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "a3",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "a4",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.27,
+          "y": 0.32
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.49,
+          "y": 0.38
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.71,
+          "y": 0.33
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "d2",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.29,
+              "y": 0.23
+            },
+            {
+              "x": 0.27,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 1,
           "toWaypointId": "wp1",
-          "points": [{ "x": 0.32, "y": 0.31 }, { "x": 0.28, "y": 0.45 }]
+          "type": "RUN_PATH"
         },
         {
-          "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
           "fromNodeId": "a1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.5,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 2,
           "toNodeId": "a2",
-          "points": [{ "x": 0.26, "y": 0.56 }, { "x": 0.50, "y": 0.60 }]
+          "type": "PASS_PATH"
         },
         {
-          "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 3,
           "fromNodeId": "d3",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.43,
+              "y": 0.26
+            },
+            {
+              "x": 0.49,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 3,
           "toWaypointId": "wp2",
-          "points": [{ "x": 0.44, "y": 0.33 }, { "x": 0.48, "y": 0.45 }]
+          "type": "RUN_PATH"
         },
         {
-          "id": "p4",
-          "type": "PASS_PATH",
-          "stepNumber": 4,
           "fromNodeId": "a2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.76,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 4,
           "toNodeId": "a3",
-          "points": [{ "x": 0.50, "y": 0.60 }, { "x": 0.74, "y": 0.56 }]
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.52
+            },
+            {
+              "x": 0.71,
+              "y": 0.33
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp3",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromWaypointId": "wp3",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.71,
+              "y": 0.33
+            },
+            {
+              "x": 0.46,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 6,
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -131,54 +291,217 @@
     "coaching_points": "- Nie beide Innenblocker gleichzeitig auf einer Linie stehen lassen, sondern konsequent Tiefenstaffelung halten\n- Übergabe erfolgt genau auf Höhe der Kreuzung mit klarer verbaler Ansage\n- Der absinkende Innenblocker verliert nie den Körper- oder Blickkontakt zum Kreisläufer\n- Aktive Beinarbeit beim Heraustreten, um keinen Rückraumwurf aus dem Lauf zuzulassen",
     "variations_text": "- Angreifer dürfen auch eine Täuschung des Kreuzens (Finte) mit eigenem 1 gegen 1 spielen\n- Dritten Abwehrspieler (Halbverteidiger) und dritten Rückraumspieler für 3 gegen 3 + KM hinzunehmen\n- Zeitlimit von 8 Sekunden pro Angriff für realistischen Spieldruck",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.42, "y": 0.33 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.58, "y": 0.33 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.30, "y": 0.58, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.56, "y": 0.60 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.50, "y": 0.36 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.48, "y": 0.50 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.36, "y": 0.48 },
-        { "id": "wp3", "type": "WAYPOINT", "x": 0.40, "y": 0.44 },
-        { "id": "wp4", "type": "WAYPOINT", "x": 0.52, "y": 0.44 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d2",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "a3",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.27
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.28,
+          "y": 0.54
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.56,
+          "y": 0.56
+        },
+        {
+          "id": "c1",
+          "label": "Hütchen",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.22,
+          "y": 0.4
+        },
+        {
+          "id": "c2",
+          "label": "Hütchen",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.76,
+          "y": 0.4
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.48,
+          "y": 0.46
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.44
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.44,
+          "y": 0.4
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.38,
+          "y": 0.38
+        },
+        {
+          "id": "wp5",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.31
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.30, "y": 0.58 }, { "x": 0.48, "y": 0.50 }]
-        },
-        {
-          "id": "p2",
-          "type": "RUN_PATH",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.54
+            },
+            {
+              "x": 0.48,
+              "y": 0.46
+            }
+          ],
           "stepNumber": 1,
+          "toWaypointId": "wp1",
+          "type": "DRIBBLE_PATH"
+        },
+        {
           "fromNodeId": "d1",
-          "toWaypointId": "wp3",
-          "points": [{ "x": 0.42, "y": 0.33 }, { "x": 0.40, "y": 0.44 }]
-        },
-        {
-          "id": "p3",
-          "type": "RUN_PATH",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.43,
+              "y": 0.26
+            },
+            {
+              "x": 0.44,
+              "y": 0.4
+            }
+          ],
           "stepNumber": 2,
-          "fromNodeId": "a2",
-          "toWaypointId": "wp2",
-          "points": [{ "x": 0.56, "y": 0.60 }, { "x": 0.36, "y": 0.48 }]
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p4",
-          "type": "RUN_PATH",
+          "fromNodeId": "a2",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.56,
+              "y": 0.56
+            },
+            {
+              "x": 0.36,
+              "y": 0.44
+            }
+          ],
           "stepNumber": 3,
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.48,
+              "y": 0.46
+            },
+            {
+              "x": 0.36,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp2",
+          "type": "PASS_PATH"
+        },
+        {
           "fromNodeId": "d2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.57,
+              "y": 0.26
+            },
+            {
+              "x": 0.38,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 4,
           "toWaypointId": "wp4",
-          "points": [{ "x": 0.58, "y": 0.33 }, { "x": 0.52, "y": 0.44 }]
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp3",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.44,
+              "y": 0.4
+            },
+            {
+              "x": 0.5,
+              "y": 0.31
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp2",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.44
+            },
+            {
+              "x": 0.46,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 5,
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -199,7 +522,6 @@
       ],
       "level": "BASIC",
       "age_groups": [
-        "D_YOUTH",
         "C_YOUTH",
         "B_YOUTH",
         "A_YOUTH",
@@ -221,46 +543,195 @@
     "coaching_points": "- Beim Heraustreten sofort den Abstand zum ballführenden Angreifer verkürzen, um Zeit und Raum zu nehmen\n- Die beiden absinkenden Nachbarn schließen die Nahtstelle hinter dem Heraustretenden lückenlos\n- Ständiger Blickwechsel zwischen Ball und Kreisläufer (peripheres Sehen)\n- Sobald der Ball weitergepasst wird, explosiv in die Ausgangsposition zurückfallen",
     "variations_text": "- Kreisläufer darf aktiv Sperren gegen den heraustretenden Spieler stellen\n- Tempo im Passspiel schrittweise erhöhen, ohne dass das Dreieck auseinanderreißt\n- Mit beiden Außenpositionen zum 5 gegen 5 erweitern",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.30, "y": 0.32 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.45, "y": 0.33 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.60, "y": 0.33 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.25, "y": 0.58, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.60 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.75, "y": 0.58 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.40, "y": 0.36 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.27, "y": 0.47 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.39, "y": 0.31 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d2",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d3",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "a4",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.27
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.25,
+          "y": 0.54
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "a3",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.75,
+          "y": 0.54
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.27,
+          "y": 0.4
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.33
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.46,
+          "y": 0.25
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.49,
+          "y": 0.39
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "d1",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.30, "y": 0.32 }, { "x": 0.27, "y": 0.47 }]
-        },
-        {
-          "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "d2",
-          "toWaypointId": "wp2",
-          "points": [{ "x": 0.45, "y": 0.33 }, { "x": 0.39, "y": 0.31 }]
-        },
-        {
-          "id": "p3",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
           "fromNodeId": "a1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.54
+            },
+            {
+              "x": 0.27,
+              "y": 0.4
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp1",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromNodeId": "d1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.29,
+              "y": 0.23
+            },
+            {
+              "x": 0.28,
+              "y": 0.33
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d2",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.43,
+              "y": 0.26
+            },
+            {
+              "x": 0.46,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.27,
+              "y": 0.4
+            },
+            {
+              "x": 0.5,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 3,
           "toNodeId": "a2",
-          "points": [{ "x": 0.25, "y": 0.58 }, { "x": 0.50, "y": 0.60 }]
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.33
+            },
+            {
+              "x": 0.29,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "d1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp3",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.46,
+              "y": 0.25
+            },
+            {
+              "x": 0.49,
+              "y": 0.39
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp4",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -272,7 +743,6 @@
     "source_url": "https://handballtraining.de/",
     "categories": {
       "phases": [
-        "GOALKEEPER_WARMUP",
         "GROUND_EXERCISE"
       ],
       "focus": [
@@ -304,44 +774,139 @@
     "coaching_points": "- Hände beim Blocken leicht nach vorne anwinkeln, Finger spreizen und Arme nicht auseinanderreißen\n- Erst hochspringen, wenn der Werfer tatsächlich abspringt (nicht auf Wurftäuschungen hereinfallen)\n- Stabiler beidbeiniger Absprung senkrecht nach oben, kein Wegdrehen des Kopfes\n- Klare Absprache zwischen Mittelblock und Torhüter vor jedem Durchgang",
     "variations_text": "- Werfer dürfen mit Stemmwurf am Block vorbei abschließen, Block passt Höhe und Position an\n- Mit aktivem Kreisläufer, sodass ein Blockspieler zuerst den Passweg schließen und dann zum Doppelblock eilen muss\n- Zählung: Block oder Torwartparade = 1 Punkt für die Abwehr, Tor = 1 Punkt für den Angriff",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.54, "y": 0.11 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.34, "y": 0.32 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.44, "y": 0.34 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.56, "y": 0.34 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.32, "y": 0.62, "hasBall": true, "isQueue": true, "queueCount": 3 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.54, "y": 0.64, "hasBall": true, "isQueue": true, "queueCount": 3 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.36, "y": 0.46 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.46, "y": 0.10 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d2",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d3",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "isQueue": true,
+          "label": "RL",
+          "queueCount": 3,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.3,
+          "y": 0.56
+        },
+        {
+          "hasBall": true,
+          "id": "a2",
+          "isQueue": true,
+          "label": "RM",
+          "queueCount": 3,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.52,
+          "y": 0.58
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.35,
+          "y": 0.4
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.55,
+          "y": 0.09
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.56
+            },
+            {
+              "x": 0.35,
+              "y": 0.4
+            }
+          ],
+          "stepNumber": 1,
           "toWaypointId": "wp1",
-          "points": [{ "x": 0.32, "y": 0.62 }, { "x": 0.36, "y": 0.46 }]
+          "type": "DRIBBLE_PATH"
         },
         {
-          "id": "p2",
-          "type": "SCREEN_BLOCK_PATH",
-          "stepNumber": 2,
           "fromNodeId": "d1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.29,
+              "y": 0.23
+            },
+            {
+              "x": 0.43,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 2,
           "toNodeId": "d2",
-          "points": [{ "x": 0.34, "y": 0.32 }, { "x": 0.44, "y": 0.34 }]
+          "type": "SCREEN_BLOCK_PATH"
         },
         {
+          "fromNodeId": "gk1",
           "id": "p3",
-          "type": "SHOT_PATH",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.09
+            },
+            {
+              "x": 0.55,
+              "y": 0.09
+            }
+          ],
           "stepNumber": 3,
-          "fromWaypointId": "wp1",
           "toWaypointId": "wp2",
-          "points": [{ "x": 0.36, "y": 0.46 }, { "x": 0.46, "y": 0.10 }]
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.35,
+              "y": 0.4
+            },
+            {
+              "x": 0.55,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 3,
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -385,53 +950,199 @@
     "coaching_points": "- Sperren niemals frontal anlaufen und festklemmen lassen, sondern frühzeitig Kontakt spüren und aktiv umgehen\n- Sofortige verbale Warnung durch den Nebenmann ist entscheidend für das richtige Timing\n- Nach dem Absetzen des KM muss der Verteidiger wieder vor bzw. neben den Kreisläufer auf die Ballseite kommen\n- Arme oben halten, um den hohen Lob- oder Bodenpass an den Kreis zu erschweren",
     "variations_text": "- Pflichtvorgabe: Der Angriff muss vor jedem Abschluss mindestens eine Sperre am Kreis stellen\n- Erweiterung auf 4 gegen 4 mit zusätzlichem Außenspieler (LA gegen AL)\n- Abwehr erhält bei einem abgefangenen Kreispass direkt 2 Punkte",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.30, "y": 0.32 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.44, "y": 0.34 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.58, "y": 0.34 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.28, "y": 0.58, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.52, "y": 0.60 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.38, "y": 0.36 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.42, "y": 0.48 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.34, "y": 0.30 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d2",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d3",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "a3",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.36,
+          "y": 0.25
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.54
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.52,
+          "y": 0.56
+        },
+        {
+          "id": "c1",
+          "label": "Hütchen",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.16,
+          "y": 0.3
+        },
+        {
+          "id": "c2",
+          "label": "Hütchen",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.16,
+          "y": 0.5
+        },
+        {
+          "id": "c3",
+          "label": "Hütchen",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.68,
+          "y": 0.3
+        },
+        {
+          "id": "c4",
+          "label": "Hütchen",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.68,
+          "y": 0.5
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.4,
+          "y": 0.4
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.41,
+          "y": 0.35
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.31,
+          "y": 0.29
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.26,
+          "y": 0.26
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "SCREEN_BLOCK_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a3",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.25
+            },
+            {
+              "x": 0.29,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "d1",
-          "points": [{ "x": 0.38, "y": 0.36 }, { "x": 0.32, "y": 0.33 }]
+          "type": "SCREEN_BLOCK_PATH"
         },
         {
-          "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
           "fromNodeId": "a1",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.28, "y": 0.58 }, { "x": 0.42, "y": 0.48 }]
-        },
-        {
-          "id": "p3",
-          "type": "RUN_PATH",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.54
+            },
+            {
+              "x": 0.4,
+              "y": 0.4
+            }
+          ],
           "stepNumber": 2,
-          "fromNodeId": "d2",
           "toWaypointId": "wp1",
-          "points": [{ "x": 0.44, "y": 0.34 }, { "x": 0.42, "y": 0.46 }]
+          "type": "DRIBBLE_PATH"
         },
         {
-          "id": "p4",
-          "type": "RUN_PATH",
-          "stepNumber": 3,
-          "fromNodeId": "d1",
+          "fromNodeId": "d2",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.43,
+              "y": 0.26
+            },
+            {
+              "x": 0.41,
+              "y": 0.35
+            }
+          ],
+          "stepNumber": 2,
           "toWaypointId": "wp2",
-          "points": [{ "x": 0.30, "y": 0.32 }, { "x": 0.34, "y": 0.30 }]
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.25
+            },
+            {
+              "x": 0.26,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d1",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.29,
+              "y": 0.23
+            },
+            {
+              "x": 0.31,
+              "y": 0.29
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -473,43 +1184,111 @@
     "coaching_points": "- Fußspitzen zeigen konsequent zum Angreifer, Oberkörper bleibt aufrecht und stabil\n- Kein passives Stehenbleiben nach der Ballabgabe – sofortige Anschlussbewegung zum Kreis oder zum nächsten Ballhalter\n- Mit beiden Händen kontrollierten Körperkontakt herstellen (Wurfarm und Hüfte sichern)\n- Hohe Intensität in kurzen Intervallen halten",
     "variations_text": "- Mit zwei Bällen arbeiten, sodass der Abwehrspieler auf den jeweils vom Trainer angesagten Ballhalter reagieren muss\n- Seitenwechsel auf die rechte Abwehrseite (HR/IR gegen RR/RM)\n- Angreifer dürfen nach eigenem Ermessen das Kontinuum jederzeit durch eine Körpertäuschung unterbrechen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.30, "y": 0.32 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.46, "y": 0.33 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.56, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.58 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.28, "y": 0.45 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.46, "y": 0.45 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.3,
+          "y": 0.2
+        },
+        {
+          "id": "d2",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.45,
+          "y": 0.26
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.54
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.27,
+          "y": 0.33
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.46,
+          "y": 0.39
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "d1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.2
+            },
+            {
+              "x": 0.27,
+              "y": 0.33
+            }
+          ],
+          "stepNumber": 1,
           "toWaypointId": "wp1",
-          "points": [{ "x": 0.30, "y": 0.32 }, { "x": 0.28, "y": 0.45 }]
+          "type": "RUN_PATH"
         },
         {
-          "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
           "fromNodeId": "a1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.54
+            },
+            {
+              "x": 0.5,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 2,
           "toNodeId": "a2",
-          "points": [{ "x": 0.24, "y": 0.56 }, { "x": 0.50, "y": 0.58 }]
+          "type": "PASS_PATH"
         },
         {
-          "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 3,
           "fromNodeId": "d2",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.45,
+              "y": 0.26
+            },
+            {
+              "x": 0.46,
+              "y": 0.39
+            }
+          ],
+          "stepNumber": 3,
           "toWaypointId": "wp2",
-          "points": [{ "x": 0.46, "y": 0.33 }, { "x": 0.46, "y": 0.45 }]
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -552,36 +1331,148 @@
     "coaching_points": "- Auf der Weichbodenmatte tiefe, stabile Grundstellung halten (Knie gebeugt, Rumpf angespannt)\n- Explosiver Abdruck beim Verlassen der Matte Richtung Ballhalter\n- Klare Rollenverteilung durch laute Kommunikation: „Ich raus – du Kreis!“\n- Nach dem Stören sofort wieder in die geschlossene Innenblock-Struktur zurückfinden",
     "variations_text": "- Zwei schmale Matten nebeneinander legen, um den Arbeitsbereich auf die Halbpositionen auszudehnen\n- Ohne Kreisläufer beginnen und erst nach sicherer Beinarbeit den KM zuschalten\n- Torhüter wirft nach erfolgreicher Abwehraktion einen direkten Gegenstoßpass auf einen startenden Außenspieler",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "m1", "type": "EQUIPMENT_MAT", "label": "Matte", "x": 0.50, "y": 0.34 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.44, "y": 0.34 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.56, "y": 0.34 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.30, "y": 0.58, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.70, "y": 0.58 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.50, "y": 0.40 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.36, "y": 0.48 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "m1",
+          "label": "Matte",
+          "type": "EQUIPMENT_MAT",
+          "x": 0.5,
+          "y": 0.26
+        },
+        {
+          "id": "d1",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d2",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "a3",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.32
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.3,
+          "y": 0.56
+        },
+        {
+          "id": "a2",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.7,
+          "y": 0.56
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.66,
+          "y": 0.42
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.63,
+          "y": 0.35
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.48,
+          "y": 0.28
+        }
       ],
       "paths": [
         {
+          "fromNodeId": "a1",
           "id": "p1",
-          "type": "RUN_PATH",
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.56
+            },
+            {
+              "x": 0.7,
+              "y": 0.56
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "d1",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.44, "y": 0.34 }, { "x": 0.36, "y": 0.48 }]
+          "toNodeId": "a2",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "a2",
           "id": "p2",
-          "type": "PASS_PATH",
+          "points": [
+            {
+              "x": 0.7,
+              "y": 0.56
+            },
+            {
+              "x": 0.66,
+              "y": 0.42
+            }
+          ],
           "stepNumber": 2,
-          "fromNodeId": "a1",
-          "toNodeId": "a2",
-          "points": [{ "x": 0.30, "y": 0.58 }, { "x": 0.70, "y": 0.58 }]
+          "toWaypointId": "wp1",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromNodeId": "d2",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.57,
+              "y": 0.26
+            },
+            {
+              "x": 0.63,
+              "y": 0.35
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.43,
+              "y": 0.26
+            },
+            {
+              "x": 0.48,
+              "y": 0.28
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -593,8 +1484,7 @@
     "source_url": "https://handball-uebungen.de/",
     "categories": {
       "phases": [
-        "GROUND_GAME",
-        "TARGET_GAME"
+        "GROUND_GAME"
       ],
       "focus": [
         "DEFENSE_6_0",
@@ -623,47 +1513,185 @@
     "coaching_points": "- Timing des „Blind Side Hit“: Erst starten, wenn der Passgeber den Kopf auf RM richtet oder den Pass auslöst\n- Der ballferne Halbverteidiger (HR) muss blitzschnell einrücken, damit kein freier Raum am Kreis entsteht\n- Klare Signalgebung im Team (z. B. Codewort „Attacke!“), damit die Kette geschlossen nachschiebt\n- Nach abgebrochenem Angriff sofort wieder geordnet in die flache 6:0 zurückfallen",
     "variations_text": "- Auslöser wechseln: Blind Side Hit sowohl von IR auf RM als auch von IL auf RM trainieren\n- Auf komplettes 6 gegen 6 mit Außenpositionen erweitern\n- Sonderpunkte für erzwungene Stürmerfouls oder Passabfangaktionen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.28, "y": 0.32 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.43, "y": 0.34 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.57, "y": 0.34 },
-        { "id": "d4", "type": "DEFENSE_PLAYER", "label": "HR", "x": 0.72, "y": 0.32 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.26, "y": 0.56, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.58 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.74, "y": 0.56 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.46, "y": 0.38 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.52, "y": 0.51 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.58, "y": 0.34 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d2",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d3",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "d4",
+          "label": "HR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "a4",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.28
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.54
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "a3",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.54
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.51,
+          "y": 0.48
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.58,
+          "y": 0.26
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.34,
+          "y": 0.45
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.31,
+          "y": 0.34
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toNodeId": "a2",
-          "points": [{ "x": 0.26, "y": 0.56 }, { "x": 0.50, "y": 0.58 }]
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.54
+            },
+            {
+              "x": 0.34,
+              "y": 0.45
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp3",
+          "type": "DRIBBLE_PATH"
         },
         {
+          "fromNodeId": "d1",
           "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
-          "fromNodeId": "d3",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.57, "y": 0.34 }, { "x": 0.52, "y": 0.51 }]
+          "points": [
+            {
+              "x": 0.29,
+              "y": 0.23
+            },
+            {
+              "x": 0.31,
+              "y": 0.34
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp4",
+          "type": "RUN_PATH"
         },
         {
+          "fromWaypointId": "wp3",
           "id": "p3",
-          "type": "RUN_PATH",
+          "points": [
+            {
+              "x": 0.34,
+              "y": 0.45
+            },
+            {
+              "x": 0.5,
+              "y": 0.56
+            }
+          ],
           "stepNumber": 2,
+          "toNodeId": "a2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "d3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.57,
+              "y": 0.26
+            },
+            {
+              "x": 0.51,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp1",
+          "type": "RUN_PATH"
+        },
+        {
           "fromNodeId": "d4",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.71,
+              "y": 0.23
+            },
+            {
+              "x": 0.58,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 3,
           "toWaypointId": "wp2",
-          "points": [{ "x": 0.72, "y": 0.32 }, { "x": 0.58, "y": 0.34 }]
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -706,45 +1734,188 @@
     "coaching_points": "- Außenverteidiger darf nie ballblind sein: Kopf ständig zwischen Ball und eigenem Außenspieler pendeln lassen\n- Übergabe des Einläufers erfolgt mit Körperkontakt, nie im freien Raum loslassen\n- Deutliche Kommunikation („Einläufer kommt!“ – „Hab ihn!“) verhindert Doppelbelegungen\n- Nach der Übergabe sofort wieder Blick zum Rückraum öffnen",
     "variations_text": "- LA darf selbst entscheiden, ob er einläuft oder auf Außen für das 1 gegen 1 bleibt\n- Einen festen Kreisläufer (4 gegen 4) ergänzen, sodass kurzzeitig zwei Kreisläufer verteidigt werden müssen\n- Zeitvorgabe von maximal 10 Sekunden pro Angriff",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "AL", "x": 0.16, "y": 0.24 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.30, "y": 0.32 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.45, "y": 0.34 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.22 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.28, "y": 0.56, "hasBall": true },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.60 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.36, "y": 0.35 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.24, "y": 0.38 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "AL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "d2",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d3",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "a1",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "a2",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.54
+        },
+        {
+          "id": "a3",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.58,
+          "y": 0.28
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.58,
+          "y": 0.58
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.24
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.19
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.38,
+          "y": 0.26
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.25,
+          "y": 0.34
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a1",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.08, "y": 0.22 }, { "x": 0.36, "y": 0.35 }]
-        },
-        {
-          "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "d1",
-          "toWaypointId": "wp2",
-          "points": [{ "x": 0.16, "y": 0.24 }, { "x": 0.24, "y": 0.38 }]
-        },
-        {
-          "id": "p3",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
           "fromNodeId": "a2",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.54
+            },
+            {
+              "x": 0.5,
+              "y": 0.58
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "a3",
-          "points": [{ "x": 0.28, "y": 0.56 }, { "x": 0.50, "y": 0.60 }]
+          "type": "PASS_PATH"
+        },
+        {
+          "controlPoint": {
+            "x": 0.22,
+            "y": 0.11
+          },
+          "fromNodeId": "a1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.36,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp1",
+          "type": "RUN_PATH",
+          "curved": true
+        },
+        {
+          "fromNodeId": "d1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.16,
+              "y": 0.16
+            },
+            {
+              "x": 0.28,
+              "y": 0.19
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.29,
+              "y": 0.23
+            },
+            {
+              "x": 0.38,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.19
+            },
+            {
+              "x": 0.25,
+              "y": 0.34
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp4",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 2
     }
   },
   {
@@ -756,8 +1927,8 @@
     "source_url": "https://handballtraining.de/",
     "categories": {
       "phases": [
-        "WARMUP",
-        "SMALL_GAME"
+        "SMALL_GAME",
+        "GROUND_GAME"
       ],
       "focus": [
         "DEFENSE_6_0",
@@ -767,7 +1938,6 @@
       ],
       "level": "BASIC",
       "age_groups": [
-        "D_YOUTH",
         "C_YOUTH",
         "B_YOUTH",
         "A_YOUTH",
@@ -793,39 +1963,183 @@
     "coaching_points": "- Abstand zwischen den Verteidigern konstant eng halten – kein „Loch“ zwischen den Spielern öffnen\n- Aktive Armarbeit auf Schulter- und Hüfthöhe, um direkte und Bodenpässe zu unterbinden\n- Schnelle, kurze Schritte statt großer Ausfallschritte\n- Ständige Absprache über die Position des Kreisläufers im Rücken",
     "variations_text": "- Ohne Bodenpässe spielen lassen, um das Herausfangen hoher Pässe zu forcieren\n- Korridor um 2 Meter verbreitern, um die Laufintensität der 6:0-Kette zu erhöhen\n- Nach Ballgewinn der Abwehr sprinten alle drei Verteidiger sofort über die Mittellinie",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "c1", "type": "EQUIPMENT_CONE", "x": 0.24, "y": 0.28 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "x": 0.76, "y": 0.28 },
-        { "id": "c3", "type": "EQUIPMENT_CONE", "x": 0.24, "y": 0.54 },
-        { "id": "c4", "type": "EQUIPMENT_CONE", "x": 0.76, "y": 0.54 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.34, "y": 0.39 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.50, "y": 0.40 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "HR", "x": 0.66, "y": 0.39 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.28, "y": 0.56, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.58 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.72, "y": 0.56 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.50, "y": 0.30 }
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.3,
+          "y": 0.24
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.7,
+          "y": 0.24
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.3,
+          "y": 0.38
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.7,
+          "y": 0.38
+        },
+        {
+          "id": "d1",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.38,
+          "y": 0.3
+        },
+        {
+          "id": "d2",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.31
+        },
+        {
+          "id": "d3",
+          "label": "HR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.62,
+          "y": 0.3
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.48
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.5
+        },
+        {
+          "id": "a3",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.48
+        },
+        {
+          "id": "a4",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.25
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.66,
+          "y": 0.36
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.56,
+          "y": 0.32
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.48
+            },
+            {
+              "x": 0.5,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "a2",
-          "points": [{ "x": 0.28, "y": 0.56 }, { "x": 0.50, "y": 0.58 }]
+          "type": "PASS_PATH"
         },
         {
-          "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
           "fromNodeId": "a2",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.5
+            },
+            {
+              "x": 0.74,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 2,
+          "toNodeId": "a3",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "d3",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.62,
+              "y": 0.3
+            },
+            {
+              "x": 0.66,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.31
+            },
+            {
+              "x": 0.56,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.48
+            },
+            {
+              "x": 0.5,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 3,
           "toNodeId": "a4",
-          "points": [{ "x": 0.50, "y": 0.58 }, { "x": 0.50, "y": 0.30 }]
+          "type": "PASS_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -867,47 +2181,271 @@
     "coaching_points": "- Nicht nur seitlich laufen, sondern die Lücke aktiv nach vorne schließen (Tiefe und Breite kombinieren)\n- Körperstellung immer leicht zur Ballseite gedreht halten, um die Nahtstelle zu verengen\n- Der ballferne Halbverteidiger (HR/HL) darf nicht zu weit außen kleben, sondern rückt ins Zentrum ein\n- Konsequentes Festmachen am Wurfarm beim Durchbruchversuch",
     "variations_text": "- Mit beiden Außenspielern (LA, RA) zum 6 gegen 6 erweitern, um das Durchschieben bis auf Außen zu schulen\n- Nach dem zweiten Parallelstoß darf der Angriff eine plötzliche Kreuzbewegung einstreuen\n- Torwart zählt nur Paraden, die aus einem gut gestellten Block resultieren, als Bonuspunkt",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.28, "y": 0.32 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.43, "y": 0.34 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.57, "y": 0.34 },
-        { "id": "d4", "type": "DEFENSE_PLAYER", "label": "HR", "x": 0.72, "y": 0.32 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.26, "y": 0.58, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.60 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.74, "y": 0.58 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.54, "y": 0.38 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.36, "y": 0.48 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.58, "y": 0.48 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d2",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d3",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "d4",
+          "label": "HR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.56
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "a3",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.56
+        },
+        {
+          "id": "a4",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.25
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.42
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.42
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.34,
+          "y": 0.35
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.39,
+          "y": 0.27
+        },
+        {
+          "id": "wp5",
+          "type": "WAYPOINT",
+          "x": 0.47,
+          "y": 0.37
+        },
+        {
+          "id": "wp6",
+          "type": "WAYPOINT",
+          "x": 0.54,
+          "y": 0.28
+        },
+        {
+          "id": "wp7",
+          "type": "WAYPOINT",
+          "x": 0.31,
+          "y": 0.24
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.56
+            },
+            {
+              "x": 0.36,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 1,
           "toWaypointId": "wp1",
-          "points": [{ "x": 0.26, "y": 0.58 }, { "x": 0.36, "y": 0.48 }]
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "d1",
           "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
-          "fromWaypointId": "wp1",
-          "toNodeId": "a2",
-          "points": [{ "x": 0.36, "y": 0.48 }, { "x": 0.50, "y": 0.60 }]
+          "points": [
+            {
+              "x": 0.29,
+              "y": 0.23
+            },
+            {
+              "x": 0.34,
+              "y": 0.35
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "d2",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 3,
+          "points": [
+            {
+              "x": 0.43,
+              "y": 0.26
+            },
+            {
+              "x": 0.39,
+              "y": 0.27
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.42
+            },
+            {
+              "x": 0.5,
+              "y": 0.58
+            }
+          ],
+          "stepNumber": 2,
+          "toNodeId": "a2",
+          "type": "PASS_PATH"
+        },
+        {
           "fromNodeId": "a2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.58
+            },
+            {
+              "x": 0.5,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 3,
           "toWaypointId": "wp2",
-          "points": [{ "x": 0.50, "y": 0.60 }, { "x": 0.58, "y": 0.48 }]
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp4",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.39,
+              "y": 0.27
+            },
+            {
+              "x": 0.47,
+              "y": 0.37
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d3",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.57,
+              "y": 0.26
+            },
+            {
+              "x": 0.54,
+              "y": 0.28
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp6",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp3",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.34,
+              "y": 0.35
+            },
+            {
+              "x": 0.31,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp7",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp2",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.42
+            },
+            {
+              "x": 0.74,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "a3",
+          "type": "PASS_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -949,42 +2487,213 @@
     "coaching_points": "- Bei zwei Kreisläufern sofort laut ansagen: „Zwei am Kreis – innen eng!“\n- Die Abwehr darf sich nicht in die Breite ziehen lassen; Kompaktheit im Zentrum hat höchste Priorität\n- Jeder Verteidiger hält Sichtkontakt sowohl zum Ball als auch zu dem ihm zugeordneten Kreisläufer\n- Bei Rückzug des zweiten Kreisläufers in den Rückraum sofort wieder in die normale 6:0-Zuordnung wechseln",
     "variations_text": "- Angriff darf frei wählen, ob ein Rückraumspieler oder ein Außenspieler übergeht\n- Bei Ballgewinn der Abwehr startet sofort ein Gegenstoß auf das gegenüberliegende Tor\n- Angriff muss innerhalb von 15 Sekunden nach dem Übergang zum Abschluss kommen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "AL", "x": 0.18, "y": 0.25 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.31, "y": 0.31 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.44, "y": 0.33 },
-        { "id": "d4", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.56, "y": 0.33 },
-        { "id": "d5", "type": "DEFENSE_PLAYER", "label": "HR", "x": 0.69, "y": 0.31 },
-        { "id": "d6", "type": "DEFENSE_PLAYER", "label": "AR", "x": 0.82, "y": 0.25 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.22 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.30, "y": 0.58, "hasBall": true },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.56 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.70, "y": 0.58 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.22 },
-        { "id": "a6", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.60, "y": 0.37 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.38, "y": 0.37 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "AL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "d2",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "d3",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d4",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "d5",
+          "label": "HR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "d6",
+          "label": "AR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "a1",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "a2",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.28,
+          "y": 0.56
+        },
+        {
+          "id": "a3",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "a4",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.72,
+          "y": 0.56
+        },
+        {
+          "id": "a5",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "a6",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.64,
+          "y": 0.25
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.25
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.23,
+          "y": 0.2
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.77,
+          "y": 0.2
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.7,
+          "y": 0.35
+        }
       ],
       "paths": [
         {
+          "fromNodeId": "a2",
           "id": "p1",
-          "type": "RUN_PATH",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.56
+            },
+            {
+              "x": 0.72,
+              "y": 0.56
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a3",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.50, "y": 0.56 }, { "x": 0.38, "y": 0.37 }]
+          "toNodeId": "a4",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "a3",
           "id": "p2",
-          "type": "PASS_PATH",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.36,
+              "y": 0.25
+            }
+          ],
           "stepNumber": 2,
-          "fromNodeId": "a2",
-          "toNodeId": "a4",
-          "points": [{ "x": 0.30, "y": 0.58 }, { "x": 0.70, "y": 0.58 }]
+          "toWaypointId": "wp1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.16,
+              "y": 0.16
+            },
+            {
+              "x": 0.23,
+              "y": 0.2
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d6",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.84,
+              "y": 0.16
+            },
+            {
+              "x": 0.77,
+              "y": 0.2
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d5",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.71,
+              "y": 0.23
+            },
+            {
+              "x": 0.7,
+              "y": 0.35
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp4",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1027,42 +2736,207 @@
     "coaching_points": "- Aktive Grundhaltung in der 6:0-Abwehr dauerhaft hochhalten – nicht auf Fehler warten, sondern Fehler erzwingen\n- Saubere Abstimmung zwischen Mittelblock, Halbverteidigern und Torhüter einfordern\n- Nach eigenem Torverlust sofort wieder kompakt in die 6:0-Ordnung zurückfinden\n- Positive Kommunikation und gegenseitiges Anfeuern bei jeder starken Defensivaktion",
     "variations_text": "- Bei Unterzahl (z. B. nach Zeitstrafe) kompakte 5:0-Abwehr als Übergangsform fordern\n- Jede erfolgreiche Freiwurf-Unterbrechung (3x hintereinander) bringt einen Extra-Punkt für die Abwehr\n- Spielzeit in 3x6 Minuten mit klaren taktischen Fokus-Aufgaben je Drittel aufteilen",
     "tactic_board_data": {
-      "version": 1,
-      "courtTemplate": "HALF_COURT_VERTICAL",
+      "courtTemplate": "FULL_COURT",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "AL", "x": 0.18, "y": 0.25 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.31, "y": 0.32 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.44, "y": 0.34 },
-        { "id": "d4", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.56, "y": 0.34 },
-        { "id": "d5", "type": "DEFENSE_PLAYER", "label": "HR", "x": 0.69, "y": 0.32 },
-        { "id": "d6", "type": "DEFENSE_PLAYER", "label": "AR", "x": 0.82, "y": 0.25 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.22 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.28, "y": 0.58 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.60, "hasBall": true },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.72, "y": 0.58 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.22 },
-        { "id": "a6", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.48, "y": 0.38 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.48, "y": 0.48 }
+        {
+          "id": "gk1",
+          "label": "TW1",
+          "type": "GOALKEEPER",
+          "x": 0.08,
+          "y": 0.5
+        },
+        {
+          "id": "gk2",
+          "label": "TW2",
+          "type": "GOALKEEPER",
+          "x": 0.92,
+          "y": 0.5
+        },
+        {
+          "id": "d1",
+          "label": "AL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.2
+        },
+        {
+          "id": "d2",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.33
+        },
+        {
+          "id": "d3",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.18,
+          "y": 0.44
+        },
+        {
+          "id": "d4",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.18,
+          "y": 0.56
+        },
+        {
+          "id": "d5",
+          "label": "HR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.67
+        },
+        {
+          "id": "d6",
+          "label": "AR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.8
+        },
+        {
+          "id": "a1",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.12
+        },
+        {
+          "id": "a2",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.32,
+          "y": 0.26
+        },
+        {
+          "hasBall": true,
+          "id": "a3",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.36,
+          "y": 0.5
+        },
+        {
+          "id": "a4",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.32,
+          "y": 0.74
+        },
+        {
+          "id": "a5",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.88
+        },
+        {
+          "id": "a6",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.19,
+          "y": 0.5
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.24,
+          "y": 0.7
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.68,
+          "y": 0.24
+        }
       ],
       "paths": [
         {
+          "fromNodeId": "a3",
           "id": "p1",
-          "type": "RUN_PATH",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.5
+            },
+            {
+              "x": 0.32,
+              "y": 0.74
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "d3",
-          "toWaypointId": "wp1",
-          "points": [{ "x": 0.44, "y": 0.34 }, { "x": 0.48, "y": 0.48 }]
+          "toNodeId": "a4",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "d5",
           "id": "p2",
-          "type": "PASS_PATH",
+          "points": [
+            {
+              "x": 0.16,
+              "y": 0.67
+            },
+            {
+              "x": 0.24,
+              "y": 0.7
+            }
+          ],
           "stepNumber": 2,
-          "fromNodeId": "a3",
-          "toNodeId": "a4",
-          "points": [{ "x": 0.50, "y": 0.60 }, { "x": 0.72, "y": 0.58 }]
+          "toWaypointId": "wp1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "d1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.2
+            },
+            {
+              "x": 0.68,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.7
+            },
+            {
+              "x": 0.68,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.68,
+              "y": 0.24
+            },
+            {
+              "x": 0.94,
+              "y": 0.46
+            }
+          ],
+          "stepNumber": 5,
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1083,7 +2957,6 @@
       ],
       "level": "BASIC",
       "age_groups": [
-        "D_YOUTH",
         "C_YOUTH",
         "B_YOUTH",
         "A_YOUTH",
@@ -1105,43 +2978,179 @@
     "coaching_points": "- Außenverteidiger schaut immer zu Ball und Gegenspieler gleichzeitig (offene Körperstellung)\n- Auf der ballfernen Seite mutig einrücken, um dem Mittelblock Rückendeckung zu geben\n- Beim Anlaufen auf den Außenspieler nicht blind vorbeispringen, sondern sauber abbremsen und Wurfarm kontrollieren\n- Enge Absprache zwischen AL und HL über die äußere Nahtstelle",
     "variations_text": "- LA darf statt des Wurfs auch einen Rückpass auf RL oder ein Einlaufen an den Kreis wählen\n- Mit Hütchen eine Markierung setzen, die AL bei Ball auf der Gegenseite berühren muss, bevor der Pass auf RL erfolgt\n- Wettbewerb: Außenspieler vs. Außenverteidiger (Tore gegen geblockte/gefangene Würfe)",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.48, "y": 0.11 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "AL", "x": 0.24, "y": 0.28 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.36, "y": 0.33 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.24 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.28, "y": 0.56 },
-        { "id": "c1", "type": "COACH_FEEDER", "label": "RM", "x": 0.54, "y": 0.58, "hasBall": true },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.14, "y": 0.24 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "AL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.23,
+          "y": 0.16
+        },
+        {
+          "id": "d2",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.35,
+          "y": 0.22
+        },
+        {
+          "id": "a1",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "a2",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.54
+        },
+        {
+          "hasBall": true,
+          "id": "c1",
+          "label": "RM",
+          "type": "COACH_FEEDER",
+          "x": 0.52,
+          "y": 0.58
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.13,
+          "y": 0.2
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.29,
+          "y": 0.37
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.19,
+          "y": 0.17
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
           "fromNodeId": "c1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.52,
+              "y": 0.58
+            },
+            {
+              "x": 0.26,
+              "y": 0.54
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "a2",
-          "points": [{ "x": 0.54, "y": 0.58 }, { "x": 0.28, "y": 0.56 }]
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "d2",
           "id": "p2",
-          "type": "PASS_PATH",
+          "points": [
+            {
+              "x": 0.35,
+              "y": 0.22
+            },
+            {
+              "x": 0.29,
+              "y": 0.37
+            }
+          ],
           "stepNumber": 2,
-          "fromNodeId": "a2",
-          "toNodeId": "a1",
-          "points": [{ "x": 0.28, "y": 0.56 }, { "x": 0.08, "y": 0.24 }]
+          "toWaypointId": "wp2",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 3,
           "fromNodeId": "d1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.23,
+              "y": 0.16
+            },
+            {
+              "x": 0.19,
+              "y": 0.17
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.54
+            },
+            {
+              "x": 0.1,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 3,
+          "toNodeId": "a1",
+          "type": "PASS_PATH"
+        },
+        {
+          "controlPoint": {
+            "x": 0.17,
+            "y": 0.23
+          },
+          "fromWaypointId": "wp3",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.19,
+              "y": 0.17
+            },
+            {
+              "x": 0.13,
+              "y": 0.2
+            }
+          ],
+          "stepNumber": 4,
           "toWaypointId": "wp1",
-          "points": [{ "x": 0.24, "y": 0.28 }, { "x": 0.14, "y": 0.24 }]
+          "type": "RUN_PATH",
+          "curved": true
+        },
+        {
+          "fromNodeId": "a1",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 5,
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 2
     }
   },
   {
@@ -1184,44 +3193,134 @@
     "coaching_points": "- Hohe Sprint- und Gleitgeschwindigkeit zwischen den Rückraumpositionen\n- Beim Anlaufen auf den Schützen rechtzeitig abbremsen, um nicht überlaufen zu werden\n- Doppelblock nur stellen, wenn beide rechtzeitig da sind – sonst stellt ein Spieler den Einzelblock und der andere sichert die Nahtstelle\n- Lautstarke Führung durch den Torhüter („Block rechts!“, „Einer raus!“)",
     "variations_text": "- Einen Kreisläufer hinzunehmen (4 gegen 3), um das Absinken noch realistischer zu gestalten\n- Werfer dürfen nur nach mindestens zwei Pässen abschließen\n- Nach einem Block sofortigen Gegenstoßpass des Torhüters anschließen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.50, "y": 0.10 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "IL", "x": 0.43, "y": 0.34 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "IR", "x": 0.57, "y": 0.34 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.28, "y": 0.60, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.50, "y": 0.62 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.72, "y": 0.60 },
-        { "id": "wp1", "type": "WAYPOINT", "x": 0.50, "y": 0.44 },
-        { "id": "wp2", "type": "WAYPOINT", "x": 0.50, "y": 0.11 }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "d1",
+          "label": "IL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "d2",
+          "label": "IR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.56
+        },
+        {
+          "id": "a2",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "a3",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.56
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.48,
+          "y": 0.4
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.28
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.56
+            },
+            {
+              "x": 0.5,
+              "y": 0.58
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "a2",
-          "points": [{ "x": 0.28, "y": 0.60 }, { "x": 0.50, "y": 0.62 }]
+          "type": "PASS_PATH"
         },
         {
-          "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
           "fromNodeId": "d1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.43,
+              "y": 0.26
+            },
+            {
+              "x": 0.48,
+              "y": 0.4
+            }
+          ],
+          "stepNumber": 2,
           "toWaypointId": "wp1",
-          "points": [{ "x": 0.43, "y": 0.34 }, { "x": 0.48, "y": 0.44 }]
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "d2",
           "id": "p3",
-          "type": "SHOT_PATH",
-          "stepNumber": 3,
-          "fromNodeId": "a2",
+          "points": [
+            {
+              "x": 0.57,
+              "y": 0.26
+            },
+            {
+              "x": 0.5,
+              "y": 0.28
+            }
+          ],
+          "stepNumber": 2,
           "toWaypointId": "wp2",
-          "points": [{ "x": 0.50, "y": 0.62 }, { "x": 0.50, "y": 0.11 }]
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.58
+            },
+            {
+              "x": 0.46,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 3,
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   }
 ]

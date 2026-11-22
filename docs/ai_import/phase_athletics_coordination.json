@@ -12,8 +12,8 @@
         "WARMUP"
       ],
       "focus": [
+        "ATHLETICS_CONDITIONING",
         "PASSING_CATCHING",
-        "FEINT_1V1",
         "FOOTWORK_DEFENSE"
       ],
       "level": "BASIC",
@@ -41,42 +41,266 @@
     "coaching_points": "- Technik vor Tempo: Erst saubere Schrittfolge auf den Fußballen, dann Frequenz maximieren\n- Blick nach dem 3. Fach vom Boden lösen und Richtung Zuspieler richten\n- Aktiver Armschwung unterstützt die hohe Schrittfrequenz und Oberkörperstabilität",
     "variations_text": "- Zuspiel erfolgt während des Durchlaufens der letzten 3 Fächer\n- Nach dem Fang sofort ein Richtungswechsel um ein Hütchen mit anschließendem Torwurf\n- Rückwärts-Icky-Shuffle für Fortgeschrittene",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.25, "y": 0.84, "isQueue": true, "queueCount": 4 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.75, "y": 0.84, "isQueue": true, "queueCount": 4 },
-        { "id": "c1", "type": "COACH_FEEDER", "label": "Z1", "x": 0.25, "y": 0.18, "hasBall": true },
-        { "id": "c2", "type": "COACH_FEEDER", "label": "Z2", "x": 0.75, "y": 0.18, "hasBall": true },
-        { "id": "w1", "type": "WAYPOINT", "label": "L1", "x": 0.25, "y": 0.50 },
-        { "id": "w2", "type": "WAYPOINT", "label": "L2", "x": 0.75, "y": 0.50 }
+        {
+          "id": "a1",
+          "isQueue": true,
+          "label": "S1",
+          "queueCount": 4,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.25,
+          "y": 0.84
+        },
+        {
+          "id": "a2",
+          "isQueue": true,
+          "label": "S2",
+          "queueCount": 4,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.75,
+          "y": 0.84
+        },
+        {
+          "hasBall": true,
+          "id": "c1",
+          "label": "Z1",
+          "type": "COACH_FEEDER",
+          "x": 0.25,
+          "y": 0.18
+        },
+        {
+          "hasBall": true,
+          "id": "c2",
+          "label": "Z2",
+          "type": "COACH_FEEDER",
+          "x": 0.75,
+          "y": 0.18
+        },
+        {
+          "id": "w1",
+          "label": "L1",
+          "type": "WAYPOINT",
+          "x": 0.25,
+          "y": 0.52
+        },
+        {
+          "id": "w2",
+          "label": "L2",
+          "type": "WAYPOINT",
+          "x": 0.75,
+          "y": 0.52
+        },
+        {
+          "id": "w3",
+          "type": "WAYPOINT",
+          "x": 0.25,
+          "y": 0.36
+        },
+        {
+          "id": "w4",
+          "type": "WAYPOINT",
+          "x": 0.75,
+          "y": 0.36
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toWaypointId": "w1",
-          "points": [{ "x": 0.25, "y": 0.84 }, { "x": 0.25, "y": 0.36 }]
-        },
-        {
-          "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
-          "fromNodeId": "c1",
-          "toWaypointId": "w1",
-          "points": [{ "x": 0.25, "y": 0.18 }, { "x": 0.25, "y": 0.36 }]
-        },
-        {
-          "id": "p3",
-          "type": "RUN_PATH",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.84
+            },
+            {
+              "x": 0.25,
+              "y": 0.52
+            }
+          ],
           "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "w1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.52
+            },
+            {
+              "x": 0.25,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "w3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "c1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.18
+            },
+            {
+              "x": 0.25,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "w3",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "w3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.36
+            },
+            {
+              "x": 0.29,
+              "y": 0.27
+            },
+            {
+              "x": 0.25,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "c1",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "w3",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.36
+            },
+            {
+              "x": 0.14,
+              "y": 0.52
+            },
+            {
+              "x": 0.14,
+              "y": 0.84
+            },
+            {
+              "x": 0.25,
+              "y": 0.84
+            }
+          ],
+          "stepNumber": 5,
+          "toNodeId": "a1",
+          "type": "RUN_PATH"
+        },
+        {
           "fromNodeId": "a2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.84
+            },
+            {
+              "x": 0.75,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 1,
           "toWaypointId": "w2",
-          "points": [{ "x": 0.75, "y": 0.84 }, { "x": 0.75, "y": 0.36 }]
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "w2",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.52
+            },
+            {
+              "x": 0.75,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "w4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "c2",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.18
+            },
+            {
+              "x": 0.75,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "w4",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "w4",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.36
+            },
+            {
+              "x": 0.79,
+              "y": 0.27
+            },
+            {
+              "x": 0.75,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "c2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "w4",
+          "id": "p10",
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.36
+            },
+            {
+              "x": 0.86,
+              "y": 0.52
+            },
+            {
+              "x": 0.86,
+              "y": 0.84
+            },
+            {
+              "x": 0.75,
+              "y": 0.84
+            }
+          ],
+          "stepNumber": 5,
+          "toNodeId": "a2",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -91,8 +315,8 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
-        "FOOTWORK_DEFENSE",
-        "DEFENSE_INDIVIDUAL"
+        "ATHLETICS_CONDITIONING",
+        "FOOTWORK_DEFENSE"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -121,13 +345,59 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.30, "y": 0.84, "isQueue": true, "queueCount": 4 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.70, "y": 0.84, "isQueue": true, "queueCount": 4 },
-        { "id": "c1", "type": "EQUIPMENT_CONE", "label": "L", "x": 0.14, "y": 0.24 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "label": "R", "x": 0.46, "y": 0.24 },
-        { "id": "c3", "type": "EQUIPMENT_CONE", "label": "L", "x": 0.54, "y": 0.24 },
-        { "id": "c4", "type": "EQUIPMENT_CONE", "label": "R", "x": 0.86, "y": 0.24 },
-        { "id": "tr", "type": "COACH_FEEDER", "label": "TR", "x": 0.50, "y": 0.10 }
+        {
+          "id": "d1",
+          "type": "DEFENSE_PLAYER",
+          "label": "V1",
+          "x": 0.3,
+          "y": 0.84,
+          "isQueue": true,
+          "queueCount": 4
+        },
+        {
+          "id": "d2",
+          "type": "DEFENSE_PLAYER",
+          "label": "V2",
+          "x": 0.7,
+          "y": 0.84,
+          "isQueue": true,
+          "queueCount": 4
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "label": "L",
+          "x": 0.14,
+          "y": 0.24
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "label": "R",
+          "x": 0.46,
+          "y": 0.24
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "label": "L",
+          "x": 0.54,
+          "y": 0.24
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "label": "R",
+          "x": 0.86,
+          "y": 0.24
+        },
+        {
+          "id": "tr",
+          "type": "COACH_FEEDER",
+          "label": "TR",
+          "x": 0.5,
+          "y": 0.1
+        }
       ],
       "paths": [
         {
@@ -135,14 +405,32 @@
           "type": "RUN_PATH",
           "stepNumber": 1,
           "fromNodeId": "d1",
-          "points": [{ "x": 0.30, "y": 0.84 }, { "x": 0.30, "y": 0.28 }]
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.84
+            },
+            {
+              "x": 0.3,
+              "y": 0.28
+            }
+          ]
         },
         {
           "id": "p2",
           "type": "RUN_PATH",
           "stepNumber": 2,
           "toNodeId": "c1",
-          "points": [{ "x": 0.30, "y": 0.28 }, { "x": 0.14, "y": 0.24 }]
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.28
+            },
+            {
+              "x": 0.14,
+              "y": 0.24
+            }
+          ]
         }
       ]
     }
@@ -159,8 +447,7 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
-        "FEINT_1V1",
-        "JUMP_SHOT",
+        "ATHLETICS_CONDITIONING",
         "FOOTWORK_DEFENSE"
       ],
       "level": "BASIC",
@@ -190,16 +477,72 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.25, "y": 0.85, "isQueue": true, "queueCount": 3 },
-        { "id": "c1", "type": "EQUIPMENT_CONE", "x": 0.35, "y": 0.70 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "x": 0.20, "y": 0.55 },
-        { "id": "c3", "type": "EQUIPMENT_CONE", "x": 0.35, "y": 0.40 },
-        { "id": "c4", "type": "EQUIPMENT_CONE", "x": 0.20, "y": 0.25 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.75, "y": 0.85, "isQueue": true, "queueCount": 3 },
-        { "id": "c5", "type": "EQUIPMENT_CONE", "x": 0.65, "y": 0.70 },
-        { "id": "c6", "type": "EQUIPMENT_CONE", "x": 0.80, "y": 0.55 },
-        { "id": "c7", "type": "EQUIPMENT_CONE", "x": 0.65, "y": 0.40 },
-        { "id": "c8", "type": "EQUIPMENT_CONE", "x": 0.80, "y": 0.25 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.25,
+          "y": 0.85,
+          "isQueue": true,
+          "queueCount": 3
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.35,
+          "y": 0.7
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.2,
+          "y": 0.55
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.35,
+          "y": 0.4
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.2,
+          "y": 0.25
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.75,
+          "y": 0.85,
+          "isQueue": true,
+          "queueCount": 3
+        },
+        {
+          "id": "c5",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.65,
+          "y": 0.7
+        },
+        {
+          "id": "c6",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.8,
+          "y": 0.55
+        },
+        {
+          "id": "c7",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.65,
+          "y": 0.4
+        },
+        {
+          "id": "c8",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.8,
+          "y": 0.25
+        }
       ],
       "paths": [
         {
@@ -208,11 +551,26 @@
           "stepNumber": 1,
           "fromNodeId": "a1",
           "points": [
-            { "x": 0.25, "y": 0.85 },
-            { "x": 0.35, "y": 0.70 },
-            { "x": 0.20, "y": 0.55 },
-            { "x": 0.35, "y": 0.40 },
-            { "x": 0.20, "y": 0.25 }
+            {
+              "x": 0.25,
+              "y": 0.85
+            },
+            {
+              "x": 0.35,
+              "y": 0.7
+            },
+            {
+              "x": 0.2,
+              "y": 0.55
+            },
+            {
+              "x": 0.35,
+              "y": 0.4
+            },
+            {
+              "x": 0.2,
+              "y": 0.25
+            }
           ]
         }
       ]
@@ -230,10 +588,7 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
-        "PASSING_CATCHING",
-        "FOOTWORK_DEFENSE",
-        "JUMP_SHOT",
-        "OFFENSE_INDIVIDUAL"
+        "ATHLETICS_CONDITIONING"
       ],
       "level": "ADVANCED",
       "age_groups": [
@@ -269,13 +624,56 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "s1", "type": "WAYPOINT", "label": "St1", "x": 0.25, "y": 0.25 },
-        { "id": "s2", "type": "EQUIPMENT_MAT", "label": "St2", "x": 0.75, "y": 0.25 },
-        { "id": "s3", "type": "EQUIPMENT_CONE", "label": "St3", "x": 0.75, "y": 0.75 },
-        { "id": "s4", "type": "OFFENSE_PLAYER", "label": "St4", "x": 0.25, "y": 0.75, "hasBall": true },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "A", "x": 0.25, "y": 0.34 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "B", "x": 0.75, "y": 0.34 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "C", "x": 0.75, "y": 0.66 }
+        {
+          "id": "s1",
+          "type": "WAYPOINT",
+          "label": "St1",
+          "x": 0.25,
+          "y": 0.25
+        },
+        {
+          "id": "s2",
+          "type": "EQUIPMENT_MAT",
+          "label": "St2",
+          "x": 0.75,
+          "y": 0.25
+        },
+        {
+          "id": "s3",
+          "type": "EQUIPMENT_CONE",
+          "label": "St3",
+          "x": 0.75,
+          "y": 0.75
+        },
+        {
+          "id": "s4",
+          "type": "OFFENSE_PLAYER",
+          "label": "St4",
+          "x": 0.25,
+          "y": 0.75,
+          "hasBall": true
+        },
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "A",
+          "x": 0.25,
+          "y": 0.34
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "B",
+          "x": 0.75,
+          "y": 0.34
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "C",
+          "x": 0.75,
+          "y": 0.66
+        }
       ],
       "paths": [
         {
@@ -284,7 +682,16 @@
           "stepNumber": 1,
           "fromWaypointId": "s1",
           "toNodeId": "s2",
-          "points": [{ "x": 0.25, "y": 0.25 }, { "x": 0.75, "y": 0.25 }]
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.25
+            },
+            {
+              "x": 0.75,
+              "y": 0.25
+            }
+          ]
         },
         {
           "id": "p2",
@@ -292,7 +699,16 @@
           "stepNumber": 2,
           "fromNodeId": "s2",
           "toNodeId": "s3",
-          "points": [{ "x": 0.75, "y": 0.25 }, { "x": 0.75, "y": 0.75 }]
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.25
+            },
+            {
+              "x": 0.75,
+              "y": 0.75
+            }
+          ]
         },
         {
           "id": "p3",
@@ -300,7 +716,16 @@
           "stepNumber": 3,
           "fromNodeId": "s3",
           "toNodeId": "s4",
-          "points": [{ "x": 0.75, "y": 0.75 }, { "x": 0.25, "y": 0.75 }]
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.75
+            },
+            {
+              "x": 0.25,
+              "y": 0.75
+            }
+          ]
         },
         {
           "id": "p4",
@@ -308,7 +733,16 @@
           "stepNumber": 4,
           "fromNodeId": "s4",
           "toWaypointId": "s1",
-          "points": [{ "x": 0.25, "y": 0.75 }, { "x": 0.25, "y": 0.25 }]
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.75
+            },
+            {
+              "x": 0.25,
+              "y": 0.25
+            }
+          ]
         }
       ]
     }
@@ -325,9 +759,7 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
-        "PASSING_CATCHING",
-        "DEFENSE_INDIVIDUAL",
-        "OFFENSE_INDIVIDUAL"
+        "ATHLETICS_CONDITIONING"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -356,12 +788,51 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "A1", "x": 0.25, "y": 0.30, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "B1", "x": 0.25, "y": 0.55 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "A2", "x": 0.50, "y": 0.30, "hasBall": true },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "B2", "x": 0.50, "y": 0.55 },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "A3", "x": 0.75, "y": 0.30, "hasBall": true },
-        { "id": "a6", "type": "OFFENSE_PLAYER", "label": "B3", "x": 0.75, "y": 0.55 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "A1",
+          "x": 0.25,
+          "y": 0.3,
+          "hasBall": true
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "B1",
+          "x": 0.25,
+          "y": 0.55
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "A2",
+          "x": 0.5,
+          "y": 0.3,
+          "hasBall": true
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "B2",
+          "x": 0.5,
+          "y": 0.55
+        },
+        {
+          "id": "a5",
+          "type": "OFFENSE_PLAYER",
+          "label": "A3",
+          "x": 0.75,
+          "y": 0.3,
+          "hasBall": true
+        },
+        {
+          "id": "a6",
+          "type": "OFFENSE_PLAYER",
+          "label": "B3",
+          "x": 0.75,
+          "y": 0.55
+        }
       ],
       "paths": [
         {
@@ -370,7 +841,16 @@
           "stepNumber": 1,
           "fromNodeId": "a1",
           "toNodeId": "a2",
-          "points": [{ "x": 0.25, "y": 0.30 }, { "x": 0.25, "y": 0.55 }]
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.3
+            },
+            {
+              "x": 0.25,
+              "y": 0.55
+            }
+          ]
         },
         {
           "id": "p2",
@@ -378,7 +858,16 @@
           "stepNumber": 1,
           "fromNodeId": "a3",
           "toNodeId": "a4",
-          "points": [{ "x": 0.50, "y": 0.30 }, { "x": 0.50, "y": 0.55 }]
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.3
+            },
+            {
+              "x": 0.5,
+              "y": 0.55
+            }
+          ]
         },
         {
           "id": "p3",
@@ -386,7 +875,16 @@
           "stepNumber": 1,
           "fromNodeId": "a5",
           "toNodeId": "a6",
-          "points": [{ "x": 0.75, "y": 0.30 }, { "x": 0.75, "y": 0.55 }]
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.3
+            },
+            {
+              "x": 0.75,
+              "y": 0.55
+            }
+          ]
         }
       ]
     }
@@ -404,8 +902,8 @@
         "WARMUP"
       ],
       "focus": [
-        "DRIBBLING",
-        "PASSING_CATCHING"
+        "ATHLETICS_CONDITIONING",
+        "DRIBBLING"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -431,31 +929,162 @@
     "coaching_points": "- Blick weg von den Bällen und in den Raum richten (periphere Wahrnehmung schulen)\n- Bälle aktiv aus dem Handgelenk und den Fingerkuppen drücken, nicht schlagen\n- Beide Hände gleichwertig trainieren, besonders die schwächere Hand bewusst fordern",
     "variations_text": "- Einen Handball und einen kleineren Ball (z. B. Tennisball) kombinieren\n- Slalom um aufgestellte Hütchen mit zwei Bällen\n- Auf Kommando in die Kniebeuge gehen und weiterprellen",
     "tactic_board_data": {
-      "version": 1,
-      "courtTemplate": "HALF_COURT_VERTICAL",
+      "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.24, "y": 0.42, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.52, "y": 0.36, "hasBall": true },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.74, "y": 0.48, "hasBall": true },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.38, "y": 0.68, "hasBall": true },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.66, "y": 0.72, "hasBall": true }
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "S1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.28,
+          "y": 0.34
+        },
+        {
+          "hasBall": true,
+          "id": "a2",
+          "label": "S2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.52,
+          "y": 0.32
+        },
+        {
+          "hasBall": true,
+          "id": "a3",
+          "label": "S3",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.72,
+          "y": 0.44
+        },
+        {
+          "hasBall": true,
+          "id": "a4",
+          "label": "S4",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.34,
+          "y": 0.66
+        },
+        {
+          "hasBall": true,
+          "id": "a5",
+          "label": "S5",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.64,
+          "y": 0.68
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.14,
+          "y": 0.16
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.5,
+          "y": 0.16
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.86,
+          "y": 0.16
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.14,
+          "y": 0.84
+        },
+        {
+          "id": "c5",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.5,
+          "y": 0.84
+        },
+        {
+          "id": "c6",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.86,
+          "y": 0.84
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "DRIBBLE_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "points": [{ "x": 0.24, "y": 0.42 }, { "x": 0.42, "y": 0.52 }]
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.34
+            },
+            {
+              "x": 0.42,
+              "y": 0.46
+            }
+          ],
+          "stepNumber": 1,
+          "type": "DRIBBLE_PATH"
         },
         {
-          "id": "p2",
-          "type": "DRIBBLE_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a3",
-          "points": [{ "x": 0.74, "y": 0.48 }, { "x": 0.58, "y": 0.60 }]
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.72,
+              "y": 0.44
+            },
+            {
+              "x": 0.58,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 1,
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromNodeId": "a4",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.34,
+              "y": 0.66
+            },
+            {
+              "x": 0.49,
+              "y": 0.63
+            },
+            {
+              "x": 0.64,
+              "y": 0.68
+            }
+          ],
+          "stepNumber": 2,
+          "toNodeId": "a5",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "a5",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.68
+            },
+            {
+              "x": 0.49,
+              "y": 0.72
+            },
+            {
+              "x": 0.34,
+              "y": 0.66
+            }
+          ],
+          "stepNumber": 2,
+          "toNodeId": "a4",
+          "type": "PASS_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -471,9 +1100,9 @@
         "GROUND_EXERCISE"
       ],
       "focus": [
+        "ATHLETICS_CONDITIONING",
         "SHOOTING",
-        "JUMP_SHOT",
-        "PASSING_CATCHING"
+        "JUMP_SHOT"
       ],
       "level": "ADVANCED",
       "age_groups": [
@@ -506,51 +1135,169 @@
     "coaching_points": "- Trotz hoher Pulsfrequenz beim abschließenden Wurf auf saubere Wurfauslage, hohen Absprung und platzierten Abschluss achten\n- Reaktive Bodenkontakte bei den Sprüngen (kurz und explosiv)\n- Zuspieler passt exakt in den Laufweg nach dem letzten Hütchen",
     "variations_text": "- Vor der Leiter 5 Burpees oder 8 Liegestütze einbauen\n- Abschluss als Schlagwurf aus dem Lauf statt Sprungwurf\n- Zwei parallele Parcours (links und rechts) für höhere Durchlaufzahl",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.16, "y": 0.82, "isQueue": true, "queueCount": 5 },
-        { "id": "w1", "type": "WAYPOINT", "label": "L", "x": 0.16, "y": 0.58 },
-        { "id": "m1", "type": "EQUIPMENT_MAT", "label": "K1", "x": 0.38, "y": 0.72 },
-        { "id": "m2", "type": "EQUIPMENT_MAT", "label": "K2", "x": 0.56, "y": 0.72 },
-        { "id": "c1", "type": "EQUIPMENT_CONE", "x": 0.76, "y": 0.66 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "x": 0.70, "y": 0.54 },
-        { "id": "c3", "type": "EQUIPMENT_CONE", "x": 0.76, "y": 0.44 },
-        { "id": "tr", "type": "COACH_FEEDER", "label": "Z", "x": 0.48, "y": 0.50, "hasBall": true }
+        {
+          "id": "gk1",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "a1",
+          "isQueue": true,
+          "label": "S1",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.14,
+          "y": 0.44
+        },
+        {
+          "id": "w1",
+          "label": "L",
+          "type": "WAYPOINT",
+          "x": 0.14,
+          "y": 0.68
+        },
+        {
+          "id": "m1",
+          "label": "K1",
+          "type": "EQUIPMENT_MAT",
+          "x": 0.36,
+          "y": 0.88
+        },
+        {
+          "id": "m2",
+          "label": "K2",
+          "type": "EQUIPMENT_MAT",
+          "x": 0.54,
+          "y": 0.88
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.74,
+          "y": 0.78
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.68,
+          "y": 0.66
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.74,
+          "y": 0.54
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.68,
+          "y": 0.42
+        },
+        {
+          "hasBall": true,
+          "id": "tr",
+          "label": "Z",
+          "type": "COACH_FEEDER",
+          "x": 0.48,
+          "y": 0.52
+        },
+        {
+          "id": "w2",
+          "type": "WAYPOINT",
+          "x": 0.66,
+          "y": 0.32
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
           "points": [
-            { "x": 0.16, "y": 0.82 },
-            { "x": 0.16, "y": 0.58 },
-            { "x": 0.38, "y": 0.72 },
-            { "x": 0.56, "y": 0.72 },
-            { "x": 0.76, "y": 0.66 },
-            { "x": 0.70, "y": 0.54 },
-            { "x": 0.76, "y": 0.44 },
-            { "x": 0.66, "y": 0.32 }
-          ]
+            {
+              "x": 0.14,
+              "y": 0.44
+            },
+            {
+              "x": 0.14,
+              "y": 0.68
+            },
+            {
+              "x": 0.14,
+              "y": 0.88
+            },
+            {
+              "x": 0.36,
+              "y": 0.88
+            },
+            {
+              "x": 0.54,
+              "y": 0.88
+            },
+            {
+              "x": 0.78,
+              "y": 0.78
+            },
+            {
+              "x": 0.64,
+              "y": 0.66
+            },
+            {
+              "x": 0.78,
+              "y": 0.54
+            },
+            {
+              "x": 0.64,
+              "y": 0.42
+            },
+            {
+              "x": 0.66,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w2",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 2,
           "fromNodeId": "tr",
-          "points": [{ "x": 0.48, "y": 0.50 }, { "x": 0.66, "y": 0.32 }]
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.48,
+              "y": 0.52
+            },
+            {
+              "x": 0.66,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "w2",
+          "type": "PASS_PATH"
         },
         {
+          "fromWaypointId": "w2",
           "id": "p3",
-          "type": "SHOT_PATH",
+          "points": [
+            {
+              "x": 0.66,
+              "y": 0.32
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
           "stepNumber": 3,
-          "toNodeId": "gk1",
-          "points": [{ "x": 0.66, "y": 0.32 }, { "x": 0.46, "y": 0.10 }]
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -565,9 +1312,8 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
-        "FOOTWORK_DEFENSE",
-        "FEINT_1V1",
-        "FAST_BREAK_1ST_WAVE"
+        "ATHLETICS_CONDITIONING",
+        "FOOTWORK_DEFENSE"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -593,12 +1339,48 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.30, "y": 0.50 },
-        { "id": "c1", "type": "EQUIPMENT_CONE", "label": "1", "x": 0.14, "y": 0.30 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "label": "2", "x": 0.46, "y": 0.30 },
-        { "id": "c3", "type": "EQUIPMENT_CONE", "label": "3", "x": 0.14, "y": 0.70 },
-        { "id": "c4", "type": "EQUIPMENT_CONE", "label": "4", "x": 0.46, "y": 0.70 },
-        { "id": "tr", "type": "COACH_FEEDER", "label": "P1", "x": 0.30, "y": 0.14 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.3,
+          "y": 0.5
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "label": "1",
+          "x": 0.14,
+          "y": 0.3
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "label": "2",
+          "x": 0.46,
+          "y": 0.3
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "label": "3",
+          "x": 0.14,
+          "y": 0.7
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "label": "4",
+          "x": 0.46,
+          "y": 0.7
+        },
+        {
+          "id": "tr",
+          "type": "COACH_FEEDER",
+          "label": "P1",
+          "x": 0.3,
+          "y": 0.14
+        }
       ],
       "paths": [
         {
@@ -607,7 +1389,16 @@
           "stepNumber": 1,
           "fromNodeId": "a1",
           "toNodeId": "c2",
-          "points": [{ "x": 0.30, "y": 0.50 }, { "x": 0.46, "y": 0.30 }]
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "x": 0.46,
+              "y": 0.3
+            }
+          ]
         },
         {
           "id": "p2",
@@ -615,7 +1406,16 @@
           "stepNumber": 2,
           "fromNodeId": "c2",
           "toNodeId": "a1",
-          "points": [{ "x": 0.46, "y": 0.30 }, { "x": 0.30, "y": 0.50 }]
+          "points": [
+            {
+              "x": 0.46,
+              "y": 0.3
+            },
+            {
+              "x": 0.3,
+              "y": 0.5
+            }
+          ]
         }
       ]
     }
@@ -632,6 +1432,7 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
+        "ATHLETICS_CONDITIONING",
         "PASSING_CATCHING",
         "PASSING",
         "CATCHING"
@@ -664,12 +1465,50 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "m1", "type": "EQUIPMENT_MAT", "label": "M1", "x": 0.30, "y": 0.50 },
-        { "id": "m2", "type": "EQUIPMENT_MAT", "label": "M2", "x": 0.70, "y": 0.50 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.30, "y": 0.38, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.30, "y": 0.62 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.70, "y": 0.38 },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.70, "y": 0.62, "hasBall": true }
+        {
+          "id": "m1",
+          "type": "EQUIPMENT_MAT",
+          "label": "M1",
+          "x": 0.3,
+          "y": 0.5
+        },
+        {
+          "id": "m2",
+          "type": "EQUIPMENT_MAT",
+          "label": "M2",
+          "x": 0.7,
+          "y": 0.5
+        },
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.3,
+          "y": 0.38,
+          "hasBall": true
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.3,
+          "y": 0.62
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.7,
+          "y": 0.38
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.7,
+          "y": 0.62,
+          "hasBall": true
+        }
       ],
       "paths": [
         {
@@ -678,7 +1517,16 @@
           "stepNumber": 1,
           "fromNodeId": "a1",
           "toNodeId": "a3",
-          "points": [{ "x": 0.30, "y": 0.38 }, { "x": 0.70, "y": 0.38 }]
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.38
+            },
+            {
+              "x": 0.7,
+              "y": 0.38
+            }
+          ]
         },
         {
           "id": "p2",
@@ -686,7 +1534,16 @@
           "stepNumber": 1,
           "fromNodeId": "a4",
           "toNodeId": "a2",
-          "points": [{ "x": 0.70, "y": 0.62 }, { "x": 0.30, "y": 0.62 }]
+          "points": [
+            {
+              "x": 0.7,
+              "y": 0.62
+            },
+            {
+              "x": 0.3,
+              "y": 0.62
+            }
+          ]
         }
       ]
     }
@@ -703,9 +1560,7 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
-        "JUMP_SHOT",
-        "SHOOTING",
-        "DEFENSE_INDIVIDUAL"
+        "ATHLETICS_CONDITIONING"
       ],
       "level": "PERFORMANCE",
       "age_groups": [
@@ -732,12 +1587,52 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "b1", "type": "EQUIPMENT_MAT", "label": "K1", "x": 0.30, "y": 0.60 },
-        { "id": "b2", "type": "EQUIPMENT_MAT", "label": "K2", "x": 0.70, "y": 0.60 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.30, "y": 0.76, "isQueue": true, "queueCount": 4 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.70, "y": 0.76, "isQueue": true, "queueCount": 4 },
-        { "id": "w1", "type": "WAYPOINT", "label": "Spr", "x": 0.30, "y": 0.35 },
-        { "id": "w2", "type": "WAYPOINT", "label": "Spr", "x": 0.70, "y": 0.35 }
+        {
+          "id": "b1",
+          "type": "EQUIPMENT_MAT",
+          "label": "K1",
+          "x": 0.3,
+          "y": 0.6
+        },
+        {
+          "id": "b2",
+          "type": "EQUIPMENT_MAT",
+          "label": "K2",
+          "x": 0.7,
+          "y": 0.6
+        },
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.3,
+          "y": 0.76,
+          "isQueue": true,
+          "queueCount": 4
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.7,
+          "y": 0.76,
+          "isQueue": true,
+          "queueCount": 4
+        },
+        {
+          "id": "w1",
+          "type": "WAYPOINT",
+          "label": "Spr",
+          "x": 0.3,
+          "y": 0.35
+        },
+        {
+          "id": "w2",
+          "type": "WAYPOINT",
+          "label": "Spr",
+          "x": 0.7,
+          "y": 0.35
+        }
       ],
       "paths": [
         {
@@ -746,7 +1641,16 @@
           "stepNumber": 1,
           "fromNodeId": "b1",
           "toWaypointId": "w1",
-          "points": [{ "x": 0.30, "y": 0.60 }, { "x": 0.30, "y": 0.35 }]
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.6
+            },
+            {
+              "x": 0.3,
+              "y": 0.35
+            }
+          ]
         },
         {
           "id": "p2",
@@ -754,7 +1658,16 @@
           "stepNumber": 1,
           "fromNodeId": "b2",
           "toWaypointId": "w2",
-          "points": [{ "x": 0.70, "y": 0.60 }, { "x": 0.70, "y": 0.35 }]
+          "points": [
+            {
+              "x": 0.7,
+              "y": 0.6
+            },
+            {
+              "x": 0.7,
+              "y": 0.35
+            }
+          ]
         }
       ]
     }
@@ -771,9 +1684,9 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
+        "ATHLETICS_CONDITIONING",
         "DEFENSE_INDIVIDUAL",
-        "OFFENSE_INDIVIDUAL",
-        "FOOTWORK_DEFENSE"
+        "OFFENSE_INDIVIDUAL"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -798,12 +1711,48 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "A1", "x": 0.25, "y": 0.45 },
-        { "id": "d1", "type": "DEFENSE_PLAYER", "label": "B1", "x": 0.25, "y": 0.55 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "A2", "x": 0.50, "y": 0.45 },
-        { "id": "d2", "type": "DEFENSE_PLAYER", "label": "B2", "x": 0.50, "y": 0.55 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "A3", "x": 0.75, "y": 0.45 },
-        { "id": "d3", "type": "DEFENSE_PLAYER", "label": "B3", "x": 0.75, "y": 0.55 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "A1",
+          "x": 0.25,
+          "y": 0.45
+        },
+        {
+          "id": "d1",
+          "type": "DEFENSE_PLAYER",
+          "label": "B1",
+          "x": 0.25,
+          "y": 0.55
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "A2",
+          "x": 0.5,
+          "y": 0.45
+        },
+        {
+          "id": "d2",
+          "type": "DEFENSE_PLAYER",
+          "label": "B2",
+          "x": 0.5,
+          "y": 0.55
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "A3",
+          "x": 0.75,
+          "y": 0.45
+        },
+        {
+          "id": "d3",
+          "type": "DEFENSE_PLAYER",
+          "label": "B3",
+          "x": 0.75,
+          "y": 0.55
+        }
       ],
       "paths": [
         {
@@ -812,7 +1761,16 @@
           "stepNumber": 1,
           "fromNodeId": "a1",
           "toNodeId": "d1",
-          "points": [{ "x": 0.25, "y": 0.45 }, { "x": 0.25, "y": 0.55 }]
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.45
+            },
+            {
+              "x": 0.25,
+              "y": 0.55
+            }
+          ]
         },
         {
           "id": "p2",
@@ -820,7 +1778,16 @@
           "stepNumber": 1,
           "fromNodeId": "a2",
           "toNodeId": "d2",
-          "points": [{ "x": 0.50, "y": 0.45 }, { "x": 0.50, "y": 0.55 }]
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.45
+            },
+            {
+              "x": 0.5,
+              "y": 0.55
+            }
+          ]
         }
       ]
     }
@@ -837,6 +1804,7 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
+        "ATHLETICS_CONDITIONING",
         "PASSING_CATCHING",
         "PASSING",
         "CATCHING"
@@ -864,14 +1832,66 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.20, "y": 0.35, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.40, "y": 0.35, "hasBall": true },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.60, "y": 0.35, "hasBall": true },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.80, "y": 0.35, "hasBall": true },
-        { "id": "w1", "type": "WAYPOINT", "label": "W", "x": 0.20, "y": 0.08 },
-        { "id": "w2", "type": "WAYPOINT", "label": "W", "x": 0.40, "y": 0.08 },
-        { "id": "w3", "type": "WAYPOINT", "label": "W", "x": 0.60, "y": 0.08 },
-        { "id": "w4", "type": "WAYPOINT", "label": "W", "x": 0.80, "y": 0.08 }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.2,
+          "y": 0.35,
+          "hasBall": true
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.4,
+          "y": 0.35,
+          "hasBall": true
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.6,
+          "y": 0.35,
+          "hasBall": true
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.8,
+          "y": 0.35,
+          "hasBall": true
+        },
+        {
+          "id": "w1",
+          "type": "WAYPOINT",
+          "label": "W",
+          "x": 0.2,
+          "y": 0.08
+        },
+        {
+          "id": "w2",
+          "type": "WAYPOINT",
+          "label": "W",
+          "x": 0.4,
+          "y": 0.08
+        },
+        {
+          "id": "w3",
+          "type": "WAYPOINT",
+          "label": "W",
+          "x": 0.6,
+          "y": 0.08
+        },
+        {
+          "id": "w4",
+          "type": "WAYPOINT",
+          "label": "W",
+          "x": 0.8,
+          "y": 0.08
+        }
       ],
       "paths": [
         {
@@ -880,7 +1900,16 @@
           "stepNumber": 1,
           "fromNodeId": "a1",
           "toWaypointId": "w1",
-          "points": [{ "x": 0.20, "y": 0.35 }, { "x": 0.20, "y": 0.08 }]
+          "points": [
+            {
+              "x": 0.2,
+              "y": 0.35
+            },
+            {
+              "x": 0.2,
+              "y": 0.08
+            }
+          ]
         },
         {
           "id": "p2",
@@ -888,7 +1917,16 @@
           "stepNumber": 1,
           "fromNodeId": "a2",
           "toWaypointId": "w2",
-          "points": [{ "x": 0.40, "y": 0.35 }, { "x": 0.40, "y": 0.08 }]
+          "points": [
+            {
+              "x": 0.4,
+              "y": 0.35
+            },
+            {
+              "x": 0.4,
+              "y": 0.08
+            }
+          ]
         }
       ]
     }
@@ -905,9 +1943,10 @@
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
+        "ATHLETICS_CONDITIONING",
+        "DRIBBLING",
         "FAST_BREAK_1ST_WAVE",
-        "RETREAT",
-        "DRIBBLING"
+        "RETREAT"
       ],
       "level": "PERFORMANCE",
       "age_groups": [
@@ -932,42 +1971,216 @@
     "coaching_points": "- Sauberes Abbremsen und tiefes Wenden an jeder Linie (Körperschwerpunkt absenken)\n- Kein Schrittfehler beim Übergang vom Prellen zum Sprint oder bei der Ballübergabe\n- Maximale Intensität bis über die letzte Ziellinie durchziehen",
     "variations_text": "- Staffellauf zweier Teams gegeneinander als Motivation\n- Am Ende des letzten Rücksprints erfolgt ein Pass zum Trainer und ein Gegenstoß-Abschluss aufs Tor\n- Ohne Ball mit defensiven Nachstellschritten auf den Rückwegen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "A1", "x": 0.08, "y": 0.25, "hasBall": true, "isQueue": true, "queueCount": 2 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "A2", "x": 0.08, "y": 0.50, "hasBall": true, "isQueue": true, "queueCount": 2 },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "A3", "x": 0.08, "y": 0.75, "hasBall": true, "isQueue": true, "queueCount": 2 },
-        { "id": "c1", "type": "EQUIPMENT_CONE", "x": 0.28, "y": 0.25 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "x": 0.50, "y": 0.25 },
-        { "id": "c3", "type": "EQUIPMENT_CONE", "x": 0.72, "y": 0.25 }
+        {
+          "hasBall": true,
+          "id": "a1",
+          "isQueue": true,
+          "label": "A1",
+          "queueCount": 2,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.08,
+          "y": 0.18
+        },
+        {
+          "hasBall": true,
+          "id": "a2",
+          "isQueue": true,
+          "label": "A2",
+          "queueCount": 2,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.08,
+          "y": 0.78
+        },
+        {
+          "hasBall": true,
+          "id": "a3",
+          "isQueue": true,
+          "label": "A3",
+          "queueCount": 2,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.08,
+          "y": 0.88
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.24,
+          "y": 0.18
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.5,
+          "y": 0.18
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.76,
+          "y": 0.18
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.24,
+          "y": 0.88
+        },
+        {
+          "id": "c5",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.5,
+          "y": 0.88
+        },
+        {
+          "id": "c6",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.76,
+          "y": 0.88
+        }
       ],
       "paths": [
         {
+          "fromNodeId": "a1",
           "id": "p1",
-          "type": "DRIBBLE_PATH",
+          "points": [
+            {
+              "x": 0.08,
+              "y": 0.18
+            },
+            {
+              "x": 0.24,
+              "y": 0.18
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a1",
           "toNodeId": "c1",
-          "points": [{ "x": 0.08, "y": 0.25 }, { "x": 0.28, "y": 0.25 }]
+          "type": "DRIBBLE_PATH"
         },
         {
+          "fromNodeId": "c1",
           "id": "p2",
-          "type": "DRIBBLE_PATH",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.18
+            },
+            {
+              "x": 0.16,
+              "y": 0.14
+            },
+            {
+              "x": 0.08,
+              "y": 0.18
+            }
+          ],
           "stepNumber": 2,
-          "fromNodeId": "a1",
-          "toNodeId": "c2",
-          "points": [{ "x": 0.08, "y": 0.25 }, { "x": 0.50, "y": 0.25 }]
+          "toNodeId": "a1",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p3",
-          "type": "DRIBBLE_PATH",
-          "stepNumber": 3,
           "fromNodeId": "a1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.08,
+              "y": 0.18
+            },
+            {
+              "x": 0.16,
+              "y": 0.22
+            },
+            {
+              "x": 0.42,
+              "y": 0.22
+            },
+            {
+              "x": 0.5,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 3,
+          "toNodeId": "c2",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromNodeId": "c2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.18
+            },
+            {
+              "x": 0.42,
+              "y": 0.1
+            },
+            {
+              "x": 0.16,
+              "y": 0.1
+            },
+            {
+              "x": 0.08,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a1",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.08,
+              "y": 0.18
+            },
+            {
+              "x": 0.16,
+              "y": 0.25
+            },
+            {
+              "x": 0.68,
+              "y": 0.25
+            },
+            {
+              "x": 0.76,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 5,
           "toNodeId": "c3",
-          "points": [{ "x": 0.08, "y": 0.25 }, { "x": 0.72, "y": 0.25 }]
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromNodeId": "c3",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.18
+            },
+            {
+              "x": 0.68,
+              "y": 0.06
+            },
+            {
+              "x": 0.16,
+              "y": 0.06
+            },
+            {
+              "x": 0.08,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 6,
+          "toNodeId": "a1",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -983,9 +2196,8 @@
         "WARMUP"
       ],
       "focus": [
-        "SHOOTING",
-        "STANDING_THROW",
-        "OFFENSE_INDIVIDUAL"
+        "ATHLETICS_CONDITIONING",
+        "REGENERATION_MOBILITY"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -1010,10 +2222,38 @@
       "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.14, "y": 0.25, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.14, "y": 0.45, "hasBall": true },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.14, "y": 0.65, "hasBall": true },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.14, "y": 0.85, "hasBall": true }
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.14,
+          "y": 0.25,
+          "hasBall": true
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.14,
+          "y": 0.45,
+          "hasBall": true
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.14,
+          "y": 0.65,
+          "hasBall": true
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.14,
+          "y": 0.85,
+          "hasBall": true
+        }
       ],
       "paths": [
         {
@@ -1021,21 +2261,48 @@
           "type": "RUN_PATH",
           "stepNumber": 1,
           "fromNodeId": "a1",
-          "points": [{ "x": 0.14, "y": 0.25 }, { "x": 0.86, "y": 0.25 }]
+          "points": [
+            {
+              "x": 0.14,
+              "y": 0.25
+            },
+            {
+              "x": 0.86,
+              "y": 0.25
+            }
+          ]
         },
         {
           "id": "p2",
           "type": "RUN_PATH",
           "stepNumber": 1,
           "fromNodeId": "a2",
-          "points": [{ "x": 0.14, "y": 0.45 }, { "x": 0.86, "y": 0.45 }]
+          "points": [
+            {
+              "x": 0.14,
+              "y": 0.45
+            },
+            {
+              "x": 0.86,
+              "y": 0.45
+            }
+          ]
         },
         {
           "id": "p3",
           "type": "RUN_PATH",
           "stepNumber": 1,
           "fromNodeId": "a3",
-          "points": [{ "x": 0.14, "y": 0.65 }, { "x": 0.86, "y": 0.65 }]
+          "points": [
+            {
+              "x": 0.14,
+              "y": 0.65
+            },
+            {
+              "x": 0.86,
+              "y": 0.65
+            }
+          ]
         }
       ]
     }
@@ -1053,9 +2320,9 @@
         "SMALL_GAME"
       ],
       "focus": [
+        "ATHLETICS_CONDITIONING",
         "DRIBBLING",
-        "SHOOTING",
-        "FEINT_1V1"
+        "SHOOTING"
       ],
       "level": "BASIC",
       "age_groups": [
@@ -1089,37 +2356,302 @@
     "coaching_points": "- Hoher Spaßfaktor durch Staffelcharakter, dennoch auf saubere einbeinige Sprunglandung achten\n- Beim Slalom-Prellen immer mit der hütchenfernen Hand prellen (Ball abschirmen)\n- Vor dem Wurf kurz abbremsen und gezielt werfen statt hektisch zu schleudern",
     "variations_text": "- Rückweg im Rückwärtslauf oder Krebsgang\n- Statt Minitor muss ein auf einem Kasten liegender Ball heruntergeworfen werden\n- Bei Fehlwurf muss eine kurze Zusatzrunde um ein Hütchen gelaufen werden",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "T1", "x": 0.28, "y": 0.88, "isQueue": true, "queueCount": 5 },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "T2", "x": 0.72, "y": 0.88, "isQueue": true, "queueCount": 5 },
-        { "id": "w1", "type": "WAYPOINT", "label": "L1", "x": 0.28, "y": 0.68 },
-        { "id": "w2", "type": "WAYPOINT", "label": "L2", "x": 0.72, "y": 0.68 },
-        { "id": "c1", "type": "EQUIPMENT_CONE", "x": 0.28, "y": 0.48 },
-        { "id": "c2", "type": "EQUIPMENT_CONE", "x": 0.28, "y": 0.34 },
-        { "id": "c3", "type": "EQUIPMENT_CONE", "x": 0.72, "y": 0.48 },
-        { "id": "c4", "type": "EQUIPMENT_CONE", "x": 0.72, "y": 0.34 },
-        { "id": "g1", "type": "EQUIPMENT_GOAL_TARGET", "label": "MT1", "x": 0.28, "y": 0.12 },
-        { "id": "g2", "type": "EQUIPMENT_GOAL_TARGET", "label": "MT2", "x": 0.72, "y": 0.12 }
+        {
+          "id": "a1",
+          "isQueue": true,
+          "label": "T1",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.28,
+          "y": 0.9
+        },
+        {
+          "id": "a2",
+          "isQueue": true,
+          "label": "T2",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.72,
+          "y": 0.9
+        },
+        {
+          "id": "w1",
+          "label": "L1",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.72
+        },
+        {
+          "id": "w2",
+          "label": "L2",
+          "type": "WAYPOINT",
+          "x": 0.72,
+          "y": 0.72
+        },
+        {
+          "id": "c1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.28,
+          "y": 0.6
+        },
+        {
+          "id": "c2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.28,
+          "y": 0.5
+        },
+        {
+          "id": "c3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.28,
+          "y": 0.4
+        },
+        {
+          "id": "c4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.28,
+          "y": 0.3
+        },
+        {
+          "id": "c5",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.72,
+          "y": 0.6
+        },
+        {
+          "id": "c6",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.72,
+          "y": 0.5
+        },
+        {
+          "id": "c7",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.72,
+          "y": 0.4
+        },
+        {
+          "id": "c8",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.72,
+          "y": 0.3
+        },
+        {
+          "id": "w3",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.22
+        },
+        {
+          "id": "w4",
+          "type": "WAYPOINT",
+          "x": 0.72,
+          "y": 0.22
+        },
+        {
+          "id": "g1",
+          "label": "MT1",
+          "type": "EQUIPMENT_GOAL_TARGET",
+          "x": 0.28,
+          "y": 0.1
+        },
+        {
+          "id": "g2",
+          "label": "MT2",
+          "type": "EQUIPMENT_GOAL_TARGET",
+          "x": 0.72,
+          "y": 0.1
+        }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toNodeId": "c2",
-          "points": [{ "x": 0.28, "y": 0.88 }, { "x": 0.28, "y": 0.68 }, { "x": 0.24, "y": 0.48 }, { "x": 0.32, "y": 0.34 }]
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.9
+            },
+            {
+              "x": 0.28,
+              "y": 0.72
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "RUN_PATH"
         },
         {
+          "fromWaypointId": "w1",
           "id": "p2",
-          "type": "SHOT_PATH",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.72
+            },
+            {
+              "x": 0.23,
+              "y": 0.6
+            },
+            {
+              "x": 0.33,
+              "y": 0.5
+            },
+            {
+              "x": 0.23,
+              "y": 0.4
+            },
+            {
+              "x": 0.33,
+              "y": 0.3
+            },
+            {
+              "x": 0.28,
+              "y": 0.22
+            }
+          ],
           "stepNumber": 2,
+          "toWaypointId": "w3",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromWaypointId": "w3",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.22
+            },
+            {
+              "x": 0.28,
+              "y": 0.1
+            }
+          ],
+          "stepNumber": 3,
           "toNodeId": "g1",
-          "points": [{ "x": 0.32, "y": 0.34 }, { "x": 0.28, "y": 0.12 }]
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromNodeId": "g1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.1
+            },
+            {
+              "x": 0.16,
+              "y": 0.22
+            },
+            {
+              "x": 0.16,
+              "y": 0.72
+            },
+            {
+              "x": 0.28,
+              "y": 0.9
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.72,
+              "y": 0.9
+            },
+            {
+              "x": 0.72,
+              "y": 0.72
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "w2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.72,
+              "y": 0.72
+            },
+            {
+              "x": 0.67,
+              "y": 0.6
+            },
+            {
+              "x": 0.77,
+              "y": 0.5
+            },
+            {
+              "x": 0.67,
+              "y": 0.4
+            },
+            {
+              "x": 0.77,
+              "y": 0.3
+            },
+            {
+              "x": 0.72,
+              "y": 0.22
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "w4",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromWaypointId": "w4",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.72,
+              "y": 0.22
+            },
+            {
+              "x": 0.72,
+              "y": 0.1
+            }
+          ],
+          "stepNumber": 3,
+          "toNodeId": "g2",
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromNodeId": "g2",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.72,
+              "y": 0.1
+            },
+            {
+              "x": 0.84,
+              "y": 0.22
+            },
+            {
+              "x": 0.84,
+              "y": 0.72
+            },
+            {
+              "x": 0.72,
+              "y": 0.9
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "a2",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1135,9 +2667,8 @@
         "WARMUP"
       ],
       "focus": [
-        "DRIBBLING",
-        "FEINT_1V1",
-        "OFFENSE_INDIVIDUAL"
+        "ATHLETICS_CONDITIONING",
+        "DRIBBLING"
       ],
       "level": "ADVANCED",
       "age_groups": [
@@ -1166,12 +2697,53 @@
       "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "tr", "type": "COACH_FEEDER", "label": "TR", "x": 0.50, "y": 0.88 },
-        { "id": "a1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.22, "y": 0.45, "hasBall": true },
-        { "id": "a2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.48, "y": 0.40, "hasBall": true },
-        { "id": "a3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.76, "y": 0.46, "hasBall": true },
-        { "id": "a4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.35, "y": 0.65, "hasBall": true },
-        { "id": "a5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.68, "y": 0.68, "hasBall": true }
+        {
+          "id": "tr",
+          "type": "COACH_FEEDER",
+          "label": "TR",
+          "x": 0.5,
+          "y": 0.88
+        },
+        {
+          "id": "a1",
+          "type": "OFFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.22,
+          "y": 0.45,
+          "hasBall": true
+        },
+        {
+          "id": "a2",
+          "type": "OFFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.48,
+          "y": 0.4,
+          "hasBall": true
+        },
+        {
+          "id": "a3",
+          "type": "OFFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.76,
+          "y": 0.46,
+          "hasBall": true
+        },
+        {
+          "id": "a4",
+          "type": "OFFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.35,
+          "y": 0.65,
+          "hasBall": true
+        },
+        {
+          "id": "a5",
+          "type": "OFFENSE_PLAYER",
+          "label": "S5",
+          "x": 0.68,
+          "y": 0.68,
+          "hasBall": true
+        }
       ],
       "paths": [
         {
@@ -1179,14 +2751,36 @@
           "type": "DRIBBLE_PATH",
           "stepNumber": 1,
           "fromNodeId": "a1",
-          "points": [{ "x": 0.22, "y": 0.45 }, { "x": 0.34, "y": 0.52 }, { "x": 0.26, "y": 0.60 }]
+          "points": [
+            {
+              "x": 0.22,
+              "y": 0.45
+            },
+            {
+              "x": 0.34,
+              "y": 0.52
+            },
+            {
+              "x": 0.26,
+              "y": 0.6
+            }
+          ]
         },
         {
           "id": "p2",
           "type": "DRIBBLE_PATH",
           "stepNumber": 1,
           "fromNodeId": "a3",
-          "points": [{ "x": 0.76, "y": 0.46 }, { "x": 0.62, "y": 0.54 }]
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.46
+            },
+            {
+              "x": 0.62,
+              "y": 0.54
+            }
+          ]
         }
       ]
     }

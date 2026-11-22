@@ -17,6 +17,11 @@ import {
   getLastSyncedAt,
   syncWithSupabaseCloud
 } from '../services/cloudSyncService';
+import {
+  fetchStandardCatalogManifest,
+  importMissingStandardExercisesForClub,
+  type StandardCatalogImportProgress
+} from '../services/standardCatalogService';
 import { seedInitialDataIfEmpty } from '../db/seedData';
 import { isValidInviteCodeFormat } from '../utils/securityUtils';
 import type { Club, ClubMember } from '../types/domain';
@@ -25,6 +30,7 @@ interface AuthClubModalProps {
   isOpen: boolean;
   onClose: () => void;
   userEmail: string | null;
+  authUserId: string | null;
   clubs: Club[];
   activeClub?: Club;
   onSelectClub: (clubId: string) => void;
@@ -39,6 +45,7 @@ export function AuthClubModal({
   isOpen,
   onClose,
   userEmail,
+  authUserId,
   clubs,
   activeClub,
   onSelectClub,
@@ -60,6 +67,9 @@ export function AuthClubModal({
   const [clubName, setClubName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [showAdminCreateClub, setShowAdminCreateClub] = useState(false);
+  const [seedStandardCatalog, setSeedStandardCatalog] = useState(true);
+  const [catalogTotalCount, setCatalogTotalCount] = useState<number | null>(null);
+  const [clubCreateProgress, setClubCreateProgress] = useState<string | null>(null);
 
   const [isBusy, setIsBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -201,6 +211,21 @@ export function AuthClubModal({
     }
   }
 
+  function formatCatalogSeedProgress(progress: StandardCatalogImportProgress): string {
+    switch (progress.phase) {
+      case 'PREPARING':
+        return 'Bereite Standard-Übungskatalog vor…';
+      case 'FETCHING':
+        return `Lade Standard-Übungen (${progress.processedFiles}/${progress.totalFiles} Pakete)…`;
+      case 'SAVING_LOCAL':
+        return `Speichere ${progress.importedExercises} Standard-Übungen lokal…`;
+      case 'SYNCING_CLOUD':
+        return `Synchronisiere Übungen in die Cloud (${progress.syncedCount}/${progress.syncTotalCount})…`;
+      case 'DONE':
+        return 'Standard-Übungskatalog abgeschlossen.';
+    }
+  }
+
   async function handleCreateAdditionalClubSubmit(e: React.FormEvent) {
     e.preventDefault();
     const supabase = getSupabaseClient();
@@ -209,6 +234,7 @@ export function AuthClubModal({
     setIsBusy(true);
     setErrorMsg(null);
     setInfoMsg(null);
+    setClubCreateProgress(null);
 
     try {
       const { data, error } = await supabase.rpc('create_club_with_admin', {
@@ -225,21 +251,60 @@ export function AuthClubModal({
         return;
       }
 
+      const payload =
+        data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
       const createdClubId =
-        data && typeof data === 'object' && 'club_id' in data
-          ? String((data as { club_id: string }).club_id)
-          : undefined;
+        typeof payload.club_id === 'string' ? payload.club_id : undefined;
+      const createdMemberId =
+        typeof payload.member_id === 'string' ? payload.member_id : undefined;
 
       const syncRes = await syncWithSupabaseCloud();
       if (createdClubId) {
         onSelectClub(createdClubId);
       }
-      setClubName('');
-      setShowAdminCreateClub(false);
-      onSyncCompleted(
-        `Neuer Verein angelegt & synchronisiert (${syncRes.pulledCount} Datensätze geladen).`
-      );
+
+      if (seedStandardCatalog && createdClubId) {
+        setClubCreateProgress('Bereite Standard-Übungskatalog vor…');
+        const effectiveAuthUserId =
+          authUserId ?? (await supabase.auth.getUser()).data.user?.id ?? null;
+
+        try {
+          const importRes = await importMissingStandardExercisesForClub({
+            clubId: createdClubId,
+            authUserId: effectiveAuthUserId,
+            createdByMemberId: createdMemberId,
+            onProgress: (prog) => setClubCreateProgress(formatCatalogSeedProgress(prog))
+          });
+
+          setClubName('');
+          setShowAdminCreateClub(false);
+          if (importRes.syncErrorMessage) {
+            setInfoMsg(
+              `Neuer Verein wurde angelegt (${importRes.importedCount} Standard-Übungen lokal eingerichtet). Cloud-Sync Hinweis: ${importRes.syncErrorMessage} Fehlende Übungen können jederzeit unter „Verein → Standard-Übungskatalog“ nachgeladen werden.`
+            );
+          } else {
+            onSyncCompleted(
+              `Neuer Verein angelegt & ${importRes.importedCount} Standard-Übungen eingerichtet.`
+            );
+          }
+        } catch (seedErr) {
+          setClubName('');
+          setShowAdminCreateClub(false);
+          const seedMsg =
+            seedErr instanceof Error ? seedErr.message : 'Standard-Übungskatalog konnte nicht geladen werden.';
+          setInfoMsg(
+            `Neuer Verein wurde angelegt, der automatische Katalog-Import wurde jedoch unterbrochen (${seedMsg}). Du kannst alle Standard-Übungen jederzeit unter „Verein → Standard-Übungskatalog“ einspielen.`
+          );
+        }
+      } else {
+        setClubName('');
+        setShowAdminCreateClub(false);
+        onSyncCompleted(
+          `Neuer Verein angelegt & synchronisiert (${syncRes.pulledCount} Datensätze geladen).`
+        );
+      }
     } finally {
+      setClubCreateProgress(null);
       setIsBusy(false);
     }
   }
@@ -577,8 +642,16 @@ export function AuthClubModal({
                   <button
                     type="button"
                     onClick={() => {
-                      setShowAdminCreateClub((v) => !v);
+                      const nextOpen = !showAdminCreateClub;
+                      setShowAdminCreateClub(nextOpen);
                       setErrorMsg(null);
+                      if (nextOpen && catalogTotalCount === null) {
+                        void fetchStandardCatalogManifest()
+                          .then((m) => setCatalogTotalCount(m.totalExercises))
+                          .catch(() => {
+                            // Keep generic label if manifest fetch fails offline
+                          });
+                      }
                     }}
                     className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2.5 py-1 text-xs font-semibold text-blue-300 hover:bg-slate-700"
                   >
@@ -605,15 +678,38 @@ export function AuthClubModal({
                         />
                       </div>
                     </div>
+                    <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-blue-500/30 bg-blue-950/20 px-3 py-2 text-[11px] text-slate-200">
+                      <input
+                        type="checkbox"
+                        checked={seedStandardCatalog}
+                        disabled={isBusy}
+                        onChange={(e) => setSeedStandardCatalog(e.target.checked)}
+                        className="h-4 w-4 rounded accent-blue-500"
+                      />
+                      <span>
+                        Standard-Übungskatalog ({catalogTotalCount ?? 'alle'} Übungen) direkt einrichten
+                      </span>
+                    </label>
+                    {clubCreateProgress && (
+                      <div className="rounded-xl border border-blue-500/30 bg-slate-900 px-3 py-2 text-[11px] text-blue-200">
+                        {clubCreateProgress}
+                      </div>
+                    )}
                     <button
                       type="submit"
                       disabled={isBusy}
                       className="w-full rounded-xl bg-emerald-600 py-2 text-xs font-bold text-white hover:bg-emerald-500 disabled:opacity-50"
                     >
-                      {isBusy ? 'Lege Verein an...' : 'Verein jetzt anlegen & wechseln'}
+                      {isBusy ? clubCreateProgress ?? 'Lege Verein an...' : 'Verein jetzt anlegen & wechseln'}
                     </button>
                   </form>
                 )}
+              </div>
+            )}
+
+            {infoMsg && (
+              <div className="rounded-xl border border-amber-500/40 bg-amber-950/30 p-3 text-xs text-amber-200">
+                {infoMsg}
               </div>
             )}
 

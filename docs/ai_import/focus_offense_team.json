@@ -26,40 +26,303 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. Vollständige Angriffsformation (LA, RL, RM, RR, RA, KM) gegen eine kompakte 6:0-Abwehr.",
     "flow_description": "1. RL spielt den Ball auf LA und geht als Einläufer Richtung Kreis oder zieht leicht zur Mitte.\n2. RM startet ohne Ball in einem weiten Bogen auf die linke Seite und kreuzt mit LA (Langes Kreuzen).\n3. LA übergibt den Ball im vollen Lauf an RM und besetzt danach die freigewordene Rückraum-Position oder sichert ab.\n4. RM stößt mit Tempo in die Mitte, bindet den Innenblock und entscheidet zwischen eigenem Wurf, Anspiel auf KM (nach Sperre) oder schnellem Weiterpass auf RR und RA.",
     "coaching_points": "- Langes Kreuzen mit hohem Tempo ausführen, um die Abwehrverschiebung zu stören\n- Alle sechs Angreifer bewegen sich synchron und halten die Räume breit\n- Nach dem Kreuzen sofort den freien Nebenmann auf der ballfernen Seite suchen",
     "variations_text": "- Spiegelverkehrt über RR, RA und RM auf der rechten Seite\n- Doppelte Punktzahl für ein Tor über die ballferne Seite (RR oder RA)\n- Abwehr schaltet nach Ballgewinn sofort auf Gegenstoß um",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.66, "hasBall": true },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.72 },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.62, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_la", "type": "WAYPOINT", "x": 0.22, "y": 0.54 },
-        { "id": "wp_rm", "type": "WAYPOINT", "x": 0.42, "y": 0.48 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.63,
+          "y": 0.24
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.38,
+          "y": 0.3
+        },
+        {
+          "id": "wp_la",
+          "type": "WAYPOINT",
+          "x": 0.22,
+          "y": 0.44
+        },
+        {
+          "id": "wp_rm_left",
+          "type": "WAYPOINT",
+          "x": 0.16,
+          "y": 0.48
+        },
+        {
+          "id": "wp_rm_mid",
+          "type": "WAYPOINT",
+          "x": 0.48,
+          "y": 0.34
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rl", "toNodeId": "la", "points": [{ "x": 0.24, "y": 0.66 }, { "x": 0.08, "y": 0.28 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "la", "toWaypointId": "wp_la", "points": [{ "x": 0.08, "y": 0.28 }, { "x": 0.22, "y": 0.54 }] },
-        { "id": "p3", "type": "RUN_PATH", "stepNumber": 3, "fromNodeId": "rm", "toWaypointId": "wp_rm", "points": [{ "x": 0.5, "y": 0.72 }, { "x": 0.42, "y": 0.48 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromWaypointId": "wp_la", "toWaypointId": "wp_rm", "points": [{ "x": 0.22, "y": 0.54 }, { "x": 0.42, "y": 0.48 }] },
-        { "id": "p5", "type": "PASS_PATH", "stepNumber": 5, "fromWaypointId": "wp_rm", "toNodeId": "rr", "points": [{ "x": 0.42, "y": 0.48 }, { "x": 0.76, "y": 0.66 }] }
-      ]
+        {
+          "fromNodeId": "rl",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.1,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "la",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.32,
+              "y": 0.41
+            },
+            {
+              "x": 0.38,
+              "y": 0.3
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.32,
+              "y": 0.58
+            },
+            {
+              "x": 0.16,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rm_left",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.22,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_la",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_la",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.22,
+              "y": 0.44
+            },
+            {
+              "x": 0.16,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rm_left",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm_left",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.16,
+              "y": 0.48
+            },
+            {
+              "x": 0.48,
+              "y": 0.34
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_rm_mid",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.63,
+              "y": 0.24
+            },
+            {
+              "x": 0.57,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 7,
+          "toNodeId": "v4",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm_mid",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.48,
+              "y": 0.34
+            },
+            {
+              "x": 0.76,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 8,
+          "toNodeId": "rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.52
+            },
+            {
+              "x": 0.9,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 9,
+          "toNodeId": "ra",
+          "type": "PASS_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -89,40 +352,254 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 im Positionsangriff gegen eine geschlossene 6:0-Abwehr.",
     "flow_description": "1. Der Angriff startet mit einer druckvollen Stoßbewegung von RM nach links und Pass auf RL.\n2. RL stößt steil zwischen Halb- und Außenverteidiger und zwingt die gesamte 6:0-Abwehr zum Verschieben nach links.\n3. Sobald die Abwehr verschoben hat, spielt RL den schnellen Rückpass auf den gegenläufig anlaufenden RM (Rückstoßen).\n4. Gleichzeitig stellt KM eine Sperre gegen den rechten Innenblocker, sodass RM mit vollem Tempo in die geöffnete Mitte durchbricht oder auf RR/RA abräumt.",
     "coaching_points": "- Erstes Stoßen muss tief und gefährlich genug sein, damit die Abwehr wirklich verschiebt\n- Rückpass erfolgt flach und im Laufrhythmus von RM\n- Kreisläufer reagiert exakt auf den Richtungswechsel des Balls",
     "variations_text": "- Start der Stoßbewegung über die rechte Seite (RR) mit Rückstoßen auf RM/RL\n- Vorgabe: Vor dem Abschluss muss mindestens ein Seitenwechsel erfolgen\n- Verteidigung wechselt nach 4 Angriffen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.66 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.7, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.56, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.22, "y": 0.5 },
-        { "id": "wp_rm", "type": "WAYPOINT", "x": 0.58, "y": 0.48 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.26
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rm_left",
+          "type": "WAYPOINT",
+          "x": 0.38,
+          "y": 0.48
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.22,
+          "y": 0.34
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.54,
+          "y": 0.38
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rm", "toNodeId": "rl", "points": [{ "x": 0.5, "y": 0.7 }, { "x": 0.24, "y": 0.66 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rl", "toWaypointId": "wp_rl", "points": [{ "x": 0.24, "y": 0.66 }, { "x": 0.22, "y": 0.5 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromWaypointId": "wp_rl", "toWaypointId": "wp_rm", "points": [{ "x": 0.22, "y": 0.5 }, { "x": 0.58, "y": 0.48 }] },
-        { "id": "p4", "type": "SCREEN_BLOCK_PATH", "stepNumber": 4, "fromNodeId": "km", "toNodeId": "v4", "points": [{ "x": 0.56, "y": 0.36 }, { "x": 0.56, "y": 0.42 }] },
-        { "id": "p5", "type": "SHOT_PATH", "stepNumber": 5, "fromWaypointId": "wp_rm", "toNodeId": "gk", "points": [{ "x": 0.58, "y": 0.48 }, { "x": 0.5, "y": 0.08 }] }
-      ]
+        {
+          "fromNodeId": "rm",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.38,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_rm_left",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm_left",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.38,
+              "y": 0.48
+            },
+            {
+              "x": 0.24,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 2,
+          "toNodeId": "rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.22,
+              "y": 0.34
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm_left",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.38,
+              "y": 0.48
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.22,
+              "y": 0.34
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.26
+            },
+            {
+              "x": 0.57,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 6,
+          "toNodeId": "v4",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.54,
+              "y": 0.38
+            },
+            {
+              "x": 0.46,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 7,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -151,40 +628,215 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 Positionsangriff gegen eine 6:0- oder 5:1-Abwehr.",
     "flow_description": "1. RM passt den Ball auf RL und löst direkt danach als zweiter Kreisläufer an die 6m-Linie auf (Übergang).\n2. Der ursprüngliche Kreisläufer (KM) positioniert sich auf der ballfernen Seite (zwischen Halb-Links und Innenblock), sodass ein Doppel-Kreis entsteht.\n3. RL und RR besetzen den Rückraum breit und verlagern den Ball mit hohem Tempo von links nach rechts.\n4. Beide Kreisläufer binden den Innenblock durch Sperren oder Absetzen; der Rückraum schließt aus der Tiefe ab oder steckt den Ball an einen der beiden Kreisläufer durch.",
     "coaching_points": "- Nach dem Übergang sofort klare Aufgabenverteilung am Kreis (einer links, einer rechts)\n- Rückraumspieler dürfen nicht zu eng zusammenstehen, sondern müssen das Feld breit halten\n- Schnelles Weiterleiten über die Achse RL-RR-RA erzeugt Überzahl am Flügel",
     "variations_text": "- Übergang erfolgt von RL statt RM, RM rückt auf halblinks nach\n- Abwehr reagiert mit offensiver 5:1-Deckung auf die beiden Rückraumspieler\n- Bei Zeitspiel muss innerhalb von 5 Sekunden abgeschlossen werden",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.26, "y": 0.66 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.7, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.74, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.64, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_piv2", "type": "WAYPOINT", "x": 0.36, "y": 0.36 },
-        { "id": "wp_rr", "type": "WAYPOINT", "x": 0.62, "y": 0.48 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.64,
+          "y": 0.24
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_piv2",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.24
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.64,
+          "y": 0.38
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rm", "toNodeId": "rl", "points": [{ "x": 0.5, "y": 0.7 }, { "x": 0.26, "y": 0.66 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rm", "toWaypointId": "wp_piv2", "points": [{ "x": 0.5, "y": 0.7 }, { "x": 0.36, "y": 0.36 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromNodeId": "rl", "toNodeId": "rr", "points": [{ "x": 0.26, "y": 0.66 }, { "x": 0.74, "y": 0.66 }] },
-        { "id": "p4", "type": "RUN_PATH", "stepNumber": 4, "fromNodeId": "rr", "toWaypointId": "wp_rr", "points": [{ "x": 0.74, "y": 0.66 }, { "x": 0.62, "y": 0.48 }] },
-        { "id": "p5", "type": "PASS_PATH", "stepNumber": 5, "fromWaypointId": "wp_rr", "toNodeId": "km", "points": [{ "x": 0.62, "y": 0.48 }, { "x": 0.64, "y": 0.36 }] }
-      ]
+        {
+          "fromNodeId": "rm",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.24,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.36,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_piv2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.76,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 3,
+          "toNodeId": "rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.52
+            },
+            {
+              "x": 0.64,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rr",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.38
+            },
+            {
+              "x": 0.64,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 5,
+          "toNodeId": "km",
+          "type": "PASS_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -214,38 +866,270 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 5 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 5
+      }
     ],
     "setup_description": "Halbes Spielfeld. Sechs Angreifer (LA, RL, RM, RR, RA, KM) spielen gegen fünf Verteidiger in einer kompakten 5:0-Abwehr.",
     "flow_description": "1. Der Angriff baut von der linken Seite über LA und RL Druck auf und zieht die 5:0-Abwehr weit auf die Ballseite.\n2. KM bindet den zentralen Verteidiger direkt vor der Mitte, sodass ein schneller Seitenwechsel auf RM und RR vorbereitet wird.\n3. Durch konsequentes Stoßen in die Nahtstellen (ohne Prellen!) wird jeder Verteidiger gebunden und der Ball blitzschnell weitergeleitet.\n4. Am Ende der Passkette entsteht eine klare 2-gegen-1-Überzahl auf Rechtsaußen, die RA frei zum Sprungwurf verwertet.",
     "coaching_points": "- Kein unnötiges Prellen in Überzahl – der Ball ist schneller als die Beine der Abwehr\n- Jeder Rückraumspieler stößt vor dem Pass steil Richtung Tor, um den Verteidiger zu binden\n- Außenspieler halten maximale Breite bis an die Seitenlinie",
     "variations_text": "- Überzahl über die linke Seite (LA) ausspielen\n- Sonderregel: Abschluss darf nur von LA, RA oder KM erfolgen\n- Nach 2 Minuten Zeitstrafe kommt der 6. Abwehrspieler aktiv aufs Feld zurück",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.06, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.66, "hasBall": true },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.68 },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.94, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.44, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.16, "y": 0.36 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.34, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.5, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.66, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.82, "y": 0.36 },
-        { "id": "wp_ra", "type": "WAYPOINT", "x": 0.78, "y": 0.18 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.17,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.32,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.25
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.68,
+          "y": 0.23
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.83,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.3,
+          "y": 0.38
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.54,
+          "y": 0.38
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.74,
+          "y": 0.36
+        },
+        {
+          "id": "wp_ra",
+          "type": "WAYPOINT",
+          "x": 0.78,
+          "y": 0.14
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rl", "toNodeId": "rm", "points": [{ "x": 0.24, "y": 0.66 }, { "x": 0.5, "y": 0.68 }] },
-        { "id": "p2", "type": "PASS_PATH", "stepNumber": 2, "fromNodeId": "rm", "toNodeId": "rr", "points": [{ "x": 0.5, "y": 0.68 }, { "x": 0.76, "y": 0.66 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromNodeId": "rr", "toNodeId": "ra", "points": [{ "x": 0.76, "y": 0.66 }, { "x": 0.94, "y": 0.28 }] },
-        { "id": "p4", "type": "RUN_PATH", "stepNumber": 4, "fromNodeId": "ra", "toWaypointId": "wp_ra", "points": [{ "x": 0.94, "y": 0.28 }, { "x": 0.78, "y": 0.18 }] },
-        { "id": "p5", "type": "SHOT_PATH", "stepNumber": 5, "fromWaypointId": "wp_ra", "toNodeId": "gk", "points": [{ "x": 0.78, "y": 0.18 }, { "x": 0.5, "y": 0.08 }] }
-      ]
+        {
+          "fromNodeId": "rl",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.3,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.3,
+              "y": 0.38
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.52
+            },
+            {
+              "x": 0.74,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.54,
+              "y": 0.38
+            },
+            {
+              "x": 0.74,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rr",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.36
+            },
+            {
+              "x": 0.9,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 6,
+          "toNodeId": "ra",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "ra",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.9,
+              "y": 0.16
+            },
+            {
+              "x": 0.78,
+              "y": 0.14
+            }
+          ],
+          "stepNumber": 7,
+          "toWaypointId": "wp_ra",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_ra",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.78,
+              "y": 0.14
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 8,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -273,39 +1157,250 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 7 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 7
+      }
     ],
     "setup_description": "Halbes Spielfeld. Sieben Angreifer (LA, RL, RM, RR, RA plus zwei Kreisläufer KM1 und KM2) spielen gegen eine volle 6:0-Abwehr. Das eigene Tor bleibt leer (bei Ballverlust direkter Wurf der Abwehr ins leere Tor simuliert).",
     "flow_description": "1. KM1 positioniert sich zwischen V2 und V3, KM2 zwischen V4 und V5.\n2. RM eröffnet das Spiel über RL, während KM1 eine Außensperre gegen V2 stellt oder V3 bindet.\n3. Durch schnelles Verlagern über RL-RM-RR wird die 6:0-Abwehr permanent in Unterzahl-Entscheidungen gezwungen.\n4. Je nach Reaktion des Innenblocks erfolgt das Anspiel an einen der beiden Kreisläufer, der Rückraumwurf aus 9m oder das Abräumen auf Außen.",
     "coaching_points": "- Extrem geringe Fehlerquote fordern (kein riskanter Pass ins Zentrum bei leerem eigenem Tor)\n- Geduldiges Ausspielen bis zur 100%-igen Torchance\n- Beide Kreisläufer halten Abstand zueinander, um den Innenblock maximal auseinanderzuziehen",
     "variations_text": "- Bei jedem Ballverlust zählt ein direkter Gegenpunkt für die Abwehr (Empty-Goal-Bestrafung)\n- Abwehr reagiert mit offensiver 5:1-Deckung auf RM\n- Wechsel des 7. Feldspielers nach jedem Ballbesitz simulieren",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.68 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.72, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.68 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km1", "type": "OFFENSE_PLAYER", "label": "KM1", "x": 0.36, "y": 0.36 },
-        { "id": "km2", "type": "OFFENSE_PLAYER", "label": "KM2", "x": 0.64, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_rr", "type": "WAYPOINT", "x": 0.68, "y": 0.5 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km1",
+          "label": "KM1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.36,
+          "y": 0.24
+        },
+        {
+          "id": "km2",
+          "label": "KM2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.64,
+          "y": 0.24
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.68,
+          "y": 0.38
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rm", "toNodeId": "rr", "points": [{ "x": 0.5, "y": 0.72 }, { "x": 0.76, "y": 0.68 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rr", "toWaypointId": "wp_rr", "points": [{ "x": 0.76, "y": 0.68 }, { "x": 0.68, "y": 0.5 }] },
-        { "id": "p3", "type": "SCREEN_BLOCK_PATH", "stepNumber": 3, "fromNodeId": "km2", "toNodeId": "v5", "points": [{ "x": 0.64, "y": 0.36 }, { "x": 0.7, "y": 0.42 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromWaypointId": "wp_rr", "toNodeId": "km2", "points": [{ "x": 0.68, "y": 0.5 }, { "x": 0.64, "y": 0.36 }] }
-      ]
+        {
+          "fromNodeId": "rm",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.24,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "km1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.24
+            },
+            {
+              "x": 0.29,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 2,
+          "toNodeId": "v2",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.5,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 3,
+          "toNodeId": "rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.76,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.52
+            },
+            {
+              "x": 0.68,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "km2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.24
+            },
+            {
+              "x": 0.71,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 6,
+          "toNodeId": "v5",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rr",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.68,
+              "y": 0.38
+            },
+            {
+              "x": 0.64,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 7,
+          "toNodeId": "km2",
+          "type": "PASS_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -335,39 +1430,245 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 Positionsangriff gegen eine offensive 5:1-Abwehr (vorgezogener Indianer auf RM).",
     "flow_description": "1. RL startet mit Ball und zieht leicht Richtung Mitte, während der vorgezogene 5:1-Verteidiger den Passweg zu RM zustellt.\n2. LA startet im Rücken seines Gegenspielers als Einläufer an die 6m-Linie und bindet dort den Halbverteidiger.\n3. KM zieht zeitgleich nach rechts weg und stellt eine Sperre im Zentrum hinter dem Indianer.\n4. RL nutzt die gewonnene Tiefe für den direkten Durchbruch, den Steckpass auf LA oder verlagert über RM (der sich freiläuft) schnell auf RR.",
     "coaching_points": "- Gegen eine 5:1-Abwehr zwingend die großen Räume hinter dem Indianer nutzen\n- Einläufer von Außen läuft mit maximalem Tempo, um das Übergeben der Abwehr zu erschweren\n- Rückraumspieler dürfen sich vom Indianer nicht zu weit Richtung Mittellinie drängen lassen",
     "variations_text": "- Einlaufen von Rechtsaußen (RA) statt Linksaußen\n- Kombination mit einem direkten Übergang von RM an den Kreis\n- Abwehr wechselt flexibel zwischen 5:1 und 6:0 (Lesen des Systems)",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.66, "hasBall": true },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.74 },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.56, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.32, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.5, "y": 0.4 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.68, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.86, "y": 0.34 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "VM", "x": 0.5, "y": 0.6 },
-        { "id": "wp_la", "type": "WAYPOINT", "x": 0.42, "y": 0.3 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.34, "y": 0.48 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.4,
+          "y": 0.25
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.3,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.25
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.7,
+          "y": 0.23
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "v6",
+          "label": "VM",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.39
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.4
+        },
+        {
+          "id": "wp_la",
+          "type": "WAYPOINT",
+          "x": 0.37,
+          "y": 0.23
+        },
+        {
+          "id": "wp_km",
+          "type": "WAYPOINT",
+          "x": 0.58,
+          "y": 0.25
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "RUN_PATH", "stepNumber": 1, "fromNodeId": "la", "toWaypointId": "wp_la", "points": [{ "x": 0.08, "y": 0.28 }, { "x": 0.42, "y": 0.3 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rl", "toWaypointId": "wp_rl", "points": [{ "x": 0.24, "y": 0.66 }, { "x": 0.34, "y": 0.48 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromWaypointId": "wp_rl", "toWaypointId": "wp_la", "points": [{ "x": 0.34, "y": 0.48 }, { "x": 0.42, "y": 0.3 }] },
-        { "id": "p4", "type": "SHOT_PATH", "stepNumber": 4, "fromWaypointId": "wp_la", "toNodeId": "gk", "points": [{ "x": 0.42, "y": 0.3 }, { "x": 0.5, "y": 0.08 }] }
-      ]
+        {
+          "fromNodeId": "rl",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.36,
+              "y": 0.4
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.22,
+              "y": 0.19
+            },
+            {
+              "x": 0.37,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_la",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.4,
+              "y": 0.25
+            },
+            {
+              "x": 0.5,
+              "y": 0.29
+            },
+            {
+              "x": 0.58,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_km",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_km",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.58,
+              "y": 0.25
+            },
+            {
+              "x": 0.5,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "v3",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.4
+            },
+            {
+              "x": 0.37,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_la",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_la",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.37,
+              "y": 0.23
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 6,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -398,40 +1699,272 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6. Fokus liegt auf kontinuierlichem Parallelstoßen von links nach rechts und zurück, ohne das Spiel durch Einzelaktionen abzubrechen.",
     "flow_description": "1. Der Ball startet auf LA, der auf den anlaufenden RL passt.\n2. RL stößt steil in die Nahtstelle, bindet seinen Verteidiger und spielt im letzten Moment weiter auf RM.\n3. RM und RR setzen die Druckwelle nahtlos fort, bis die Abwehr auf einer Seite nicht mehr rechtzeitig verschieben kann.\n4. Entsteht auf rechts kein klarer Wurf, wird die Welle sofort ohne Prellen zurück nach links ausgelöst, während KM permanent den freien Raum hinter den heraustretenden Verteidigern sucht.",
     "coaching_points": "- Rückraumspieler holen vor jeder Ballannahme Tiefe (ca. 11-12m), um im Vollsprint annehmen zu können\n- Nullschritt-Annahme und sofortige Blickorientierung zur nächsten Lücke\n- Kein 'Ballhalten im Stand' – der Ball bleibt permanent in Bewegung",
     "variations_text": "- Maximal 1x Prellen pro Ballbesitz erlaubt\n- Erst nach mindestens zwei kompletten Seitenwechseln darf geworfen werden\n- Bei Ballverlust sofortiges Rückzugsverhalten bis zur eigenen 9m-Linie",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28, "hasBall": true },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.26, "y": 0.7 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.72 },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.74, "y": 0.7 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.5, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.32, "y": 0.52 },
-        { "id": "wp_rm", "type": "WAYPOINT", "x": 0.52, "y": 0.52 },
-        { "id": "wp_rr", "type": "WAYPOINT", "x": 0.72, "y": 0.5 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "hasBall": true,
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.26
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.34,
+          "y": 0.38
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.54,
+          "y": 0.38
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.74,
+          "y": 0.36
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "la", "toWaypointId": "wp_rl", "points": [{ "x": 0.08, "y": 0.28 }, { "x": 0.32, "y": 0.52 }] },
-        { "id": "p2", "type": "PASS_PATH", "stepNumber": 2, "fromWaypointId": "wp_rl", "toWaypointId": "wp_rm", "points": [{ "x": 0.32, "y": 0.52 }, { "x": 0.52, "y": 0.52 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromWaypointId": "wp_rm", "toWaypointId": "wp_rr", "points": [{ "x": 0.52, "y": 0.52 }, { "x": 0.72, "y": 0.5 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromWaypointId": "wp_rr", "toNodeId": "ra", "points": [{ "x": 0.72, "y": 0.5 }, { "x": 0.92, "y": 0.28 }] }
-      ]
+        {
+          "fromNodeId": "rl",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.34,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.34,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.34,
+              "y": 0.38
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.52
+            },
+            {
+              "x": 0.74,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.54,
+              "y": 0.38
+            },
+            {
+              "x": 0.74,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rr",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.36
+            },
+            {
+              "x": 0.9,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 7,
+          "toNodeId": "ra",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "ra",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.9,
+              "y": 0.16
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 8,
+          "toWaypointId": "wp_rm",
+          "type": "PASS_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -460,40 +1993,236 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 gegen eine tief gestaffelte, offensive 3:2:1-Abwehr.",
     "flow_description": "1. Gegen die offensive 3:2:1-Formation verzichtet der Angriff auf langsames Querspielen vor der Spitze und sucht sofort das 1-gegen-1 gegen die Halbverteidiger.\n2. RL spielt auf LA und startet sofort ohne Ball hinter dem vorgezogenen Halbverteidiger in die Tiefe (Übergang).\n3. RM zieht auf die linke Seite nach, während KM den hinteren Mittelspieler (HM) bindet.\n4. LA spielt den Ball auf RM zurück, der nun im 2 gegen 1 mit dem eingelaufenen RL oder über einen schnellen Wechsel auf RR die geöffnete 3:2:1-Struktur ausspielt.",
     "coaching_points": "- Tiefe Räume zwischen den Abwehrlinien (zwischen Halb und Hinterem Mitte) aktiv anlaufen\n- Schnelle Ballannahme ohne Blickverlust zum offensiven Gegenspieler\n- Einlaufen ohne Ball zwingt die 3:2:1-Abwehr zu schwierigen Übergaben",
     "variations_text": "- Übergang erfolgt von RR nach Pass auf RA\n- 3:2:1-Abwehr darf ab der 9m-Linie aggressiv Passwege jagen\n- Zusatzpunkt für jeden erfolgreichen Pass hinter die erste Abwehrlinie",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.68, "hasBall": true },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.76 },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.68 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.52, "y": 0.34 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "AL", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "AR", "x": 0.86, "y": 0.34 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "HM", "x": 0.5, "y": 0.38 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "HL", "x": 0.32, "y": 0.52 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "HR", "x": 0.68, "y": 0.52 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "VM", "x": 0.5, "y": 0.62 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.36, "y": 0.34 },
-        { "id": "wp_rm", "type": "WAYPOINT", "x": 0.28, "y": 0.64 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.52
+        },
+        {
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.52
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.24
+        },
+        {
+          "id": "v1",
+          "label": "AL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "AR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "v3",
+          "label": "HM",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.25
+        },
+        {
+          "id": "v4",
+          "label": "HL",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.3,
+          "y": 0.32
+        },
+        {
+          "id": "v5",
+          "label": "HR",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.7,
+          "y": 0.32
+        },
+        {
+          "id": "v6",
+          "label": "VM",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.4
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.38,
+          "y": 0.24
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.5
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rl", "toNodeId": "la", "points": [{ "x": 0.24, "y": 0.68 }, { "x": 0.08, "y": 0.28 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rl", "toWaypointId": "wp_rl", "points": [{ "x": 0.24, "y": 0.68 }, { "x": 0.36, "y": 0.34 }] },
-        { "id": "p3", "type": "RUN_PATH", "stepNumber": 3, "fromNodeId": "rm", "toWaypointId": "wp_rm", "points": [{ "x": 0.5, "y": 0.76 }, { "x": 0.28, "y": 0.64 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromNodeId": "la", "toWaypointId": "wp_rm", "points": [{ "x": 0.08, "y": 0.28 }, { "x": 0.28, "y": 0.64 }] },
-        { "id": "p5", "type": "PASS_PATH", "stepNumber": 5, "fromWaypointId": "wp_rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.28, "y": 0.64 }, { "x": 0.36, "y": 0.34 }] }
-      ]
+        {
+          "fromNodeId": "rl",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.1,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "la",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.52
+            },
+            {
+              "x": 0.22,
+              "y": 0.35
+            },
+            {
+              "x": 0.38,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.58
+            },
+            {
+              "x": 0.28,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.57,
+              "y": 0.24
+            },
+            {
+              "x": 0.5,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "v3",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.28,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.5
+            },
+            {
+              "x": 0.38,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -523,38 +2252,307 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Ganzes Spielfeld mit zwei Torhütern. Team A startet nach einem simulierten Gegentor sofort mit der schnellen Mitte gegen das zurückeilende Team B.",
     "flow_description": "1. Auf Pfiff des Trainers holt der Torhüter von Team A den Ball aus dem Tor und passt sofort an die Mittellinie zu RM.\n2. Beide Außenspieler und der Kreisläufer sprinten sofort in die Tiefe, RL und RR stoßen mit maximalem Tempo nach.\n3. RM führt den Anwurf schnell aus und spielt den nachstoßenden RL oder RR in der 2. Welle an.\n4. Steht die Abwehr bereits, geht die Mannschaft ohne Tempoverlust direkt in eine vereinbarte Auslösehandlung (z. B. Stoßen-Rückstoßen) über.",
     "coaching_points": "- Klare Laufkorridore in der 2. Welle (Außen halten Breite, Kreis läuft durch die Mitte)\n- Übergang von 2. Welle in den Positionsangriff erfolgt fließend ohne Abstoppen\n- Anwurf schnell und regelkonform am Mittelpunkt ausführen",
     "variations_text": "- Tor innerhalb von 7 Sekunden nach Anwurf zählt doppelt\n- Verteidigende Mannschaft muss vor dem Rückzug erst die eigene 6m-Linie berühren\n- Kontinuierliches Spiel hin und her über 5 Minuten",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
-        { "id": "gk1", "type": "GOALKEEPER", "label": "TW1", "x": 0.08, "y": 0.5 },
-        { "id": "gk2", "type": "GOALKEEPER", "label": "TW2", "x": 0.92, "y": 0.5 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.5, "hasBall": true },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.42, "y": 0.28 },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.42, "y": 0.72 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.58, "y": 0.14 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.58, "y": 0.86 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.62, "y": 0.5 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.72, "y": 0.35 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.72, "y": 0.5 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.72, "y": 0.65 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.74, "y": 0.3 },
-        { "id": "wp_km", "type": "WAYPOINT", "x": 0.82, "y": 0.5 }
+        {
+          "hasBall": true,
+          "id": "gk1",
+          "label": "TW1",
+          "type": "GOALKEEPER",
+          "x": 0.08,
+          "y": 0.5
+        },
+        {
+          "id": "gk2",
+          "label": "TW2",
+          "type": "GOALKEEPER",
+          "x": 0.92,
+          "y": 0.5
+        },
+        {
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.5
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.38,
+          "y": 0.28
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.38,
+          "y": 0.72
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.56,
+          "y": 0.12
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.56,
+          "y": 0.88
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.58,
+          "y": 0.5
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.78,
+          "y": 0.22
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.34
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.72,
+          "y": 0.45
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.72,
+          "y": 0.55
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.66
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.78,
+          "y": 0.78
+        },
+        {
+          "id": "wp_la",
+          "type": "WAYPOINT",
+          "x": 0.86,
+          "y": 0.14
+        },
+        {
+          "id": "wp_ra",
+          "type": "WAYPOINT",
+          "x": 0.86,
+          "y": 0.86
+        },
+        {
+          "id": "wp_km",
+          "type": "WAYPOINT",
+          "x": 0.8,
+          "y": 0.5
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.68,
+          "y": 0.26
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.68,
+          "y": 0.74
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "RUN_PATH", "stepNumber": 1, "fromNodeId": "rl", "toWaypointId": "wp_rl", "points": [{ "x": 0.42, "y": 0.28 }, { "x": 0.74, "y": 0.3 }] },
-        { "id": "p2", "type": "PASS_PATH", "stepNumber": 2, "fromNodeId": "rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.5, "y": 0.5 }, { "x": 0.74, "y": 0.3 }] },
-        { "id": "p3", "type": "RUN_PATH", "stepNumber": 3, "fromNodeId": "km", "toWaypointId": "wp_km", "points": [{ "x": 0.62, "y": 0.5 }, { "x": 0.82, "y": 0.5 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromWaypointId": "wp_rl", "toWaypointId": "wp_km", "points": [{ "x": 0.74, "y": 0.3 }, { "x": 0.82, "y": 0.5 }] },
-        { "id": "p5", "type": "SHOT_PATH", "stepNumber": 5, "fromWaypointId": "wp_km", "toNodeId": "gk2", "points": [{ "x": 0.82, "y": 0.5 }, { "x": 0.92, "y": 0.5 }] }
-      ]
+        {
+          "fromNodeId": "gk1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "x": 0.5,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.56,
+              "y": 0.12
+            },
+            {
+              "x": 0.86,
+              "y": 0.14
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_la",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "ra",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.56,
+              "y": 0.88
+            },
+            {
+              "x": 0.86,
+              "y": 0.86
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_ra",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.58,
+              "y": 0.5
+            },
+            {
+              "x": 0.8,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_km",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.38,
+              "y": 0.28
+            },
+            {
+              "x": 0.68,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.38,
+              "y": 0.72
+            },
+            {
+              "x": 0.68,
+              "y": 0.74
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.5
+            },
+            {
+              "x": 0.68,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 7,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.68,
+              "y": 0.26
+            },
+            {
+              "x": 0.8,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 8,
+          "toWaypointId": "wp_km",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_km",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.8,
+              "y": 0.5
+            },
+            {
+              "x": 0.95,
+              "y": 0.47
+            }
+          ],
+          "stepNumber": 9,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -584,40 +2582,214 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 gegen eine 6:0-Abwehr. Fokus auf einem einfachen, strukturierten Positionswechsel im linken Rückraum als Auslösehandlung.",
     "flow_description": "1. RM startet mit Ball, zieht Richtung RL und kreuzt mit ihm im vollen Lauf.\n2. RL übernimmt den Ball auf der Mitte-Position und attackiert den Innenblock.\n3. Zeitgleich stellt KM eine Sperre gegen den rechten Innenblocker.\n4. RL nutzt die Sperre für den eigenen Wurf oder Pass auf KM; rückt der linke Halbverteidiger zur Hilfe ein, erfolgt der sofortige Weiterpass auf RR und RA.",
     "coaching_points": "- Nach dem Kreuzen besetzt RM konsequent die linke Rückraumposition als Anspielstation\n- Klarer Tempowechsel von RL beim Übernehmen des Balls\n- Alle sechs Positionen bleiben aktiv anspielbereit",
     "variations_text": "- Spiegelverkehrt mit RM und RR einleiten\n- Abwehr darf erst beim Kreuzen offensiv heraustreten\n- Tor nach konsequentem Weiterspiel auf den ballfernen Außenspieler zählt doppelt",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.66 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.7, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.56, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_rm", "type": "WAYPOINT", "x": 0.28, "y": 0.58 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.54, "y": 0.48 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.54
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.54
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.28
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.32,
+          "y": 0.48
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.48,
+          "y": 0.38
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "RUN_PATH", "stepNumber": 1, "fromNodeId": "rm", "toWaypointId": "wp_rm", "points": [{ "x": 0.5, "y": 0.7 }, { "x": 0.28, "y": 0.58 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rl", "toWaypointId": "wp_rl", "points": [{ "x": 0.24, "y": 0.66 }, { "x": 0.54, "y": 0.48 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromWaypointId": "wp_rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.28, "y": 0.58 }, { "x": 0.54, "y": 0.48 }] },
-        { "id": "p4", "type": "SCREEN_BLOCK_PATH", "stepNumber": 4, "fromNodeId": "km", "toNodeId": "v4", "points": [{ "x": 0.56, "y": 0.36 }, { "x": 0.56, "y": 0.42 }] },
-        { "id": "p5", "type": "SHOT_PATH", "stepNumber": 5, "fromWaypointId": "wp_rl", "toNodeId": "gk", "points": [{ "x": 0.54, "y": 0.48 }, { "x": 0.5, "y": 0.08 }] }
-      ]
+        {
+          "fromNodeId": "rm",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.58
+            },
+            {
+              "x": 0.32,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.54
+            },
+            {
+              "x": 0.48,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.32,
+              "y": 0.48
+            },
+            {
+              "x": 0.48,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.28
+            },
+            {
+              "x": 0.57,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "v4",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.48,
+              "y": 0.38
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 5,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -646,41 +2818,294 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 Positionsangriff gegen 6:0-Abwehr.",
     "flow_description": "1. RL startet mit Ball und kreuzt mit RM in Richtung Mitte.\n2. RM nimmt den Ball mit Tempo mit und kreuzt direkt weiter mit RR.\n3. RR attackiert steil die linke Abwehrseite (Nahtstelle zwischen V2 und V3), während KM den zentralen Verteidiger sperrt.\n4. Durch das doppelte Kreuzen verschiebt die Abwehr stark zur Mitte; RR spielt sofort über den nachrückenden RL (jetzt auf halblinks) auf den freistehenden LA zum Sprungwurf ab.",
     "coaching_points": "- Beide Kreuzbewegungen dürfen nicht zu tief (nicht unter 9m) stattfinden\n- Nach dem zweiten Kreuzen sofort das Tempo über die Ballverlagerung erhöhen\n- Linksaußen bleibt geduldig in der Ecke stehen, um den Winkel maximal groß zu halten",
     "variations_text": "- Spiegelverkehrt von RR über RM nach RL und Abschluss über RA\n- RR darf bei zu passiver Abwehr nach dem zweiten Kreuzen direkt werfen\n- Einbau einer Passtäuschung beim zweiten Kreuzen (Leerkreuzen)",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.68, "hasBall": true },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.72 },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.68 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.48, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_c1", "type": "WAYPOINT", "x": 0.42, "y": 0.58 },
-        { "id": "wp_c2", "type": "WAYPOINT", "x": 0.62, "y": 0.58 },
-        { "id": "wp_rr", "type": "WAYPOINT", "x": 0.34, "y": 0.48 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.56
+        },
+        {
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.6
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.56
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.28
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_c1",
+          "type": "WAYPOINT",
+          "x": 0.54,
+          "y": 0.48
+        },
+        {
+          "id": "wp_c2",
+          "type": "WAYPOINT",
+          "x": 0.42,
+          "y": 0.5
+        },
+        {
+          "id": "wp_c3",
+          "type": "WAYPOINT",
+          "x": 0.68,
+          "y": 0.48
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.36
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "RUN_PATH", "stepNumber": 1, "fromNodeId": "rl", "toWaypointId": "wp_c1", "points": [{ "x": 0.24, "y": 0.68 }, { "x": 0.42, "y": 0.58 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rm", "toWaypointId": "wp_c2", "points": [{ "x": 0.5, "y": 0.72 }, { "x": 0.62, "y": 0.58 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromWaypointId": "wp_c1", "toWaypointId": "wp_c2", "points": [{ "x": 0.42, "y": 0.58 }, { "x": 0.62, "y": 0.58 }] },
-        { "id": "p4", "type": "RUN_PATH", "stepNumber": 4, "fromNodeId": "rr", "toWaypointId": "wp_rr", "points": [{ "x": 0.76, "y": 0.68 }, { "x": 0.34, "y": 0.48 }] },
-        { "id": "p5", "type": "PASS_PATH", "stepNumber": 5, "fromWaypointId": "wp_rr", "toNodeId": "la", "points": [{ "x": 0.34, "y": 0.48 }, { "x": 0.08, "y": 0.28 }] }
-      ]
+        {
+          "fromNodeId": "rl",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.56
+            },
+            {
+              "x": 0.54,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_c1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.42,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_c2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_c1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.54,
+              "y": 0.48
+            },
+            {
+              "x": 0.42,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_c2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_c2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.42,
+              "y": 0.5
+            },
+            {
+              "x": 0.68,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_c3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.56
+            },
+            {
+              "x": 0.36,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_c3",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.68,
+              "y": 0.48
+            },
+            {
+              "x": 0.36,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.28
+            },
+            {
+              "x": 0.43,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 7,
+          "toNodeId": "v3",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rr",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.36
+            },
+            {
+              "x": 0.1,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 8,
+          "toNodeId": "la",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 9,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -709,40 +3134,295 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6. Der Trainer agiert als Schiedsrichter und hebt zu einem beliebigen Zeitpunkt (oder direkt zu Beginn) den Arm für passives Spiel.",
     "flow_description": "1. Sobald der Trainer den Arm hebt, hat der Angriff exakt 4 Pässe bis zum Torwurf.\n2. RM ruft sofort eine vorab definierte Kurz-Auslösehandlung (z. B. Sperre für Rückraumschützen oder Stoßen-Abräumen) aus.\n3. Jeder Pass muss zwingend mit Raumgewinn und Torgefahr verbunden sein – keine Alibi-Querpässe.\n4. Nach dem 4. Pass muss ein regulärer Torabschluss erfolgen; ein Freiwurf setzt den Zähler nicht zurück.",
     "coaching_points": "- Ruhe bewahren und klare Ansage vom Spielmacher (RM) einfordern\n- Alle Spieler wissen sofort ihre Laufwege für die Zeitspiel-Lösung\n- Konsequentes Block-Ausweichen und entschlossener Abschluss",
     "variations_text": "- Passlimit auf 3 Pässe reduzieren\n- Start aus einer Freiwurfsituation an der 9m-Linie mit nur noch 2 erlaubten Pässen\n- Abwehr erhält 2 Punkte für jeden erzwungenen Fehlwurf oder Passfehler",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "coach", "type": "COACH_FEEDER", "label": "SR", "x": 0.9, "y": 0.72 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.26, "y": 0.66 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.68, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.74, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.42, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.36, "y": 0.46 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "coach",
+          "label": "SR",
+          "type": "COACH_FEEDER",
+          "x": 0.9,
+          "y": 0.72
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.56
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.6
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.56
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.36,
+          "y": 0.28
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.68,
+          "y": 0.42
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.48,
+          "y": 0.42
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.35,
+          "y": 0.36
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rm", "toNodeId": "rr", "points": [{ "x": 0.5, "y": 0.68 }, { "x": 0.74, "y": 0.66 }] },
-        { "id": "p2", "type": "PASS_PATH", "stepNumber": 2, "fromNodeId": "rr", "toNodeId": "rm", "points": [{ "x": 0.74, "y": 0.66 }, { "x": 0.5, "y": 0.68 }] },
-        { "id": "p3", "type": "SCREEN_BLOCK_PATH", "stepNumber": 3, "fromNodeId": "km", "toNodeId": "v3", "points": [{ "x": 0.42, "y": 0.36 }, { "x": 0.44, "y": 0.42 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromNodeId": "rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.5, "y": 0.68 }, { "x": 0.36, "y": 0.46 }] },
-        { "id": "p5", "type": "SHOT_PATH", "stepNumber": 5, "fromWaypointId": "wp_rl", "toNodeId": "gk", "points": [{ "x": 0.36, "y": 0.46 }, { "x": 0.5, "y": 0.08 }] }
-      ]
+        {
+          "fromNodeId": "rr",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.56
+            },
+            {
+              "x": 0.68,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.68,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.48,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rr",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.68,
+              "y": 0.42
+            },
+            {
+              "x": 0.48,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.28
+            },
+            {
+              "x": 0.43,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 5,
+          "toNodeId": "v3",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.56
+            },
+            {
+              "x": 0.35,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.48,
+              "y": 0.42
+            },
+            {
+              "x": 0.35,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 7,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.35,
+              "y": 0.36
+            },
+            {
+              "x": 0.1,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 8,
+          "toNodeId": "la",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 9,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -772,39 +3452,258 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 5 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 5
+      }
     ],
     "setup_description": "Halbes Spielfeld. Sechs Angreifer gegen eine 5:0-Abwehr. Fokus liegt auf dem Einlaufen des ballfernen Außenspielers zur Schaffung eines Doppel-Kreises in Überzahl.",
     "flow_description": "1. Der Angriff spielt den Ball über RM auf RR und bindet die rechte Abwehrseite.\n2. Sobald der Ball auf RR ist, läuft der ballferne Linksaußen (LA) unbemerkt hinter der Abwehr an den 6m-Raum ein.\n3. KM stellt auf der rechten Seite eine Sperre gegen den Halbverteidiger, während der Ball schnell über RM nach links zu RL verlagert wird.\n4. RL nutzt die entstandene 3-gegen-2-Überzahl auf der linken Seite (RL, eingelaufener LA, nachrückender KM) zum freien Wurf oder Steckpass.",
     "coaching_points": "- Ballferner Außenspieler startet erst, wenn der Ball sicher auf der gegenüberliegenden Seite ist\n- Schnelles Weiterleiten über RM ohne Tempoverlust\n- Einläufer bindet den Innenblock und hält die Hände fangbereit",
     "variations_text": "- Spiegelverkehrt mit Einlaufen von RA starten\n- Abwehr spielt offensiv in einer 4:1-Unterzahl\n- Tor nach direktem Anspiel an den Einläufer zählt doppelt",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.66 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.68, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.62, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.16, "y": 0.36 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.34, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.5, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.66, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.82, "y": 0.36 },
-        { "id": "wp_la", "type": "WAYPOINT", "x": 0.36, "y": 0.32 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.26, "y": 0.46 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.56
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.6
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.56
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.62,
+          "y": 0.26
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.17,
+          "y": 0.17
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.31,
+          "y": 0.22
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.69,
+          "y": 0.22
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.83,
+          "y": 0.17
+        },
+        {
+          "id": "wp_la",
+          "type": "WAYPOINT",
+          "x": 0.4,
+          "y": 0.25
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.42
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "PASS_PATH", "stepNumber": 1, "fromNodeId": "rm", "toNodeId": "rr", "points": [{ "x": 0.5, "y": 0.68 }, { "x": 0.76, "y": 0.66 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "la", "toWaypointId": "wp_la", "points": [{ "x": 0.08, "y": 0.28 }, { "x": 0.36, "y": 0.32 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromNodeId": "rr", "toNodeId": "rm", "points": [{ "x": 0.76, "y": 0.66 }, { "x": 0.5, "y": 0.68 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromNodeId": "rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.5, "y": 0.68 }, { "x": 0.26, "y": 0.46 }] },
-        { "id": "p5", "type": "PASS_PATH", "stepNumber": 5, "fromWaypointId": "wp_rl", "toWaypointId": "wp_la", "points": [{ "x": 0.26, "y": 0.46 }, { "x": 0.36, "y": 0.32 }] }
-      ]
+        {
+          "fromNodeId": "rm",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.76,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.4,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_la",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.62,
+              "y": 0.26
+            },
+            {
+              "x": 0.69,
+              "y": 0.22
+            }
+          ],
+          "stepNumber": 3,
+          "toNodeId": "v4",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.56
+            },
+            {
+              "x": 0.5,
+              "y": 0.6
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.56
+            },
+            {
+              "x": 0.28,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.28,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.42
+            },
+            {
+              "x": 0.4,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 7,
+          "toWaypointId": "wp_la",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_la",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.4,
+              "y": 0.25
+            },
+            {
+              "x": 0.46,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 8,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -834,38 +3733,191 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 mit Freiwurf zentral oder halblinks an der 9m-Linie (alle Angreifer außerhalb von 9m, Abwehr kompakt am 6m-Raum).",
     "flow_description": "1. RM führt den Freiwurf an der 9m-Linie aus, während RL und RR tief an der 12m-Linie anlaufbereit stehen.\n2. KM positioniert sich direkt am Block der Abwehr und stellt auf das Signal von RM eine Sperre gegen den zentralen Blockspieler.\n3. RM tippt den Ball kurz an und spielt den flachen Pass auf den mit Vollsprint anlaufenden RL (oder kreuzt direkt mit ihm).\n4. RL steigt über die Lücke zum Sprungwurf hoch oder spielt bei Doppelblock den sofortigen Steckpass an KM bzw. den freien Außenspieler.",
     "coaching_points": "- Regelkonforme Ausführung des Freiwurfs (alle Angreifer hinter der 9m-Linie)\n- Maximales Anlauftempo des Schützen im Moment des Freiwurf-Signals\n- Klare zweite Option (Pass an den Kreis oder auf Außen), falls der Block schließt",
     "variations_text": "- Freiwurf von halbrechts für RR als Hauptschützen\n- Direkte Ausführung als Schlagwurf durch eine abgesprochene Block-Lücke\n- Zeitdruck: Nur 2 Pässe nach dem Freiwurf erlaubt",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.32 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.78 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.46, "y": 0.56, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.74 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.32 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.38, "y": 0.38 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.36, "y": 0.5 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.74
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.39
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.74
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.4,
+          "y": 0.38
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.44
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "SCREEN_BLOCK_PATH", "stepNumber": 1, "fromNodeId": "km", "toNodeId": "v2", "points": [{ "x": 0.38, "y": 0.38 }, { "x": 0.3, "y": 0.42 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rl", "toWaypointId": "wp_rl", "points": [{ "x": 0.24, "y": 0.78 }, { "x": 0.36, "y": 0.5 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromNodeId": "rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.46, "y": 0.56 }, { "x": 0.36, "y": 0.5 }] },
-        { "id": "p4", "type": "SHOT_PATH", "stepNumber": 4, "fromWaypointId": "wp_rl", "toNodeId": "gk", "points": [{ "x": 0.36, "y": 0.5 }, { "x": 0.5, "y": 0.08 }] }
-      ]
+        {
+          "fromNodeId": "km",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.4,
+              "y": 0.38
+            },
+            {
+              "x": 0.43,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "v3",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.74
+            },
+            {
+              "x": 0.36,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.39
+            },
+            {
+              "x": 0.36,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.44
+            },
+            {
+              "x": 0.45,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 4,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -895,40 +3947,456 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. Alle sechs Angreifer starten an der Mittellinie, die sechs Verteidiger laufen nach einem Signal von der 9m-Linie zur 6m-Linie zurück und sortieren sich.",
     "flow_description": "1. RM eröffnet den Angriff aus der Bewegung mit einem Pass auf die linke Seite (RL).\n2. RL attackiert den noch nicht vollständig geordneten linken Abwehrbereich und zieht die Aufmerksamkeit auf sich.\n3. Sobald die Abwehr nach links überlädt, erfolgt der sofortige Seitenwechsel über RM auf RR und weiter auf RA.\n4. Gelingt kein direkter Abschluss, schließt KM eine sofortige Sperre auf der rechten Seite an, um den Druck aufrechtzuerhalten.",
     "coaching_points": "- Hohes Tempo im Übergang aus der Bewegung bis zum Torabschluss halten\n- Unordnung der Abwehr (falsche Zuordnungen) sofort erkennen und gezielt bespielen\n- Breite Laufwege der Außenspieler öffnen das Zentrum",
     "variations_text": "- Start der Abwehr in falscher Positionszuordnung (z. B. Außen deckt kurzzeitig Mitte)\n- Maximal 8 Sekunden Zeit ab dem Startsignal an der Mittellinie\n- Bei Fehlwurf sofortiges Rückzugsverhalten der Angreifer",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.1, "y": 0.72 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.28, "y": 0.82 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.86, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.72, "y": 0.82 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.9, "y": 0.72 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.52, "y": 0.66 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.18, "y": 0.44 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.32, "y": 0.48 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.46, "y": 0.46 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.58, "y": 0.48 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.72, "y": 0.46 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.84, "y": 0.42 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.28, "y": 0.56 },
-        { "id": "wp_ra", "type": "WAYPOINT", "x": 0.86, "y": 0.26 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.74
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.82
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.86
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.82
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.74
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.68
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.14,
+          "y": 0.24
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.31
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.42,
+          "y": 0.38
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.58,
+          "y": 0.38
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.31
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.86,
+          "y": 0.24
+        },
+        {
+          "id": "wp_v1",
+          "type": "WAYPOINT",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "wp_v2",
+          "type": "WAYPOINT",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "wp_v3",
+          "type": "WAYPOINT",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "wp_v4",
+          "type": "WAYPOINT",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "wp_v5",
+          "type": "WAYPOINT",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "wp_v6",
+          "type": "WAYPOINT",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.26,
+          "y": 0.48
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.54
+        },
+        {
+          "id": "wp_rr",
+          "type": "WAYPOINT",
+          "x": 0.74,
+          "y": 0.48
+        },
+        {
+          "id": "wp_ra",
+          "type": "WAYPOINT",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "wp_km",
+          "type": "WAYPOINT",
+          "x": 0.66,
+          "y": 0.28
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "RUN_PATH", "stepNumber": 1, "fromNodeId": "rl", "toWaypointId": "wp_rl", "points": [{ "x": 0.28, "y": 0.82 }, { "x": 0.28, "y": 0.56 }] },
-        { "id": "p2", "type": "PASS_PATH", "stepNumber": 2, "fromNodeId": "rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.5, "y": 0.86 }, { "x": 0.28, "y": 0.56 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromWaypointId": "wp_rl", "toNodeId": "rr", "points": [{ "x": 0.28, "y": 0.56 }, { "x": 0.72, "y": 0.82 }] },
-        { "id": "p4", "type": "RUN_PATH", "stepNumber": 4, "fromNodeId": "ra", "toWaypointId": "wp_ra", "points": [{ "x": 0.9, "y": 0.72 }, { "x": 0.86, "y": 0.26 }] },
-        { "id": "p5", "type": "PASS_PATH", "stepNumber": 5, "fromNodeId": "rr", "toWaypointId": "wp_ra", "points": [{ "x": 0.72, "y": 0.82 }, { "x": 0.86, "y": 0.26 }] }
-      ]
+        {
+          "fromNodeId": "v1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.14,
+              "y": 0.24
+            },
+            {
+              "x": 0.16,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_v1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v2",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.31
+            },
+            {
+              "x": 0.29,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v3",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.42,
+              "y": 0.38
+            },
+            {
+              "x": 0.43,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_v3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v4",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.58,
+              "y": 0.38
+            },
+            {
+              "x": 0.57,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_v4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v5",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.31
+            },
+            {
+              "x": 0.71,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_v5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v6",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.86,
+              "y": 0.24
+            },
+            {
+              "x": 0.84,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 6,
+          "toWaypointId": "wp_v6",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.82
+            },
+            {
+              "x": 0.26,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 7,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.86
+            },
+            {
+              "x": 0.26,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 8,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.86
+            },
+            {
+              "x": 0.5,
+              "y": 0.54
+            }
+          ],
+          "stepNumber": 9,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p10",
+          "points": [
+            {
+              "x": 0.26,
+              "y": 0.48
+            },
+            {
+              "x": 0.5,
+              "y": 0.54
+            }
+          ],
+          "stepNumber": 10,
+          "toWaypointId": "wp_rm",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "rr",
+          "id": "p11",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.82
+            },
+            {
+              "x": 0.74,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 11,
+          "toWaypointId": "wp_rr",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p12",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.54
+            },
+            {
+              "x": 0.74,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 12,
+          "toWaypointId": "wp_rr",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "ra",
+          "id": "p13",
+          "points": [
+            {
+              "x": 0.9,
+              "y": 0.74
+            },
+            {
+              "x": 0.9,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 13,
+          "toWaypointId": "wp_ra",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rr",
+          "id": "p14",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.48
+            },
+            {
+              "x": 0.9,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 14,
+          "toWaypointId": "wp_ra",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "km",
+          "id": "p15",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.68
+            },
+            {
+              "x": 0.66,
+              "y": 0.28
+            }
+          ],
+          "stepNumber": 15,
+          "toWaypointId": "wp_km",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_km",
+          "id": "p16",
+          "points": [
+            {
+              "x": 0.66,
+              "y": 0.28
+            },
+            {
+              "x": 0.71,
+              "y": 0.23
+            }
+          ],
+          "stepNumber": 16,
+          "toWaypointId": "wp_v5",
+          "type": "SCREEN_BLOCK_PATH"
+        }
+      ],
+      "version": 1
     }
   },
   {
@@ -957,39 +4425,247 @@
       ]
     },
     "materials": [
-      { "type": "BALL", "quantity": 6 },
-      { "type": "BIBS", "quantity": 6 }
+      {
+        "type": "BALL",
+        "quantity": 6
+      },
+      {
+        "type": "BIBS",
+        "quantity": 6
+      }
     ],
     "setup_description": "Halbes Spielfeld. 6 gegen 6 Positionsangriff gegen eine variable 6:0-Abwehr (Abwehr entscheidet frei zwischen Übergeben, Helfen oder Heraustreten).",
     "flow_description": "1. Der Angriff leitet zentral über RM mit einer Sperre von KM gegen einen Innenblocker ein.\n2. Option A (Abwehr bleibt passiv): RM zieht direkt zum Torwurf durch.\n3. Option B (Innenblock hilft aus): RM steckt den Ball an den absetzenden KM durch.\n4. Option C (Halbverteidiger rückt ein): RM spielt den sofortigen Expresspass auf die überzahlige Seite (RL/LA oder RR/RA) zum freien Abschluss.",
     "coaching_points": "- Spielzug nicht starr abspulen, sondern konsequent die Abwehrreaktion lesen\n- Alle ballfernen Spieler antizipieren die Weiterspieloption und starten im richtigen Moment an\n- Kurze, direkte Kommunikation zwischen RM und KM",
     "variations_text": "- Trainer gibt der Abwehr vor jedem Angriff geheim vor, welche Reaktion sie zeigen soll\n- Wechsel zwischen 6:0- und 5:1-Abwehr alle 3 Minuten\n- Turnierwertung: 2 Punkte für Tor nach Option C (Abräumen auf Außen)",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
-        { "id": "gk", "type": "GOALKEEPER", "label": "TW", "x": 0.5, "y": 0.08 },
-        { "id": "la", "type": "OFFENSE_PLAYER", "label": "LA", "x": 0.08, "y": 0.28 },
-        { "id": "rl", "type": "OFFENSE_PLAYER", "label": "RL", "x": 0.24, "y": 0.66 },
-        { "id": "rm", "type": "OFFENSE_PLAYER", "label": "RM", "x": 0.5, "y": 0.7, "hasBall": true },
-        { "id": "rr", "type": "OFFENSE_PLAYER", "label": "RR", "x": 0.76, "y": 0.66 },
-        { "id": "ra", "type": "OFFENSE_PLAYER", "label": "RA", "x": 0.92, "y": 0.28 },
-        { "id": "km", "type": "OFFENSE_PLAYER", "label": "KM", "x": 0.44, "y": 0.36 },
-        { "id": "v1", "type": "DEFENSE_PLAYER", "label": "V1", "x": 0.14, "y": 0.34 },
-        { "id": "v2", "type": "DEFENSE_PLAYER", "label": "V2", "x": 0.3, "y": 0.42 },
-        { "id": "v3", "type": "DEFENSE_PLAYER", "label": "V3", "x": 0.44, "y": 0.42 },
-        { "id": "v4", "type": "DEFENSE_PLAYER", "label": "V4", "x": 0.56, "y": 0.42 },
-        { "id": "v5", "type": "DEFENSE_PLAYER", "label": "V5", "x": 0.7, "y": 0.42 },
-        { "id": "v6", "type": "DEFENSE_PLAYER", "label": "V6", "x": 0.86, "y": 0.34 },
-        { "id": "wp_rm", "type": "WAYPOINT", "x": 0.44, "y": 0.48 },
-        { "id": "wp_rl", "type": "WAYPOINT", "x": 0.24, "y": 0.46 }
+        {
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
+          "x": 0.5,
+          "y": 0.09
+        },
+        {
+          "id": "la",
+          "label": "LA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.16
+        },
+        {
+          "id": "rl",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.56
+        },
+        {
+          "hasBall": true,
+          "id": "rm",
+          "label": "RM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.6
+        },
+        {
+          "id": "rr",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.56
+        },
+        {
+          "id": "ra",
+          "label": "RA",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.16
+        },
+        {
+          "id": "km",
+          "label": "KM",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.48,
+          "y": 0.29
+        },
+        {
+          "id": "v1",
+          "label": "V1",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.16,
+          "y": 0.16
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.29,
+          "y": 0.23
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.26
+        },
+        {
+          "id": "v4",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
+        },
+        {
+          "id": "v5",
+          "label": "V5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.71,
+          "y": 0.23
+        },
+        {
+          "id": "v6",
+          "label": "V6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.84,
+          "y": 0.16
+        },
+        {
+          "id": "wp_rm",
+          "type": "WAYPOINT",
+          "x": 0.44,
+          "y": 0.42
+        },
+        {
+          "id": "wp_rl",
+          "type": "WAYPOINT",
+          "x": 0.24,
+          "y": 0.44
+        }
       ],
       "paths": [
-        { "id": "p1", "type": "SCREEN_BLOCK_PATH", "stepNumber": 1, "fromNodeId": "km", "toNodeId": "v3", "points": [{ "x": 0.44, "y": 0.36 }, { "x": 0.44, "y": 0.42 }] },
-        { "id": "p2", "type": "RUN_PATH", "stepNumber": 2, "fromNodeId": "rm", "toWaypointId": "wp_rm", "points": [{ "x": 0.5, "y": 0.7 }, { "x": 0.44, "y": 0.48 }] },
-        { "id": "p3", "type": "PASS_PATH", "stepNumber": 3, "fromWaypointId": "wp_rm", "toWaypointId": "wp_rl", "points": [{ "x": 0.44, "y": 0.48 }, { "x": 0.24, "y": 0.46 }] },
-        { "id": "p4", "type": "PASS_PATH", "stepNumber": 4, "fromWaypointId": "wp_rl", "toNodeId": "la", "points": [{ "x": 0.24, "y": 0.46 }, { "x": 0.08, "y": 0.28 }] }
-      ]
+        {
+          "fromNodeId": "km",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.48,
+              "y": 0.29
+            },
+            {
+              "x": 0.43,
+              "y": 0.26
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "v3",
+          "type": "SCREEN_BLOCK_PATH"
+        },
+        {
+          "fromNodeId": "rm",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.44,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_rm",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.44,
+              "y": 0.42
+            },
+            {
+              "x": 0.47,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 3,
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromNodeId": "rl",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.56
+            },
+            {
+              "x": 0.24,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_rl",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rm",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.44,
+              "y": 0.42
+            },
+            {
+              "x": 0.24,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "wp_rl",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_rl",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.44
+            },
+            {
+              "x": 0.1,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 6,
+          "toNodeId": "la",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "la",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.1,
+              "y": 0.16
+            },
+            {
+              "x": 0.44,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 7,
+          "type": "SHOT_PATH"
+        }
+      ],
+      "version": 1
     }
   }
 ]

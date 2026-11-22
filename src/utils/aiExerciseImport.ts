@@ -17,6 +17,7 @@ import type {
 } from '../types/domain';
 import {
   ALL_AGE_GROUPS,
+  ATHLETICS_RECOVERY_FOCUS_TAGS,
   DEFAULT_AGE_GROUPS,
   TACTIC_FOCUS_TAGS,
   TECHNIQUE_FOCUS_TAGS
@@ -30,20 +31,22 @@ Deine Aufgabe ist es, die vom Nutzer bereitgestellten Handball-Übungen (aus Scr
 Antworte AUSSCHLIESSLICH mit validem JSON (entweder ein einzelnes Objekt oder ein Array [...] bei mehreren Übungen).
 
 ### Koordinatensystem für das Taktikboard (tactic_board_data):
-- Alle Koordinaten (x, y) sind normiert zwischen 0.0 und 1.0 (Standard: HALF_COURT_VERTICAL).
-- Das Handballtor befindet sich OBEN MITTIG bei (x: 0.50, y: 0.05), der Torwart (TW) bei (x: 0.50, y: 0.08).
-- Die 6m-Torraumlinie verläuft bogenförmig um das Tor bis ca. y: 0.24.
-- Die 9m-Freiwurflinie verläuft bogenförmig bis ca. y: 0.38.
-- Typische Angriffs-Grundpositionen:
-  - LA: (x: 0.12, y: 0.16), RL: (x: 0.24, y: 0.48), RM: (x: 0.50, y: 0.52), RR: (x: 0.76, y: 0.48), RA: (x: 0.88, y: 0.16), KM: (x: 0.45, y: 0.22)
-- Typische Abwehr-Positionen (6:0):
-  - AL: (x: 0.16, y: 0.16), HL: (x: 0.29, y: 0.23), IL: (x: 0.43, y: 0.26), IR: (x: 0.57, y: 0.26), HR: (x: 0.71, y: 0.23), AR: (x: 0.84, y: 0.16), VM (bei 5:1/3:2:1): (x: 0.50, y: 0.38)
+- Alle Koordinaten (x, y) sind normiert zwischen 0.04 und 0.96. Erlaubte Templates: "HALF_COURT_VERTICAL" (Standard), "FULL_COURT", "GOAL_SECTOR_ZOOM", "FREE_SPACE".
+- Bei HALF_COURT_VERTICAL (Halbfeld vertikal):
+  - Das Handballtor befindet sich OBEN MITTIG bei (x: 0.50, y: 0.05), der Torwart (TW) bei (x: 0.50, y: 0.09).
+  - Die 6m-Torraumlinie verläuft bogenförmig bis Scheitelpunkt (x: 0.50, y: 0.243; x-Spanne 0.26..0.74); die 7m-Markierung liegt bei y: 0.286; die 9m-Freiwurflinie bis (x: 0.50, y: 0.386; x-Spanne 0.13..0.87).
+  - Typische Angriffs-Grundpositionen: LA: (0.10, 0.16), RL: (0.24, 0.48), RM: (0.50, 0.54), RR: (0.76, 0.48), RA: (0.90, 0.16), KM: (0.45, 0.25).
+  - Typische Abwehr-Positionen (6:0): AL: (0.16, 0.16), HL: (0.29, 0.23), IL: (0.43, 0.26), IR: (0.57, 0.26), HR: (0.71, 0.23), AR: (0.84, 0.16), VM (bei 5:1/3:2:1): (0.50, 0.39).
+- Bei FULL_COURT (Ganzfeld, immer HORIZONTAL von links nach rechts):
+  - Linkes Tor bei (0.04, 0.50), TW1 bei (0.08, 0.50), linker 6m-Scheitel bei x: 0.17, Mittellinie bei x: 0.50, rechter 6m-Scheitel bei x: 0.83, TW2 bei (0.92, 0.50), rechtes Tor bei (0.96, 0.50).
+- Bei GOAL_SECTOR_ZOOM (Torraum-Zoom): Tor oben (0.50, 0.05), TW (0.50, 0.14..0.20), 6m-Scheitel y: 0.414, 7m y: 0.486, 9m-Scheitel y: 0.636.
+- Bei FREE_SPACE (Freifläche ohne Tore): für Koordinationsleitern, Staffeln, Wandwürfe, Partnerübungen und Cool-Down.
 - Wenn auf einer Position im Training eine Warteschlange/Anstellreihe steht, setze "isQueue": true und "queueCount": 3.
 - Optional (v2): "zones" für Ziel-/Sperrzonen ({ id, shape: "RECT"|"ELLIPSE", x, y, width, height, color, opacity, label }), "controlPoint": { "x": 0.35, "y": 0.42 } auf Pfaden für Bogenläufe, sowie "keyframes" für explizite Animations-Szenen.
 
 ### Erlaubte Enum-Werte:
 - phases: ["WARMUP", "SMALL_GAME", "GOALKEEPER_WARMUP", "GROUND_EXERCISE", "GROUND_GAME", "TARGET_GAME", "ATHLETICS_COORDINATION", "COOL_DOWN"]
-- focus: ["OFFENSE_INDIVIDUAL", "OFFENSE_GROUP", "OFFENSE_TEAM", "DEFENSE_INDIVIDUAL", "DEFENSE_GROUP", "DEFENSE_6_0", "DEFENSE_5_1", "DEFENSE_3_2_1", "FAST_BREAK_1ST_WAVE", "FAST_BREAK_2ND_WAVE", "RETREAT", "SHOOTING", "PASSING_CATCHING", "GOALKEEPER_TECHNIQUE", "DRIBBLING", "PASSING", "CATCHING", "JUMP_SHOT", "STANDING_THROW", "HIP_UNDERARM_SHOT", "FALLING_SHOT", "LOB_SPIN_SHOT", "FEINT_1V1", "CROSSING_SCREEN", "FOOTWORK_DEFENSE"]
+- focus: ["OFFENSE_INDIVIDUAL", "OFFENSE_GROUP", "OFFENSE_TEAM", "DEFENSE_INDIVIDUAL", "DEFENSE_GROUP", "DEFENSE_6_0", "DEFENSE_5_1", "DEFENSE_3_2_1", "FAST_BREAK_1ST_WAVE", "FAST_BREAK_2ND_WAVE", "RETREAT", "SHOOTING", "PASSING_CATCHING", "GOALKEEPER_TECHNIQUE", "DRIBBLING", "PASSING", "CATCHING", "JUMP_SHOT", "STANDING_THROW", "HIP_UNDERARM_SHOT", "FALLING_SHOT", "LOB_SPIN_SHOT", "FEINT_1V1", "CROSSING_SCREEN", "FOOTWORK_DEFENSE", "ATHLETICS_CONDITIONING", "REGENERATION_MOBILITY"]
 - level: "BASIC" | "ADVANCED" | "PERFORMANCE"
 - age_groups (Altersstufen, mindestens 1 Wert): ["MINIS", "F_YOUTH", "E_YOUTH", "D_YOUTH", "C_YOUTH", "B_YOUTH", "A_YOUTH", "ADULTS"]
 - materials.type: "BALL" | "BALL_CART" | "CONE" | "BIBS" | "COORDINATION_LADDER" | "SOFT_MAT" | "POLE_AIRBODY" | "VAULTING_BOX" | "TARGET_CORNER" | "MINI_GOAL"
@@ -297,7 +300,11 @@ export function parseAndNormalizeAiExerciseJson(
 
     const rawCats = (item.categories ?? {}) as Record<string, unknown>;
     const phases = (Array.isArray(rawCats.phases) ? rawCats.phases : ['GROUND_EXERCISE']) as TrainingPhaseCategory[];
-    const validFocus = new Set<string>([...TACTIC_FOCUS_TAGS, ...TECHNIQUE_FOCUS_TAGS]);
+    const validFocus = new Set<string>([
+      ...TACTIC_FOCUS_TAGS,
+      ...TECHNIQUE_FOCUS_TAGS,
+      ...ATHLETICS_RECOVERY_FOCUS_TAGS
+    ]);
     const rawFocus = Array.isArray(rawCats.focus) ? rawCats.focus : ['OFFENSE_GROUP'];
     const legacyTechniques = Array.isArray(rawCats.techniques)
       ? rawCats.techniques.map((t) => (t === 'GOALKEEPER_SAVE' ? 'GOALKEEPER_TECHNIQUE' : t))
@@ -309,7 +316,11 @@ export function parseAndNormalizeAiExerciseJson(
         )
       )
     );
-    if (focus.length === 0) focus.push('OFFENSE_GROUP');
+    if (focus.length === 0) {
+      if (phases.includes('COOL_DOWN')) focus.push('REGENERATION_MOBILITY');
+      else if (phases.includes('ATHLETICS_COORDINATION')) focus.push('ATHLETICS_CONDITIONING');
+      else focus.push('OFFENSE_GROUP');
+    }
     const level = (typeof rawCats.level === 'string' ? rawCats.level : 'BASIC') as ComplexityLevel;
     const validAgeGroups = new Set<string>(ALL_AGE_GROUPS);
     const parsedAgeGroups = Array.isArray(rawCats.age_groups)

@@ -43,132 +43,267 @@
     "coaching_points": "- Kein Jubel nach einem Tor und kein Ärger nach einem Fehlwurf – sofortiger Umschaltreflex\n- Lautstarke Kommunikation im Rückzug („Ich hab Mitte!“, „Links frei!“)\n- Passwege zu den Außenbahnen frühzeitig schließen",
     "variations_text": "- Zeitfenster für den Konter von 8 auf 6 Sekunden verkürzen\n- Nur Treffer nach mindestens einem Querpass in die Mini-Tore werten",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
+          "hasBall": true,
           "id": "gk",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.1,
-          "hasBall": true
+          "y": 0.09
         },
         {
           "id": "mg1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "MT1",
+          "type": "EQUIPMENT_GOAL_TARGET",
           "x": 0.2,
           "y": 0.92
         },
         {
           "id": "mg2",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "MT2",
+          "type": "EQUIPMENT_GOAL_TARGET",
           "x": 0.8,
           "y": 0.92
         },
         {
           "id": "b1",
-          "type": "OFFENSE_PLAYER",
           "label": "B1",
-          "x": 0.24,
-          "y": 0.34
+          "type": "OFFENSE_PLAYER",
+          "x": 0.14,
+          "y": 0.22
         },
         {
           "id": "b2",
-          "type": "OFFENSE_PLAYER",
           "label": "B2",
-          "x": 0.5,
-          "y": 0.32
+          "type": "OFFENSE_PLAYER",
+          "x": 0.28,
+          "y": 0.28
         },
         {
           "id": "b3",
-          "type": "OFFENSE_PLAYER",
           "label": "B3",
-          "x": 0.76,
-          "y": 0.34
+          "type": "OFFENSE_PLAYER",
+          "x": 0.43,
+          "y": 0.3
+        },
+        {
+          "id": "b4",
+          "label": "B4",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.3
+        },
+        {
+          "id": "b5",
+          "label": "B5",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.72,
+          "y": 0.28
+        },
+        {
+          "id": "b6",
+          "label": "B6",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.86,
+          "y": 0.22
         },
         {
           "id": "a1",
-          "type": "DEFENSE_PLAYER",
           "label": "A1",
-          "x": 0.3,
-          "y": 0.44
+          "type": "DEFENSE_PLAYER",
+          "x": 0.1,
+          "y": 0.28
         },
         {
           "id": "a2",
-          "type": "DEFENSE_PLAYER",
           "label": "A2",
-          "x": 0.52,
-          "y": 0.46
+          "type": "DEFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.48
         },
         {
           "id": "a3",
-          "type": "DEFENSE_PLAYER",
           "label": "A3",
-          "x": 0.72,
-          "y": 0.44
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.52
+        },
+        {
+          "id": "a4",
+          "label": "A4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.48
+        },
+        {
+          "id": "a5",
+          "label": "A5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.9,
+          "y": 0.28
+        },
+        {
+          "id": "a6",
+          "label": "A6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.36
         },
         {
           "id": "wp_b1",
           "type": "WAYPOINT",
-          "x": 0.22,
+          "x": 0.2,
           "y": 0.74
         },
         {
-          "id": "wp_a1",
+          "id": "wp_b6",
           "type": "WAYPOINT",
-          "x": 0.26,
+          "x": 0.8,
+          "y": 0.74
+        },
+        {
+          "id": "wp_a2",
+          "type": "WAYPOINT",
+          "x": 0.24,
+          "y": 0.8
+        },
+        {
+          "id": "wp_a3",
+          "type": "WAYPOINT",
+          "x": 0.44,
           "y": 0.78
+        },
+        {
+          "id": "wp_a4",
+          "type": "WAYPOINT",
+          "x": 0.76,
+          "y": 0.8
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "b1",
-          "toWaypointId": "wp_b1",
+          "id": "p1",
           "points": [
-            { "x": 0.24, "y": 0.34 },
-            { "x": 0.22, "y": 0.74 }
-          ]
+            {
+              "x": 0.14,
+              "y": 0.22
+            },
+            {
+              "x": 0.2,
+              "y": 0.74
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b1",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
           "fromNodeId": "gk",
-          "toWaypointId": "wp_b1",
+          "id": "p2",
           "points": [
-            { "x": 0.5, "y": 0.1 },
-            { "x": 0.22, "y": 0.74 }
-          ]
-        },
-        {
-          "id": "p3",
-          "type": "RUN_PATH",
+            {
+              "x": 0.5,
+              "y": 0.09
+            },
+            {
+              "x": 0.2,
+              "y": 0.74
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a1",
-          "toWaypointId": "wp_a1",
-          "points": [
-            { "x": 0.3, "y": 0.44 },
-            { "x": 0.26, "y": 0.78 }
-          ]
+          "toWaypointId": "wp_b1",
+          "type": "PASS_PATH"
         },
         {
-          "id": "p4",
-          "type": "SHOT_PATH",
-          "stepNumber": 2,
-          "fromWaypointId": "wp_b1",
-          "toNodeId": "mg1",
+          "fromNodeId": "b6",
+          "id": "p3",
           "points": [
-            { "x": 0.22, "y": 0.74 },
-            { "x": 0.2, "y": 0.92 }
-          ]
+            {
+              "x": 0.86,
+              "y": 0.22
+            },
+            {
+              "x": 0.8,
+              "y": 0.74
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b6",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.48
+            },
+            {
+              "x": 0.24,
+              "y": 0.8
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.52
+            },
+            {
+              "x": 0.44,
+              "y": 0.78
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a4",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.48
+            },
+            {
+              "x": 0.76,
+              "y": 0.8
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_b1",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.2,
+              "y": 0.74
+            },
+            {
+              "x": 0.2,
+              "y": 0.92
+            }
+          ],
+          "stepNumber": 2,
+          "toNodeId": "mg1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -213,86 +348,187 @@
     "coaching_points": "- Nach der Landung sofort explodieren und über die Schulter Blickkontakt zum abwerfenden Torwart halten\n- Nicht blind geradeaus rennen, sondern die Passlinie zwischen Torwart und Konterläufer schließen\n- Bei Ballgewinn sofort selbst wieder den Gegenstoß einleiten",
     "variations_text": "- Als 2 gegen 2 Wettkampf durchführen: Zwei Werfer schalten gegen zwei startende Konterläufer um\n- Teamwertung einführen: 2 Punkte für abgefangenen Pass, 1 Punkt für verhindertes Tor",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW1",
+          "type": "GOALKEEPER",
           "x": 0.08,
           "y": 0.5
         },
         {
           "id": "gk2",
-          "type": "GOALKEEPER",
           "label": "TW2",
+          "type": "GOALKEEPER",
           "x": 0.92,
-          "y": 0.5,
-          "hasBall": true
+          "y": 0.5
         },
         {
+          "id": "c1",
+          "label": "H1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.17,
+          "y": 0.44
+        },
+        {
+          "id": "c2",
+          "label": "H2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.83,
+          "y": 0.56
+        },
+        {
+          "hasBall": true,
           "id": "a1",
-          "type": "DEFENSE_PLAYER",
           "label": "A1",
-          "x": 0.78,
-          "y": 0.34
+          "type": "DEFENSE_PLAYER",
+          "x": 0.68,
+          "y": 0.32
         },
         {
+          "hasBall": true,
+          "id": "a2",
+          "isQueue": true,
+          "label": "A2",
+          "queueCount": 4,
+          "type": "DEFENSE_PLAYER",
+          "x": 0.12,
+          "y": 0.16
+        },
+        {
+          "hasBall": true,
           "id": "b1",
-          "type": "OFFENSE_PLAYER",
+          "isQueue": true,
           "label": "B1",
-          "x": 0.64,
-          "y": 0.78
+          "queueCount": 4,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.88,
+          "y": 0.84
+        },
+        {
+          "id": "wp_a1_shoot",
+          "type": "WAYPOINT",
+          "x": 0.8,
+          "y": 0.38
         },
         {
           "id": "wp_b1",
           "type": "WAYPOINT",
-          "x": 0.26,
-          "y": 0.66
+          "x": 0.28,
+          "y": 0.68
         },
         {
-          "id": "wp_a1",
+          "id": "wp_a1_ret",
           "type": "WAYPOINT",
-          "x": 0.32,
+          "x": 0.34,
           "y": 0.62
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "b1",
-          "toWaypointId": "wp_b1",
-          "points": [
-            { "x": 0.64, "y": 0.78 },
-            { "x": 0.26, "y": 0.66 }
-          ]
-        },
-        {
-          "id": "p2",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "gk2",
-          "toWaypointId": "wp_b1",
-          "points": [
-            { "x": 0.92, "y": 0.5 },
-            { "x": 0.26, "y": 0.66 }
-          ]
-        },
-        {
-          "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toWaypointId": "wp_a1",
+          "id": "p1",
           "points": [
-            { "x": 0.78, "y": 0.34 },
-            { "x": 0.32, "y": 0.62 }
-          ]
+            {
+              "x": 0.68,
+              "y": 0.32
+            },
+            {
+              "x": 0.8,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a1_shoot",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a1_shoot",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.8,
+              "y": 0.38
+            },
+            {
+              "x": 0.95,
+              "y": 0.46
+            }
+          ],
+          "stepNumber": 1,
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromNodeId": "b1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.88,
+              "y": 0.84
+            },
+            {
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "gk2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "b1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.88,
+              "y": 0.84
+            },
+            {
+              "x": 0.28,
+              "y": 0.68
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "gk2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.92,
+              "y": 0.5
+            },
+            {
+              "x": 0.28,
+              "y": 0.68
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b1",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a1_shoot",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.8,
+              "y": 0.38
+            },
+            {
+              "x": 0.34,
+              "y": 0.62
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a1_ret",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -388,8 +624,14 @@
           "fromNodeId": "a1",
           "toNodeId": "gk2",
           "points": [
-            { "x": 0.72, "y": 0.44 },
-            { "x": 0.92, "y": 0.5 }
+            {
+              "x": 0.72,
+              "y": 0.44
+            },
+            {
+              "x": 0.92,
+              "y": 0.5
+            }
           ]
         },
         {
@@ -399,8 +641,14 @@
           "fromNodeId": "b1",
           "toWaypointId": "wp_b",
           "points": [
-            { "x": 0.72, "y": 0.82 },
-            { "x": 0.24, "y": 0.58 }
+            {
+              "x": 0.72,
+              "y": 0.82
+            },
+            {
+              "x": 0.24,
+              "y": 0.58
+            }
           ]
         },
         {
@@ -410,8 +658,14 @@
           "fromNodeId": "gk2",
           "toWaypointId": "wp_b",
           "points": [
-            { "x": 0.92, "y": 0.5 },
-            { "x": 0.24, "y": 0.58 }
+            {
+              "x": 0.92,
+              "y": 0.5
+            },
+            {
+              "x": 0.24,
+              "y": 0.58
+            }
           ]
         },
         {
@@ -421,8 +675,14 @@
           "fromNodeId": "a1",
           "toWaypointId": "wp_a",
           "points": [
-            { "x": 0.72, "y": 0.44 },
-            { "x": 0.2, "y": 0.54 }
+            {
+              "x": 0.72,
+              "y": 0.44
+            },
+            {
+              "x": 0.2,
+              "y": 0.54
+            }
           ]
         }
       ]
@@ -468,117 +728,164 @@
     "coaching_points": "- Nie mit dem Rücken zum Ball zurücklaufen – stets halboffene Körperhaltung einnehmen\n- Der ballnahe Verteidiger stört den Ballvortrag, der ballferne sichert die Tiefe\n- Klare Absprache bei Kreuzbewegungen der Angreifer",
     "variations_text": "- Angreifer dürfen erst ab der Mittellinie prellen\n- Bei einem abgefangenen Pass oder Ballgewinn tauschen die Rollen sofort",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
         {
+          "hasBall": true,
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW1",
+          "type": "GOALKEEPER",
           "x": 0.08,
-          "y": 0.5,
-          "hasBall": true
+          "y": 0.5
         },
         {
           "id": "gk2",
-          "type": "GOALKEEPER",
           "label": "TW2",
+          "type": "GOALKEEPER",
           "x": 0.92,
           "y": 0.5
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "A1",
-          "x": 0.22,
-          "y": 0.34
+          "type": "OFFENSE_PLAYER",
+          "x": 0.18,
+          "y": 0.3
         },
         {
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "A2",
-          "x": 0.22,
-          "y": 0.68
+          "type": "OFFENSE_PLAYER",
+          "x": 0.18,
+          "y": 0.7
         },
         {
           "id": "v1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
-          "x": 0.36,
+          "type": "DEFENSE_PLAYER",
+          "x": 0.24,
           "y": 0.38
         },
         {
           "id": "v2",
-          "type": "DEFENSE_PLAYER",
           "label": "V2",
-          "x": 0.36,
-          "y": 0.64
+          "type": "DEFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.62
         },
         {
           "id": "wp_a1",
           "type": "WAYPOINT",
-          "x": 0.72,
-          "y": 0.3
+          "x": 0.74,
+          "y": 0.24
+        },
+        {
+          "id": "wp_a2",
+          "type": "WAYPOINT",
+          "x": 0.76,
+          "y": 0.68
         },
         {
           "id": "wp_v1",
           "type": "WAYPOINT",
-          "x": 0.78,
-          "y": 0.36
+          "x": 0.79,
+          "y": 0.32
         },
         {
           "id": "wp_v2",
           "type": "WAYPOINT",
-          "x": 0.78,
-          "y": 0.58
+          "x": 0.8,
+          "y": 0.56
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
           "fromNodeId": "gk1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "x": 0.18,
+              "y": 0.3
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "a1",
-          "points": [
-            { "x": 0.08, "y": 0.5 },
-            { "x": 0.22, "y": 0.34 }
-          ]
+          "type": "PASS_PATH"
         },
         {
-          "id": "p2",
-          "type": "DRIBBLE_PATH",
-          "stepNumber": 2,
           "fromNodeId": "a1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.18,
+              "y": 0.3
+            },
+            {
+              "x": 0.74,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 2,
           "toWaypointId": "wp_a1",
-          "points": [
-            { "x": 0.22, "y": 0.34 },
-            { "x": 0.72, "y": 0.3 }
-          ]
+          "type": "DRIBBLE_PATH"
         },
         {
+          "fromNodeId": "a2",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
-          "fromNodeId": "v1",
-          "toWaypointId": "wp_v1",
           "points": [
-            { "x": 0.36, "y": 0.38 },
-            { "x": 0.78, "y": 0.36 }
-          ]
+            {
+              "x": 0.18,
+              "y": 0.7
+            },
+            {
+              "x": 0.76,
+              "y": 0.68
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a2",
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "v1",
           "id": "p4",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
-          "fromNodeId": "v2",
-          "toWaypointId": "wp_v2",
           "points": [
-            { "x": 0.36, "y": 0.64 },
-            { "x": 0.78, "y": 0.58 }
-          ]
+            {
+              "x": 0.24,
+              "y": 0.38
+            },
+            {
+              "x": 0.79,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.62
+            },
+            {
+              "x": 0.8,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v2",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -620,89 +927,279 @@
     "coaching_points": "- Zentrum vor Außen schützen: Lieber einen Wurf vom spitzen Winkel als einen freien Durchbruch durch die Mitte zulassen\n- Durch angetäuschte Ausfallschritte den Ballführer zum Abstoppen oder zu einem zusätzlichen Pass zwingen\n- Aktiv mit dem Torwart kommunizieren, welche Ecke gedeckt wird",
     "variations_text": "- Als 3 gegen 4 Unterzahl-Rückzug spielen\n- Wertung: Wenn die Abwehr den Abschluss länger als 5 Sekunden verzögert, erhält sie 1 Punkt",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.1
+          "y": 0.09
         },
         {
           "id": "v1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.5,
           "y": 0.44
         },
         {
           "id": "v2",
-          "type": "DEFENSE_PLAYER",
           "label": "V2",
+          "type": "DEFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.26
+          "y": 0.27
+        },
+        {
+          "id": "v3",
+          "label": "V3",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.93
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "LA",
+          "type": "OFFENSE_PLAYER",
           "x": 0.16,
           "y": 0.82
         },
         {
+          "hasBall": true,
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "RM",
+          "type": "OFFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.86,
-          "hasBall": true
+          "y": 0.84
         },
         {
           "id": "a3",
-          "type": "OFFENSE_PLAYER",
           "label": "RA",
+          "type": "OFFENSE_PLAYER",
           "x": 0.84,
           "y": 0.82
         },
         {
-          "id": "wp_v1",
+          "id": "wp_a1",
           "type": "WAYPOINT",
-          "x": 0.4,
-          "y": 0.3
+          "x": 0.14,
+          "y": 0.46
+        },
+        {
+          "id": "wp_a2",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "wp_a3",
+          "type": "WAYPOINT",
+          "x": 0.86,
+          "y": 0.46
+        },
+        {
+          "id": "wp_a3_shot",
+          "type": "WAYPOINT",
+          "x": 0.88,
+          "y": 0.22
+        },
+        {
+          "id": "wp_v1_press",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.52
+        },
+        {
+          "id": "wp_v1_ret",
+          "type": "WAYPOINT",
+          "x": 0.42,
+          "y": 0.27
         },
         {
           "id": "wp_v2",
           "type": "WAYPOINT",
-          "x": 0.64,
-          "y": 0.24
+          "x": 0.6,
+          "y": 0.25
+        },
+        {
+          "id": "wp_v3",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.42
         }
       ],
       "paths": [
         {
+          "fromNodeId": "a2",
           "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "v1",
-          "toWaypointId": "wp_v1",
           "points": [
-            { "x": 0.5, "y": 0.44 },
-            { "x": 0.4, "y": 0.3 }
-          ]
+            {
+              "x": 0.5,
+              "y": 0.84
+            },
+            {
+              "x": 0.5,
+              "y": 0.58
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a2",
+          "type": "DRIBBLE_PATH"
         },
         {
+          "fromNodeId": "a1",
           "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "v2",
-          "toWaypointId": "wp_v2",
           "points": [
-            { "x": 0.5, "y": 0.26 },
-            { "x": 0.64, "y": 0.24 }
-          ]
+            {
+              "x": 0.16,
+              "y": 0.82
+            },
+            {
+              "x": 0.14,
+              "y": 0.46
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.84,
+              "y": 0.82
+            },
+            {
+              "x": 0.86,
+              "y": 0.46
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.44
+            },
+            {
+              "x": 0.5,
+              "y": 0.52
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_v1_press",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.58
+            },
+            {
+              "x": 0.86,
+              "y": 0.46
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a3",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_v1_press",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.52
+            },
+            {
+              "x": 0.42,
+              "y": 0.27
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v1_ret",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v2",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.27
+            },
+            {
+              "x": 0.6,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a3",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.86,
+              "y": 0.46
+            },
+            {
+              "x": 0.88,
+              "y": 0.22
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_a3_shot",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a3_shot",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.88,
+              "y": 0.22
+            },
+            {
+              "x": 0.54,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 3,
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromNodeId": "v3",
+          "id": "p10",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.93
+            },
+            {
+              "x": 0.5,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_v3",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -746,50 +1243,78 @@
     "coaching_points": "- Mentale Reaktionsschnelligkeit: Sofort auf den Wurfausgang reagieren, ohne stehen zu bleiben\n- Kurze, schnelle Bodenkontakte beim Richtungswechsel um das Hütchen\n- Tiefer Körperschwerpunkt in der anschließenden Abwehrposition",
     "variations_text": "- Zusätzliche Koordinationsleiter auf dem Rückweg einbauen\n- Zwei Spieler werfen kurz nacheinander und organisieren sofort gemeinsam eine 2er-Abwehr",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.1
+          "y": 0.09
         },
         {
+          "hasBall": true,
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
+          "isQueue": true,
           "label": "RM",
+          "queueCount": 4,
+          "type": "OFFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.54,
-          "hasBall": true
+          "y": 0.56
         },
         {
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "RL",
+          "type": "OFFENSE_PLAYER",
           "x": 0.26,
           "y": 0.52
         },
         {
+          "id": "a3",
+          "label": "RR",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.52
+        },
+        {
           "id": "c1",
-          "type": "EQUIPMENT_CONE",
           "label": "H1",
-          "x": 0.2,
-          "y": 0.82
+          "type": "EQUIPMENT_CONE",
+          "x": 0.24,
+          "y": 0.29
         },
         {
           "id": "c2",
-          "type": "EQUIPMENT_CONE",
           "label": "H2",
-          "x": 0.8,
-          "y": 0.82
+          "type": "EQUIPMENT_CONE",
+          "x": 0.76,
+          "y": 0.29
+        },
+        {
+          "id": "c3",
+          "label": "H3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.24,
+          "y": 0.9
+        },
+        {
+          "id": "c4",
+          "label": "H4",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.76,
+          "y": 0.9
+        },
+        {
+          "id": "wp_shoot",
+          "type": "WAYPOINT",
+          "x": 0.44,
+          "y": 0.4
         },
         {
           "id": "wp_ret",
           "type": "WAYPOINT",
-          "x": 0.26,
-          "y": 0.78
+          "x": 0.2,
+          "y": 0.88
         },
         {
           "id": "wp_def",
@@ -800,39 +1325,108 @@
       ],
       "paths": [
         {
+          "fromNodeId": "a1",
           "id": "p1",
-          "type": "SHOT_PATH",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.26,
+              "y": 0.52
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a1",
-          "toNodeId": "gk",
-          "points": [
-            { "x": 0.5, "y": 0.54 },
-            { "x": 0.5, "y": 0.1 }
-          ]
+          "toNodeId": "a2",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "a1",
           "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
-          "fromNodeId": "a1",
-          "toWaypointId": "wp_ret",
           "points": [
-            { "x": 0.5, "y": 0.54 },
-            { "x": 0.26, "y": 0.78 }
-          ]
+            {
+              "x": 0.5,
+              "y": 0.56
+            },
+            {
+              "x": 0.44,
+              "y": 0.4
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_shoot",
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "a2",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 3,
-          "fromWaypointId": "wp_ret",
-          "toWaypointId": "wp_def",
           "points": [
-            { "x": 0.26, "y": 0.78 },
-            { "x": 0.46, "y": 0.34 }
-          ]
+            {
+              "x": 0.26,
+              "y": 0.52
+            },
+            {
+              "x": 0.44,
+              "y": 0.4
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_shoot",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp_shoot",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.44,
+              "y": 0.4
+            },
+            {
+              "x": 0.46,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 2,
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromWaypointId": "wp_shoot",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.44,
+              "y": 0.4
+            },
+            {
+              "x": 0.2,
+              "y": 0.88
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_ret",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_ret",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.2,
+              "y": 0.88
+            },
+            {
+              "x": 0.46,
+              "y": 0.34
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp_def",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -874,103 +1468,277 @@
     "coaching_points": "- Anwurfstörer muss 3 Meter Abstand einhalten, aber durch aktive Armarbeit den schnellen ersten Pass verzögern\n- Zentrale Achse zuerst schließen, dann nach außen auffächern\n- Kein Spieler verlässt sich auf feste Positionszuordnungen – zunächst den nächsten freien Gegner aufnehmen",
     "variations_text": "- Auf 6 gegen 6 erweitern\n- Nach erfolgreichem Stoppen der Schnellen Mitte wird noch 15 Sekunden regulär weiterverteidigt",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW1",
+          "type": "GOALKEEPER",
           "x": 0.08,
           "y": 0.5
         },
         {
           "id": "gk2",
-          "type": "GOALKEEPER",
           "label": "TW2",
+          "type": "GOALKEEPER",
           "x": 0.92,
           "y": 0.5
         },
         {
+          "hasBall": true,
           "id": "b1",
-          "type": "OFFENSE_PLAYER",
           "label": "B1",
+          "type": "OFFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.5,
-          "hasBall": true
+          "y": 0.5
         },
         {
           "id": "b2",
-          "type": "OFFENSE_PLAYER",
           "label": "B2",
-          "x": 0.56,
-          "y": 0.24
+          "type": "OFFENSE_PLAYER",
+          "x": 0.52,
+          "y": 0.22
         },
         {
           "id": "b3",
-          "type": "OFFENSE_PLAYER",
           "label": "B3",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.52,
+          "y": 0.78
+        },
+        {
+          "id": "b4",
+          "label": "B4",
+          "type": "OFFENSE_PLAYER",
           "x": 0.56,
-          "y": 0.76
+          "y": 0.38
         },
         {
           "id": "a1",
-          "type": "DEFENSE_PLAYER",
           "label": "A1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.42,
           "y": 0.5
         },
         {
           "id": "a2",
-          "type": "DEFENSE_PLAYER",
           "label": "A2",
-          "x": 0.62,
-          "y": 0.34
+          "type": "DEFENSE_PLAYER",
+          "x": 0.64,
+          "y": 0.3
         },
         {
           "id": "a3",
-          "type": "DEFENSE_PLAYER",
           "label": "A3",
-          "x": 0.62,
-          "y": 0.66
+          "type": "DEFENSE_PLAYER",
+          "x": 0.64,
+          "y": 0.7
+        },
+        {
+          "id": "a4",
+          "label": "A4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.74,
+          "y": 0.48
+        },
+        {
+          "id": "wp_a1",
+          "type": "WAYPOINT",
+          "x": 0.38,
+          "y": 0.42
         },
         {
           "id": "wp_a2",
           "type": "WAYPOINT",
-          "x": 0.26,
-          "y": 0.36
+          "x": 0.24,
+          "y": 0.34
         },
         {
           "id": "wp_a3",
           "type": "WAYPOINT",
-          "x": 0.26,
-          "y": 0.64
+          "x": 0.24,
+          "y": 0.66
+        },
+        {
+          "id": "wp_a4",
+          "type": "WAYPOINT",
+          "x": 0.22,
+          "y": 0.5
+        },
+        {
+          "id": "wp_b2",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.24
+        },
+        {
+          "id": "wp_b3",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.76
+        },
+        {
+          "id": "wp_b4",
+          "type": "WAYPOINT",
+          "x": 0.3,
+          "y": 0.44
         }
       ],
       "paths": [
         {
+          "fromNodeId": "a4",
           "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a2",
-          "toWaypointId": "wp_a2",
           "points": [
-            { "x": 0.62, "y": 0.34 },
-            { "x": 0.26, "y": 0.36 }
-          ]
+            {
+              "x": 0.74,
+              "y": 0.48
+            },
+            {
+              "x": 0.95,
+              "y": 0.47
+            }
+          ],
+          "stepNumber": 1,
+          "type": "SHOT_PATH"
         },
         {
+          "fromNodeId": "b1",
           "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a3",
-          "toWaypointId": "wp_a3",
           "points": [
-            { "x": 0.62, "y": 0.66 },
-            { "x": 0.26, "y": 0.64 }
-          ]
+            {
+              "x": 0.5,
+              "y": 0.5
+            },
+            {
+              "x": 0.28,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "b2",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.52,
+              "y": 0.22
+            },
+            {
+              "x": 0.28,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.52,
+              "y": 0.78
+            },
+            {
+              "x": 0.28,
+              "y": 0.76
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b4",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.56,
+              "y": 0.38
+            },
+            {
+              "x": 0.3,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a1",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.42,
+              "y": 0.5
+            },
+            {
+              "x": 0.38,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.3
+            },
+            {
+              "x": 0.24,
+              "y": 0.34
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.7
+            },
+            {
+              "x": 0.24,
+              "y": 0.66
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a4",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.48
+            },
+            {
+              "x": 0.22,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a4",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1012,113 +1780,248 @@
     "coaching_points": "- Laute, eindeutige Kommunikation löst Unordnung im Rückzug am schnellsten auf\n- Erst die Mitte besetzen, dann nach außen übergeben\n- Blickkontakt zwischen den Verteidigern beim Kreuzen der Angreifer halten",
     "variations_text": "- Mannschaften starten mit geschlossenen Augen oder in Bauchlage an der Mittellinie\n- Auf 4 gegen 4 erweitern",
     "tactic_board_data": {
-      "version": 1,
-      "courtTemplate": "HALF_COURT_VERTICAL",
+      "courtTemplate": "FULL_COURT",
       "nodes": [
         {
-          "id": "gk",
+          "id": "gk1",
+          "label": "TW1",
           "type": "GOALKEEPER",
-          "label": "TW",
+          "x": 0.08,
+          "y": 0.5
+        },
+        {
+          "id": "gk2",
+          "label": "TW2",
+          "type": "GOALKEEPER",
+          "x": 0.92,
+          "y": 0.5
+        },
+        {
+          "hasBall": true,
+          "id": "coach",
+          "label": "T",
+          "type": "COACH_FEEDER",
           "x": 0.5,
-          "y": 0.1
+          "y": 0.12
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "A1",
-          "x": 0.24,
-          "y": 0.84
+          "type": "OFFENSE_PLAYER",
+          "x": 0.46,
+          "y": 0.26
         },
         {
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "A2",
-          "x": 0.5,
-          "y": 0.86,
-          "hasBall": true
+          "type": "OFFENSE_PLAYER",
+          "x": 0.46,
+          "y": 0.5
         },
         {
           "id": "a3",
-          "type": "OFFENSE_PLAYER",
           "label": "A3",
-          "x": 0.76,
-          "y": 0.84
-        },
-        {
-          "id": "v1",
-          "type": "DEFENSE_PLAYER",
-          "label": "V1",
-          "x": 0.34,
-          "y": 0.72
-        },
-        {
-          "id": "v2",
-          "type": "DEFENSE_PLAYER",
-          "label": "V2",
-          "x": 0.54,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.46,
           "y": 0.74
         },
         {
-          "id": "v3",
+          "id": "v1",
+          "label": "V1",
           "type": "DEFENSE_PLAYER",
+          "x": 0.56,
+          "y": 0.34
+        },
+        {
+          "id": "v2",
+          "label": "V2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.56,
+          "y": 0.52
+        },
+        {
+          "id": "v3",
           "label": "V3",
-          "x": 0.7,
-          "y": 0.72
+          "type": "DEFENSE_PLAYER",
+          "x": 0.56,
+          "y": 0.7
+        },
+        {
+          "id": "wp_a1",
+          "type": "WAYPOINT",
+          "x": 0.74,
+          "y": 0.24
+        },
+        {
+          "id": "wp_a2",
+          "type": "WAYPOINT",
+          "x": 0.72,
+          "y": 0.5
+        },
+        {
+          "id": "wp_a3",
+          "type": "WAYPOINT",
+          "x": 0.74,
+          "y": 0.76
         },
         {
           "id": "wp_v1",
           "type": "WAYPOINT",
-          "x": 0.28,
-          "y": 0.34
+          "x": 0.78,
+          "y": 0.3
         },
         {
           "id": "wp_v2",
           "type": "WAYPOINT",
-          "x": 0.5,
-          "y": 0.32
+          "x": 0.78,
+          "y": 0.5
         },
         {
           "id": "wp_v3",
           "type": "WAYPOINT",
-          "x": 0.72,
-          "y": 0.34
+          "x": 0.78,
+          "y": 0.7
         }
       ],
       "paths": [
         {
+          "fromNodeId": "coach",
           "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "v1",
-          "toWaypointId": "wp_v1",
           "points": [
-            { "x": 0.34, "y": 0.72 },
-            { "x": 0.28, "y": 0.34 }
-          ]
+            {
+              "x": 0.5,
+              "y": 0.12
+            },
+            {
+              "x": 0.46,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
+          "toNodeId": "a2",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "a2",
           "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "v2",
-          "toWaypointId": "wp_v2",
           "points": [
-            { "x": 0.54, "y": 0.74 },
-            { "x": 0.5, "y": 0.32 }
-          ]
+            {
+              "x": 0.46,
+              "y": 0.5
+            },
+            {
+              "x": 0.72,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a2",
+          "type": "DRIBBLE_PATH"
         },
         {
+          "fromNodeId": "a1",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "v3",
-          "toWaypointId": "wp_v3",
           "points": [
-            { "x": 0.7, "y": 0.72 },
-            { "x": 0.72, "y": 0.34 }
-          ]
+            {
+              "x": 0.46,
+              "y": 0.26
+            },
+            {
+              "x": 0.74,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.46,
+              "y": 0.74
+            },
+            {
+              "x": 0.74,
+              "y": 0.76
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v1",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.56,
+              "y": 0.34
+            },
+            {
+              "x": 0.78,
+              "y": 0.3
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.56,
+              "y": 0.52
+            },
+            {
+              "x": 0.78,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v3",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.56,
+              "y": 0.7
+            },
+            {
+              "x": 0.78,
+              "y": 0.7
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a2",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.72,
+              "y": 0.5
+            },
+            {
+              "x": 0.74,
+              "y": 0.24
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_a1",
+          "type": "PASS_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1159,93 +2062,277 @@
     "coaching_points": "- Nachrückender Verteidiger muss sofort laut kommunizieren, von welcher Seite er hilft\n- Die ersten drei Verteidiger dürfen sich nicht auseinanderziehen lassen\n- Sauberes Übergeben beim Einlaufen des vierten Verteidigers",
     "variations_text": "- V4 startet mal von links, mal von rechts, damit die Abwehr flexibel reagieren muss\n- Auf 5 gegen 4 mit einem nachrückenden fünften Verteidiger erweitern",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.1
+          "y": 0.09
         },
         {
           "id": "v1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.34,
-          "y": 0.36
+          "y": 0.42
         },
         {
           "id": "v2",
-          "type": "DEFENSE_PLAYER",
           "label": "V2",
+          "type": "DEFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.34
+          "y": 0.45
         },
         {
           "id": "v3",
-          "type": "DEFENSE_PLAYER",
           "label": "V3",
+          "type": "DEFENSE_PLAYER",
           "x": 0.66,
-          "y": 0.36
+          "y": 0.42
         },
         {
           "id": "v4",
-          "type": "DEFENSE_PLAYER",
           "label": "V4",
-          "x": 0.9,
-          "y": 0.72
+          "type": "DEFENSE_PLAYER",
+          "x": 0.92,
+          "y": 0.66
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "A1",
-          "x": 0.16,
-          "y": 0.8
+          "type": "OFFENSE_PLAYER",
+          "x": 0.14,
+          "y": 0.84
         },
         {
+          "hasBall": true,
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "A2",
-          "x": 0.4,
-          "y": 0.86,
-          "hasBall": true
+          "type": "OFFENSE_PLAYER",
+          "x": 0.38,
+          "y": 0.88
         },
         {
           "id": "a3",
-          "type": "OFFENSE_PLAYER",
           "label": "A3",
-          "x": 0.64,
-          "y": 0.86
+          "type": "OFFENSE_PLAYER",
+          "x": 0.62,
+          "y": 0.88
         },
         {
           "id": "a4",
-          "type": "OFFENSE_PLAYER",
           "label": "A4",
+          "type": "OFFENSE_PLAYER",
           "x": 0.86,
-          "y": 0.8
+          "y": 0.84
+        },
+        {
+          "id": "wp_a1",
+          "type": "WAYPOINT",
+          "x": 0.12,
+          "y": 0.36
+        },
+        {
+          "id": "wp_a2",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.48
+        },
+        {
+          "id": "wp_a3",
+          "type": "WAYPOINT",
+          "x": 0.64,
+          "y": 0.48
+        },
+        {
+          "id": "wp_a4",
+          "type": "WAYPOINT",
+          "x": 0.88,
+          "y": 0.36
+        },
+        {
+          "id": "wp_v1",
+          "type": "WAYPOINT",
+          "x": 0.34,
+          "y": 0.25
+        },
+        {
+          "id": "wp_v2",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.27
+        },
+        {
+          "id": "wp_v3",
+          "type": "WAYPOINT",
+          "x": 0.66,
+          "y": 0.25
         },
         {
           "id": "wp_v4",
           "type": "WAYPOINT",
           "x": 0.8,
-          "y": 0.32
+          "y": 0.22
         }
       ],
       "paths": [
         {
+          "fromNodeId": "a1",
           "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "v4",
-          "toWaypointId": "wp_v4",
           "points": [
-            { "x": 0.9, "y": 0.72 },
-            { "x": 0.8, "y": 0.32 }
-          ]
+            {
+              "x": 0.14,
+              "y": 0.84
+            },
+            {
+              "x": 0.12,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.38,
+              "y": 0.88
+            },
+            {
+              "x": 0.36,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a2",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.62,
+              "y": 0.88
+            },
+            {
+              "x": 0.64,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a4",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.86,
+              "y": 0.84
+            },
+            {
+              "x": 0.88,
+              "y": 0.36
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v1",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.34,
+              "y": 0.42
+            },
+            {
+              "x": 0.34,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_v1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.45
+            },
+            {
+              "x": 0.5,
+              "y": 0.27
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_v2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v3",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.66,
+              "y": 0.42
+            },
+            {
+              "x": 0.66,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_v3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a2",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.48
+            },
+            {
+              "x": 0.64,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a3",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "v4",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.92,
+              "y": 0.66
+            },
+            {
+              "x": 0.8,
+              "y": 0.22
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_v4",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1287,56 +2374,55 @@
     "coaching_points": "- Regelkonform stören: Torraumlinie nicht übertreten, aber direkt davor die Passwinkel schließen\n- Bereits 1–2 Sekunden Verzögerung beim Torwartabwurf reichen oft, um die 1. Welle komplett zu unterbinden\n- Nach dem Abwurf sofort umschalten und nicht vorne stehen bleiben",
     "variations_text": "- Torwart darf maximal 3 Sekunden halten, sonst zählt es als Punkt für die Abwehr\n- Störspieler darf nach dem Abwurf auch aktiv auf den Mittelpass lauern",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW1",
+          "type": "GOALKEEPER",
           "x": 0.08,
           "y": 0.5
         },
         {
+          "hasBall": true,
           "id": "gk2",
-          "type": "GOALKEEPER",
           "label": "TW2",
+          "type": "GOALKEEPER",
           "x": 0.92,
-          "y": 0.5,
-          "hasBall": true
+          "y": 0.5
         },
         {
           "id": "v_st",
-          "type": "DEFENSE_PLAYER",
           "label": "ST",
+          "type": "DEFENSE_PLAYER",
           "x": 0.82,
           "y": 0.5
         },
         {
           "id": "v1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.66,
           "y": 0.3
         },
         {
           "id": "v2",
-          "type": "DEFENSE_PLAYER",
           "label": "V2",
+          "type": "DEFENSE_PLAYER",
           "x": 0.66,
           "y": 0.7
         },
         {
           "id": "b1",
-          "type": "OFFENSE_PLAYER",
           "label": "B1",
+          "type": "OFFENSE_PLAYER",
           "x": 0.74,
           "y": 0.18
         },
         {
           "id": "b2",
-          "type": "OFFENSE_PLAYER",
           "label": "B2",
+          "type": "OFFENSE_PLAYER",
           "x": 0.74,
           "y": 0.82
         },
@@ -1351,32 +2437,136 @@
           "type": "WAYPOINT",
           "x": 0.3,
           "y": 0.72
+        },
+        {
+          "id": "wp_b1",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.18
+        },
+        {
+          "id": "wp_b2",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.82
+        },
+        {
+          "id": "wp_st",
+          "type": "WAYPOINT",
+          "x": 0.22,
+          "y": 0.5
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "v1",
-          "toWaypointId": "wp_v1",
+          "id": "p1",
           "points": [
-            { "x": 0.66, "y": 0.3 },
-            { "x": 0.3, "y": 0.28 }
-          ]
+            {
+              "x": 0.66,
+              "y": 0.3
+            },
+            {
+              "x": 0.3,
+              "y": 0.28
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_v1",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "v2",
-          "toWaypointId": "wp_v2",
+          "id": "p2",
           "points": [
-            { "x": 0.66, "y": 0.7 },
-            { "x": 0.3, "y": 0.72 }
-          ]
+            {
+              "x": 0.66,
+              "y": 0.7
+            },
+            {
+              "x": 0.3,
+              "y": 0.72
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_v2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b1",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.18
+            },
+            {
+              "x": 0.36,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.74,
+              "y": 0.82
+            },
+            {
+              "x": 0.36,
+              "y": 0.82
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b2",
+          "type": "RUN_PATH"
+        },
+        {
+          "controlPoint": {
+            "x": 0.68,
+            "y": 0.22
+          },
+          "fromNodeId": "gk2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.92,
+              "y": 0.5
+            },
+            {
+              "x": 0.36,
+              "y": 0.18
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b1",
+          "type": "PASS_PATH",
+          "curved": true
+        },
+        {
+          "fromNodeId": "v_st",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.82,
+              "y": 0.5
+            },
+            {
+              "x": 0.22,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp_st",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 2
     }
   },
   {
@@ -1388,7 +2578,7 @@
     "source_url": "https://www.handballtraining.de/abwehr/rueckzugsverhalten/",
     "categories": {
       "phases": [
-        "WARMUP",
+        "GROUND_EXERCISE",
         "ATHLETICS_COORDINATION"
       ],
       "focus": [
@@ -1421,104 +2611,301 @@
     "coaching_points": "- Kopf beim Passen oben halten, um das optische Signal ohne Verzögerung zu erkennen\n- Explosiver erster Antritt nach der Drehung (tiefer Schwerpunkt)\n- Sauberes Abbremsen vor der Abwehrgrundstellung ohne Überkreuzen der Beine",
     "variations_text": "- Akustische Signale (Pfiff = Rückzug links, Doppelpfiff = Rückzug rechts)\n- Nach dem Rückzugssprint folgt direkt ein reales 2 gegen 2 gegen das nächste Paar",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
-          "id": "coach",
-          "type": "COACH_FEEDER",
-          "label": "TR",
+          "id": "gk",
+          "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.14
+          "y": 0.09
         },
         {
-          "id": "a1",
-          "type": "OFFENSE_PLAYER",
-          "label": "S1",
-          "x": 0.36,
-          "y": 0.72,
-          "hasBall": true
-        },
-        {
-          "id": "a2",
-          "type": "OFFENSE_PLAYER",
-          "label": "S2",
-          "x": 0.64,
-          "y": 0.72
+          "id": "coach",
+          "label": "TR",
+          "type": "COACH_FEEDER",
+          "x": 0.76,
+          "y": 0.1
         },
         {
           "id": "c1",
-          "type": "EQUIPMENT_CONE",
           "label": "H1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.24,
+          "y": 0.29
+        },
+        {
+          "id": "c2",
+          "label": "H2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.5,
+          "y": 0.39
+        },
+        {
+          "id": "c3",
+          "label": "H3",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.76,
+          "y": 0.29
+        },
+        {
+          "id": "c4",
+          "label": "H4",
+          "type": "EQUIPMENT_CONE",
           "x": 0.24,
           "y": 0.88
         },
         {
-          "id": "c2",
+          "id": "c5",
+          "label": "H5",
           "type": "EQUIPMENT_CONE",
-          "label": "H2",
+          "x": 0.5,
+          "y": 0.88
+        },
+        {
+          "id": "c6",
+          "label": "H6",
+          "type": "EQUIPMENT_CONE",
           "x": 0.76,
           "y": 0.88
+        },
+        {
+          "hasBall": true,
+          "id": "a1",
+          "label": "S1",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.36,
+          "y": 0.72
+        },
+        {
+          "id": "a2",
+          "label": "S2",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.64,
+          "y": 0.72
         },
         {
           "id": "wp1",
           "type": "WAYPOINT",
           "x": 0.36,
-          "y": 0.44
+          "y": 0.56
         },
         {
           "id": "wp2",
           "type": "WAYPOINT",
           "x": 0.64,
-          "y": 0.44
+          "y": 0.56
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.42
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.64,
+          "y": 0.42
+        },
+        {
+          "id": "wp5",
+          "type": "WAYPOINT",
+          "x": 0.18,
+          "y": 0.9
+        },
+        {
+          "id": "wp6",
+          "type": "WAYPOINT",
+          "x": 0.82,
+          "y": 0.9
+        },
+        {
+          "id": "wp7",
+          "type": "WAYPOINT",
+          "x": 0.34,
+          "y": 0.82
+        },
+        {
+          "id": "wp8",
+          "type": "WAYPOINT",
+          "x": 0.66,
+          "y": 0.82
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toWaypointId": "wp1",
+          "id": "p1",
           "points": [
-            { "x": 0.36, "y": 0.72 },
-            { "x": 0.36, "y": 0.44 }
-          ]
-        },
-        {
-          "id": "p2",
-          "type": "RUN_PATH",
+            {
+              "x": 0.36,
+              "y": 0.72
+            },
+            {
+              "x": 0.36,
+              "y": 0.56
+            }
+          ],
           "stepNumber": 1,
+          "toWaypointId": "wp1",
+          "type": "RUN_PATH"
+        },
+        {
           "fromNodeId": "a2",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.72
+            },
+            {
+              "x": 0.64,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 1,
           "toWaypointId": "wp2",
-          "points": [
-            { "x": 0.64, "y": 0.72 },
-            { "x": 0.64, "y": 0.44 }
-          ]
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "a1",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
-          "fromWaypointId": "wp1",
-          "toNodeId": "c1",
           "points": [
-            { "x": 0.36, "y": 0.44 },
-            { "x": 0.24, "y": 0.88 }
-          ]
+            {
+              "x": 0.36,
+              "y": 0.72
+            },
+            {
+              "x": 0.64,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp2",
+          "type": "PASS_PATH"
         },
         {
+          "fromWaypointId": "wp1",
           "id": "p4",
-          "type": "RUN_PATH",
-          "stepNumber": 2,
-          "fromWaypointId": "wp2",
-          "toNodeId": "c2",
           "points": [
-            { "x": 0.64, "y": 0.44 },
-            { "x": 0.76, "y": 0.88 }
-          ]
+            {
+              "x": 0.36,
+              "y": 0.56
+            },
+            {
+              "x": 0.36,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp2",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.56
+            },
+            {
+              "x": 0.64,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.56
+            },
+            {
+              "x": 0.36,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp3",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "wp3",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.36,
+              "y": 0.42
+            },
+            {
+              "x": 0.18,
+              "y": 0.9
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp4",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.42
+            },
+            {
+              "x": 0.82,
+              "y": 0.9
+            }
+          ],
+          "stepNumber": 3,
+          "toWaypointId": "wp6",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp5",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.18,
+              "y": 0.9
+            },
+            {
+              "x": 0.34,
+              "y": 0.82
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp7",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp6",
+          "id": "p10",
+          "points": [
+            {
+              "x": 0.82,
+              "y": 0.9
+            },
+            {
+              "x": 0.66,
+              "y": 0.82
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "wp8",
+          "type": "RUN_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1560,120 +2947,361 @@
     "coaching_points": "- Hohe Motivation für kompromisslose Rückzugsarbeit durch das Punktesystem\n- Alle fünf Spieler sprinten geschlossen zurück – kein Abschalten auf den Außenpositionen\n- Aktiv Passwege zustellen und den Ballführer frühzeitig festmachen",
     "variations_text": "- Bei jedem Ballverlust im Angriff muss der Verursacher laut „Ball weg!“ rufen\n- Im 6 gegen 6 mit offensiver 3:2:1-Grundordnung im Rückzug spielen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW1",
+          "type": "GOALKEEPER",
           "x": 0.08,
           "y": 0.5
         },
         {
+          "hasBall": true,
           "id": "gk2",
-          "type": "GOALKEEPER",
           "label": "TW2",
+          "type": "GOALKEEPER",
           "x": 0.92,
-          "y": 0.5,
-          "hasBall": true
+          "y": 0.5
         },
         {
           "id": "b1",
-          "type": "OFFENSE_PLAYER",
           "label": "B1",
+          "type": "OFFENSE_PLAYER",
           "x": 0.68,
-          "y": 0.22
+          "y": 0.16
         },
         {
           "id": "b2",
-          "type": "OFFENSE_PLAYER",
           "label": "B2",
-          "x": 0.64,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.68,
           "y": 0.5
         },
         {
           "id": "b3",
-          "type": "OFFENSE_PLAYER",
           "label": "B3",
+          "type": "OFFENSE_PLAYER",
           "x": 0.68,
-          "y": 0.78
+          "y": 0.84
         },
         {
-          "id": "a1",
-          "type": "DEFENSE_PLAYER",
-          "label": "A1",
-          "x": 0.56,
+          "id": "b4",
+          "label": "B4",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
           "y": 0.3
         },
         {
-          "id": "a2",
+          "id": "b5",
+          "label": "B5",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.76,
+          "y": 0.7
+        },
+        {
+          "id": "a1",
+          "label": "A1",
           "type": "DEFENSE_PLAYER",
-          "label": "A2",
           "x": 0.54,
-          "y": 0.52
+          "y": 0.22
+        },
+        {
+          "id": "a2",
+          "label": "A2",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.42
         },
         {
           "id": "a3",
-          "type": "DEFENSE_PLAYER",
           "label": "A3",
-          "x": 0.56,
-          "y": 0.72
+          "type": "DEFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
+        },
+        {
+          "id": "a4",
+          "label": "A4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.54,
+          "y": 0.78
+        },
+        {
+          "id": "a5",
+          "label": "A5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.58,
+          "y": 0.5
         },
         {
           "id": "wp_a1",
           "type": "WAYPOINT",
-          "x": 0.26,
-          "y": 0.32
+          "x": 0.22,
+          "y": 0.28
         },
         {
           "id": "wp_a2",
           "type": "WAYPOINT",
-          "x": 0.24,
-          "y": 0.5
+          "x": 0.25,
+          "y": 0.42
         },
         {
           "id": "wp_a3",
           "type": "WAYPOINT",
-          "x": 0.26,
+          "x": 0.25,
+          "y": 0.58
+        },
+        {
+          "id": "wp_a4",
+          "type": "WAYPOINT",
+          "x": 0.22,
+          "y": 0.72
+        },
+        {
+          "id": "wp_a5",
+          "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.5
+        },
+        {
+          "id": "wp_b1",
+          "type": "WAYPOINT",
+          "x": 0.42,
+          "y": 0.16
+        },
+        {
+          "id": "wp_b2",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.5
+        },
+        {
+          "id": "wp_b3",
+          "type": "WAYPOINT",
+          "x": 0.42,
+          "y": 0.84
+        },
+        {
+          "id": "wp_b4",
+          "type": "WAYPOINT",
+          "x": 0.46,
+          "y": 0.32
+        },
+        {
+          "id": "wp_b5",
+          "type": "WAYPOINT",
+          "x": 0.46,
           "y": 0.68
         }
       ],
       "paths": [
         {
+          "fromNodeId": "gk2",
           "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a1",
-          "toWaypointId": "wp_a1",
           "points": [
-            { "x": 0.56, "y": 0.3 },
-            { "x": 0.26, "y": 0.32 }
-          ]
+            {
+              "x": 0.92,
+              "y": 0.5
+            },
+            {
+              "x": 0.42,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b1",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "b1",
           "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a2",
-          "toWaypointId": "wp_a2",
           "points": [
-            { "x": 0.54, "y": 0.52 },
-            { "x": 0.24, "y": 0.5 }
-          ]
+            {
+              "x": 0.68,
+              "y": 0.16
+            },
+            {
+              "x": 0.42,
+              "y": 0.16
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b1",
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "b2",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a3",
-          "toWaypointId": "wp_a3",
           "points": [
-            { "x": 0.56, "y": 0.72 },
-            { "x": 0.26, "y": 0.68 }
-          ]
+            {
+              "x": 0.68,
+              "y": 0.5
+            },
+            {
+              "x": 0.36,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.68,
+              "y": 0.84
+            },
+            {
+              "x": 0.42,
+              "y": 0.84
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b4",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.3
+            },
+            {
+              "x": 0.46,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b5",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.7
+            },
+            {
+              "x": 0.46,
+              "y": 0.68
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a1",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.54,
+              "y": 0.22
+            },
+            {
+              "x": 0.22,
+              "y": 0.28
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.42
+            },
+            {
+              "x": 0.25,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.58
+            },
+            {
+              "x": 0.25,
+              "y": 0.58
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a4",
+          "id": "p10",
+          "points": [
+            {
+              "x": 0.54,
+              "y": 0.78
+            },
+            {
+              "x": 0.22,
+              "y": 0.72
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a5",
+          "id": "p11",
+          "points": [
+            {
+              "x": 0.58,
+              "y": 0.5
+            },
+            {
+              "x": 0.28,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_b1",
+          "id": "p12",
+          "points": [
+            {
+              "x": 0.42,
+              "y": 0.16
+            },
+            {
+              "x": 0.36,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b2",
+          "type": "PASS_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1715,120 +3343,404 @@
     "coaching_points": "- Schnelles Einschätzen der Situation: Wer zuerst hinten ist, sichert zuerst das Zentrum (Innenblock)\n- Kein unnötiges Kreuzen im eigenen Rückzugsraum, solange der Gegner Tempo macht\n- Klare Übergabesignale beim späteren Zurücktauschen auf die Stammposition",
     "variations_text": "- Einen Spieler von Team A kurz vor dem Pfiff zum Wechsel an die Auswechselbank schicken (Rückzug in Unterzahl mit Abwehr-Angriff-Wechsel)\n- Zielformation im Rückzug vorgeben (z. B. 5:1-Abwehr statt 6:0)",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "FULL_COURT",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW1",
+          "type": "GOALKEEPER",
           "x": 0.08,
           "y": 0.5
         },
         {
           "id": "gk2",
-          "type": "GOALKEEPER",
           "label": "TW2",
+          "type": "GOALKEEPER",
           "x": 0.92,
           "y": 0.5
         },
         {
+          "hasBall": true,
           "id": "b1",
-          "type": "OFFENSE_PLAYER",
           "label": "B1",
-          "x": 0.66,
-          "y": 0.5,
-          "hasBall": true
+          "type": "OFFENSE_PLAYER",
+          "x": 0.7,
+          "y": 0.5
         },
         {
           "id": "b2",
-          "type": "OFFENSE_PLAYER",
           "label": "B2",
-          "x": 0.6,
-          "y": 0.2
+          "type": "OFFENSE_PLAYER",
+          "x": 0.8,
+          "y": 0.14
         },
         {
           "id": "b3",
-          "type": "OFFENSE_PLAYER",
           "label": "B3",
-          "x": 0.6,
-          "y": 0.8
+          "type": "OFFENSE_PLAYER",
+          "x": 0.8,
+          "y": 0.86
+        },
+        {
+          "id": "b4",
+          "label": "B4",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.8,
+          "y": 0.34
+        },
+        {
+          "id": "b5",
+          "label": "B5",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.8,
+          "y": 0.66
+        },
+        {
+          "id": "b6",
+          "label": "B6",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.8,
+          "y": 0.5
         },
         {
           "id": "a1",
-          "type": "DEFENSE_PLAYER",
           "label": "A1",
-          "x": 0.72,
+          "type": "DEFENSE_PLAYER",
+          "x": 0.64,
           "y": 0.36
         },
         {
           "id": "a2",
-          "type": "DEFENSE_PLAYER",
           "label": "A2",
-          "x": 0.7,
+          "type": "DEFENSE_PLAYER",
+          "x": 0.64,
           "y": 0.64
         },
         {
           "id": "a3",
-          "type": "DEFENSE_PLAYER",
           "label": "A3",
+          "type": "DEFENSE_PLAYER",
           "x": 0.58,
+          "y": 0.46
+        },
+        {
+          "id": "a4",
+          "label": "A4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.58,
+          "y": 0.22
+        },
+        {
+          "id": "a5",
+          "label": "A5",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.58,
+          "y": 0.78
+        },
+        {
+          "id": "a6",
+          "label": "A6",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.7,
+          "y": 0.28
+        },
+        {
+          "id": "wp_a1",
+          "type": "WAYPOINT",
+          "x": 0.22,
           "y": 0.44
+        },
+        {
+          "id": "wp_a2",
+          "type": "WAYPOINT",
+          "x": 0.22,
+          "y": 0.68
         },
         {
           "id": "wp_a3",
           "type": "WAYPOINT",
           "x": 0.22,
-          "y": 0.46
+          "y": 0.56
         },
         {
-          "id": "wp_a1",
+          "id": "wp_a4",
           "type": "WAYPOINT",
           "x": 0.24,
-          "y": 0.3
+          "y": 0.2
         },
         {
-          "id": "wp_a2",
+          "id": "wp_a5",
           "type": "WAYPOINT",
           "x": 0.24,
-          "y": 0.66
+          "y": 0.8
+        },
+        {
+          "id": "wp_a6",
+          "type": "WAYPOINT",
+          "x": 0.22,
+          "y": 0.32
+        },
+        {
+          "id": "wp_b1",
+          "type": "WAYPOINT",
+          "x": 0.48,
+          "y": 0.5
+        },
+        {
+          "id": "wp_b2",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.14
+        },
+        {
+          "id": "wp_b3",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.86
+        },
+        {
+          "id": "wp_b4",
+          "type": "WAYPOINT",
+          "x": 0.42,
+          "y": 0.32
+        },
+        {
+          "id": "wp_b5",
+          "type": "WAYPOINT",
+          "x": 0.42,
+          "y": 0.68
+        },
+        {
+          "id": "wp_b6",
+          "type": "WAYPOINT",
+          "x": 0.36,
+          "y": 0.5
         }
       ],
       "paths": [
         {
+          "fromNodeId": "b1",
           "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a3",
-          "toWaypointId": "wp_a3",
           "points": [
-            { "x": 0.58, "y": 0.44 },
-            { "x": 0.22, "y": 0.46 }
-          ]
+            {
+              "x": 0.7,
+              "y": 0.5
+            },
+            {
+              "x": 0.48,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b1",
+          "type": "DRIBBLE_PATH"
         },
         {
+          "fromNodeId": "b2",
           "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a1",
-          "toWaypointId": "wp_a1",
           "points": [
-            { "x": 0.72, "y": 0.36 },
-            { "x": 0.24, "y": 0.3 }
-          ]
+            {
+              "x": 0.8,
+              "y": 0.14
+            },
+            {
+              "x": 0.36,
+              "y": 0.14
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b2",
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "b3",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a2",
-          "toWaypointId": "wp_a2",
           "points": [
-            { "x": 0.7, "y": 0.64 },
-            { "x": 0.24, "y": 0.66 }
-          ]
+            {
+              "x": 0.8,
+              "y": 0.86
+            },
+            {
+              "x": 0.36,
+              "y": 0.86
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b4",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.8,
+              "y": 0.34
+            },
+            {
+              "x": 0.42,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b5",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.8,
+              "y": 0.66
+            },
+            {
+              "x": 0.42,
+              "y": 0.68
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "b6",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.8,
+              "y": 0.5
+            },
+            {
+              "x": 0.36,
+              "y": 0.5
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_b6",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a1",
+          "id": "p7",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.36
+            },
+            {
+              "x": 0.22,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p8",
+          "points": [
+            {
+              "x": 0.64,
+              "y": 0.64
+            },
+            {
+              "x": 0.22,
+              "y": 0.68
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p9",
+          "points": [
+            {
+              "x": 0.58,
+              "y": 0.46
+            },
+            {
+              "x": 0.22,
+              "y": 0.56
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a4",
+          "id": "p10",
+          "points": [
+            {
+              "x": 0.58,
+              "y": 0.22
+            },
+            {
+              "x": 0.24,
+              "y": 0.2
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a4",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a5",
+          "id": "p11",
+          "points": [
+            {
+              "x": 0.58,
+              "y": 0.78
+            },
+            {
+              "x": 0.24,
+              "y": 0.8
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a5",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a6",
+          "id": "p12",
+          "points": [
+            {
+              "x": 0.7,
+              "y": 0.28
+            },
+            {
+              "x": 0.22,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a6",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_b1",
+          "id": "p13",
+          "points": [
+            {
+              "x": 0.48,
+              "y": 0.5
+            },
+            {
+              "x": 0.36,
+              "y": 0.14
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_b2",
+          "type": "PASS_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1873,79 +3785,215 @@
     "coaching_points": "- Diszipliniertes Einhalten der Wechselzone verhindert unnötige 2-Minuten-Strafen\n- Höchstes Sprinttempo bis zur Seitenlinie – kein Auslaufen vor dem Wechsel\n- Die beiden verbleibenden Verteidiger müssen konsequent das Zentrum schließen, bis der Wechsel vollzogen ist",
     "variations_text": "- Doppelwechsel (zwei Spieler wechseln gleichzeitig im Rückzug)\n- Auf das ganze Spielfeld im 6 gegen 6 übertragen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.1
+          "y": 0.09
         },
         {
           "id": "v1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
-          "x": 0.4,
-          "y": 0.34
+          "type": "DEFENSE_PLAYER",
+          "x": 0.42,
+          "y": 0.38
         },
         {
           "id": "v2",
-          "type": "DEFENSE_PLAYER",
           "label": "V2",
+          "type": "DEFENSE_PLAYER",
           "x": 0.6,
-          "y": 0.34
+          "y": 0.37
         },
         {
           "id": "v_in",
-          "type": "DEFENSE_PLAYER",
           "label": "V3",
+          "type": "DEFENSE_PLAYER",
           "x": 0.06,
-          "y": 0.78
+          "y": 0.8
+        },
+        {
+          "id": "v_out",
+          "label": "V4",
+          "type": "DEFENSE_PLAYER",
+          "x": 0.26,
+          "y": 0.56
+        },
+        {
+          "id": "c1",
+          "label": "H1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.06,
+          "y": 0.7
+        },
+        {
+          "id": "c2",
+          "label": "H2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.06,
+          "y": 0.92
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "A1",
+          "type": "OFFENSE_PLAYER",
           "x": 0.24,
           "y": 0.84
         },
         {
+          "hasBall": true,
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "A2",
+          "type": "OFFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.86,
-          "hasBall": true
+          "y": 0.86
         },
         {
           "id": "a3",
-          "type": "OFFENSE_PLAYER",
           "label": "A3",
+          "type": "OFFENSE_PLAYER",
           "x": 0.76,
           "y": 0.84
         },
         {
+          "id": "wp_vout",
+          "type": "WAYPOINT",
+          "x": 0.06,
+          "y": 0.86
+        },
+        {
           "id": "wp_vin",
           "type": "WAYPOINT",
+          "x": 0.28,
+          "y": 0.32
+        },
+        {
+          "id": "wp_a1",
+          "type": "WAYPOINT",
           "x": 0.24,
-          "y": 0.34
+          "y": 0.48
+        },
+        {
+          "id": "wp_a2",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.54
+        },
+        {
+          "id": "wp_a3",
+          "type": "WAYPOINT",
+          "x": 0.76,
+          "y": 0.48
         }
       ],
       "paths": [
         {
+          "fromNodeId": "v_out",
           "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "v_in",
-          "toWaypointId": "wp_vin",
           "points": [
-            { "x": 0.06, "y": 0.78 },
-            { "x": 0.24, "y": 0.34 }
-          ]
+            {
+              "x": 0.26,
+              "y": 0.56
+            },
+            {
+              "x": 0.06,
+              "y": 0.86
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_vout",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a1",
+          "id": "p2",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.84
+            },
+            {
+              "x": 0.24,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.86
+            },
+            {
+              "x": 0.5,
+              "y": 0.54
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a2",
+          "type": "DRIBBLE_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.76,
+              "y": 0.84
+            },
+            {
+              "x": 0.76,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "wp_a3",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "v_in",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.06,
+              "y": 0.8
+            },
+            {
+              "x": 0.28,
+              "y": 0.32
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_vin",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromWaypointId": "wp_a2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.54
+            },
+            {
+              "x": 0.24,
+              "y": 0.48
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "wp_a1",
+          "type": "PASS_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   }
 ]

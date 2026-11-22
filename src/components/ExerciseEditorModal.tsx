@@ -3,6 +3,7 @@ import {
   Check,
   ClipboardPaste,
   ExternalLink as ExternalLinkIcon,
+  Film,
   Image as ImageIcon,
   Layers,
   Plus,
@@ -24,6 +25,7 @@ import type {
 import {
   AGE_GROUP_LABELS,
   ALL_AGE_GROUPS,
+  ATHLETICS_RECOVERY_FOCUS_TAGS,
   COMPLEXITY_LABELS,
   DEFAULT_AGE_GROUPS,
   FOCUS_TAG_LABELS,
@@ -34,6 +36,7 @@ import {
 } from '../constants/handballLabels';
 import { TacticBoardEditor } from './TacticBoardEditor';
 import { buildTacticBoardPreset } from '../utils/tacticPresets';
+import { hasExplicitTacticAnimation } from '../utils/tacticBoardUtils';
 import { isSafeHttpUrl, sanitizeHttpUrl } from '../utils/securityUtils';
 
 interface ExerciseEditorModalProps {
@@ -607,6 +610,18 @@ export function ExerciseEditorModal({
                     )}
                   </button>
                 </div>
+
+                {hasExplicitTacticAnimation(tacticBoard) ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-950/50 px-2.5 py-1 text-[11px] font-semibold text-emerald-300">
+                    <Film className="h-3.5 w-3.5" />
+                    Animation vorhanden ({tacticBoard.keyframes?.length ?? 0} Szenen)
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/80 bg-slate-950 px-2.5 py-1 text-[11px] font-medium text-slate-400">
+                    <Film className="h-3.5 w-3.5" />
+                    Keine Animation
+                  </span>
+                )}
               </div>
 
               {graphicTab === 'TACTIC_BOARD' ? (
@@ -803,6 +818,31 @@ export function ExerciseEditorModal({
                             className={`rounded-lg px-2 py-1 text-[11px] font-medium transition ${
                               active
                                 ? 'bg-amber-600 text-white'
+                                : 'bg-slate-900 text-slate-400 hover:bg-slate-800'
+                            }`}
+                          >
+                            #{FOCUS_TAG_LABELS[f]}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-800/80 pt-2.5">
+                    <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-teal-300/90">
+                      Athletik & Regeneration
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {ATHLETICS_RECOVERY_FOCUS_TAGS.map((f) => {
+                        const active = focusTags.includes(f);
+                        return (
+                          <button
+                            key={f}
+                            type="button"
+                            onClick={() => toggleFocus(f)}
+                            className={`rounded-lg px-2 py-1 text-[11px] font-medium transition ${
+                              active
+                                ? 'bg-teal-600 text-white'
                                 : 'bg-slate-900 text-slate-400 hover:bg-slate-800'
                             }`}
                           >

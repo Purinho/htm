@@ -37,7 +37,9 @@ export type HandballFocusTag =
   | 'LOB_SPIN_SHOT'
   | 'FEINT_1V1'
   | 'CROSSING_SCREEN'
-  | 'FOOTWORK_DEFENSE';
+  | 'FOOTWORK_DEFENSE'
+  | 'ATHLETICS_CONDITIONING'
+  | 'REGENERATION_MOBILITY';
 
 export type ComplexityLevel = 'BASIC' | 'ADVANCED' | 'PERFORMANCE';
 

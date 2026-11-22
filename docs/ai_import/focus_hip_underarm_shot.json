@@ -321,7 +321,6 @@
     "source_url": "https://www.yoursportplanner.com/handball-hueftwurf-partneruebung/",
     "categories": {
       "phases": [
-        "WARMUP",
         "GROUND_EXERCISE"
       ],
       "focus": [
@@ -331,7 +330,6 @@
       ],
       "level": "BASIC",
       "age_groups": [
-        "E_YOUTH",
         "D_YOUTH",
         "C_YOUTH",
         "B_YOUTH"
@@ -459,90 +457,137 @@
     "coaching_points": "- Oberkörper bleibt möglichst stabil und kippt nur leicht kontrolliert zur Gegenseite\n- Saubere Rotation aus dem Unterarm und aktives Nachdrücken der Finger\n- Kein Ausholen über Schulterhöhe\n- Blick fixiert das untere oder halbhohe Toreck",
     "variations_text": "- Aus dem Sitzen direkt nach dem Wurf aufstehen und einen zweiten Ball im tiefen Stand werfen\n- Torhüter versucht, die flachen Würfe mit dem Fuß abzuwehren\n- Zielhütchen im Tor gezielt abschießen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "W1",
-          "x": 0.36,
-          "y": 0.42,
-          "hasBall": true
+          "type": "OFFENSE_PLAYER",
+          "x": 0.35,
+          "y": 0.33
         },
         {
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "W2",
-          "x": 0.64,
-          "y": 0.42,
-          "hasBall": true
+          "type": "OFFENSE_PLAYER",
+          "x": 0.65,
+          "y": 0.33
+        },
+        {
+          "hasBall": true,
+          "id": "a3",
+          "label": "ZP",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.48
         },
         {
           "id": "c1",
+          "label": "Stange",
           "type": "EQUIPMENT_CONE",
-          "label": "Hindernis",
-          "x": 0.4,
-          "y": 0.35
+          "x": 0.39,
+          "y": 0.27
         },
         {
           "id": "c2",
+          "label": "Stange",
           "type": "EQUIPMENT_CONE",
-          "label": "Hindernis",
-          "x": 0.6,
-          "y": 0.35
+          "x": 0.61,
+          "y": 0.27
         },
         {
           "id": "t1",
+          "label": "Ecke L",
           "type": "EQUIPMENT_GOAL_TARGET",
-          "label": "Tor",
-          "x": 0.5,
+          "x": 0.44,
+          "y": 0.05
+        },
+        {
+          "id": "t2",
+          "label": "Ecke R",
+          "type": "EQUIPMENT_GOAL_TARGET",
+          "x": 0.56,
           "y": 0.05
         }
       ],
       "paths": [
         {
+          "fromNodeId": "a3",
           "id": "p1",
-          "type": "SHOT_PATH",
-          "stepNumber": 1,
-          "fromNodeId": "a1",
-          "toNodeId": "t1",
           "points": [
             {
-              "x": 0.36,
-              "y": 0.42
+              "x": 0.5,
+              "y": 0.48
             },
             {
-              "x": 0.5,
-              "y": 0.05
+              "x": 0.35,
+              "y": 0.33
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toNodeId": "a1",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "a1",
           "id": "p2",
-          "type": "SHOT_PATH",
-          "stepNumber": 2,
-          "fromNodeId": "a2",
-          "toNodeId": "t1",
           "points": [
             {
-              "x": 0.64,
-              "y": 0.42
+              "x": 0.35,
+              "y": 0.33
             },
             {
-              "x": 0.5,
+              "x": 0.44,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 2,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromNodeId": "a3",
+          "id": "p3",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.48
+            },
+            {
+              "x": 0.65,
+              "y": 0.33
+            }
+          ],
+          "stepNumber": 3,
+          "toNodeId": "a2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.65,
+              "y": 0.33
+            },
+            {
+              "x": 0.56,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 4,
+          "toNodeId": "t2",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -584,39 +629,38 @@
     "coaching_points": "- Die Täuschung nach oben muss absolut glaubwürdig sein, damit der Block wirklich hochgeht\n- Explosiver Wechsel von 'hoch' (Täuschung) auf 'tief' (Ausfallschritt & Unterarmzug)\n- Richtigen Abstand zum Verteidiger halten, um ein Stürmerfoul zu vermeiden\n- Ball am Verteidiger vorbeischieben und sofort ins Eck zirkeln",
     "variations_text": "- Verteidiger darf frei entscheiden, ob er hochblockt (Lösung: Hüftwurf) oder tief stehen bleibt (Lösung: hoher Wurf oder Durchbruch)\n- Zweiter Verteidiger steht daneben, sodass durch die Nahtstelle geworfen werden muss\n- Abschluss zwingend ins lange untere Eck",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
           "id": "d1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.36,
           "y": 0.34
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
-          "label": "RL",
-          "x": 0.28,
-          "y": 0.64,
           "isQueue": true,
-          "queueCount": 5
+          "label": "RL",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.28,
+          "y": 0.64
         },
         {
+          "hasBall": true,
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "RM",
+          "type": "OFFENSE_PLAYER",
           "x": 0.56,
-          "y": 0.6,
-          "hasBall": true
+          "y": 0.6
         },
         {
           "id": "w1",
@@ -632,19 +676,33 @@
         },
         {
           "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "Ecke",
+          "type": "EQUIPMENT_GOAL_TARGET",
           "x": 0.55,
           "y": 0.05
         }
       ],
       "paths": [
         {
+          "fromNodeId": "a1",
           "id": "p1",
-          "type": "PASS_PATH",
+          "points": [
+            {
+              "x": 0.28,
+              "y": 0.64
+            },
+            {
+              "x": 0.36,
+              "y": 0.45
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a2",
           "toWaypointId": "w1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p2",
           "points": [
             {
               "x": 0.56,
@@ -654,14 +712,14 @@
               "x": 0.36,
               "y": 0.45
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "PASS_PATH"
         },
         {
-          "id": "p2",
-          "type": "FEINT_PATH",
-          "stepNumber": 2,
           "fromWaypointId": "w1",
-          "toWaypointId": "w2",
+          "id": "p3",
           "points": [
             {
               "x": 0.36,
@@ -671,14 +729,14 @@
               "x": 0.44,
               "y": 0.38
             }
-          ]
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "w2",
+          "type": "FEINT_PATH"
         },
         {
-          "id": "p3",
-          "type": "SHOT_PATH",
-          "stepNumber": 3,
           "fromWaypointId": "w2",
-          "toNodeId": "t1",
+          "id": "p4",
           "points": [
             {
               "x": 0.44,
@@ -688,9 +746,13 @@
               "x": 0.55,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 3,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -732,39 +794,45 @@
     "coaching_points": "- Durch die niedrige Seilhöhe lernen die Spieler, den Ball extrem flach über den Hallenboden zu ziehen\n- Handgelenk bleibt parallel zum Boden, damit der Ball nicht nach oben abhebt\n- Hinteres Knie darf sich fast dem Hallenboden nähern\n- Hohe Wurfgeschwindigkeit trotz tiefer Position durch dynamischen Unterarmzug",
     "variations_text": "- Zielhütchen in den unteren Torecken aufstellen und gezielt abräumen\n- Zwei Seile hintereinander im Abstand von 2 Metern spannen (flacher Wurftunnel)\n- Abschluss als ganz flacher Aufsetzer direkt hinter dem Seil",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
-          "label": "RM",
-          "x": 0.5,
-          "y": 0.68,
-          "hasBall": true,
           "isQueue": true,
-          "queueCount": 6
+          "label": "RM",
+          "queueCount": 6,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.68
+        },
+        {
+          "hasBall": true,
+          "id": "a2",
+          "label": "ZP",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.5
         },
         {
           "id": "c1",
-          "type": "EQUIPMENT_CONE",
           "label": "Stange",
+          "type": "EQUIPMENT_CONE",
           "x": 0.4,
-          "y": 0.32
+          "y": 0.29
         },
         {
           "id": "c2",
-          "type": "EQUIPMENT_CONE",
           "label": "Stange",
+          "type": "EQUIPMENT_CONE",
           "x": 0.6,
-          "y": 0.32
+          "y": 0.29
         },
         {
           "id": "w1",
@@ -774,19 +842,16 @@
         },
         {
           "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "Unten",
+          "type": "EQUIPMENT_GOAL_TARGET",
           "x": 0.45,
           "y": 0.05
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toWaypointId": "w1",
+          "id": "p1",
           "points": [
             {
               "x": 0.5,
@@ -796,14 +861,31 @@
               "x": 0.5,
               "y": 0.44
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "a2",
           "id": "p2",
-          "type": "SHOT_PATH",
-          "stepNumber": 2,
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.5
+            },
+            {
+              "x": 0.5,
+              "y": 0.44
+            }
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "PASS_PATH"
+        },
+        {
           "fromWaypointId": "w1",
-          "toNodeId": "t1",
+          "id": "p3",
           "points": [
             {
               "x": 0.5,
@@ -813,9 +895,13 @@
               "x": 0.45,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 2,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -859,39 +945,66 @@
     "coaching_points": "- Handlungskette fließend verbinden: Fangen -> Binden -> Antäuschen -> Ausfallschritt -> Unterarmwurf\n- Keine Pause zwischen Täuschung und tiefem Ausfallschritt\n- Körperneigung zur Gegenseite maximiert den Wurfweg am Verteidiger vorbei\n- Ruhige Augen auf dem Torhüter behalten",
     "variations_text": "- Verteidiger darf auch seitlich verschieben; Angreifer entscheidet zwischen Durchbruch und Unterarmwurf\n- Ein Kreisläufer steht als Passoption bereit, falls ein zweiter Verteidiger hilft\n- Pflicht: Abschluss in die vom Trainer vorab angesagte Ecke",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
           "id": "d1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.34,
           "y": 0.34
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
-          "label": "RL",
-          "x": 0.24,
-          "y": 0.64,
           "isQueue": true,
-          "queueCount": 5
+          "label": "RL",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.64
         },
         {
+          "hasBall": true,
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "RM",
+          "type": "OFFENSE_PLAYER",
           "x": 0.52,
-          "y": 0.6,
-          "hasBall": true
+          "y": 0.6
+        },
+        {
+          "id": "c1",
+          "label": "RL",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.18,
+          "y": 0.38
+        },
+        {
+          "id": "c2",
+          "label": "RL",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.46,
+          "y": 0.36
+        },
+        {
+          "id": "c3",
+          "label": "RR",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.54,
+          "y": 0.36
+        },
+        {
+          "id": "c4",
+          "label": "RR",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.82,
+          "y": 0.38
         },
         {
           "id": "w1",
@@ -907,19 +1020,33 @@
         },
         {
           "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "Tor",
-          "x": 0.46,
+          "type": "EQUIPMENT_GOAL_TARGET",
+          "x": 0.45,
           "y": 0.05
         }
       ],
       "paths": [
         {
+          "fromNodeId": "a1",
           "id": "p1",
-          "type": "PASS_PATH",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.64
+            },
+            {
+              "x": 0.34,
+              "y": 0.46
+            }
+          ],
           "stepNumber": 1,
-          "fromNodeId": "a2",
           "toWaypointId": "w1",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "a2",
+          "id": "p2",
           "points": [
             {
               "x": 0.52,
@@ -929,14 +1056,14 @@
               "x": 0.34,
               "y": 0.46
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "PASS_PATH"
         },
         {
-          "id": "p2",
-          "type": "FEINT_PATH",
-          "stepNumber": 2,
           "fromWaypointId": "w1",
-          "toWaypointId": "w2",
+          "id": "p3",
           "points": [
             {
               "x": 0.34,
@@ -946,26 +1073,30 @@
               "x": 0.42,
               "y": 0.38
             }
-          ]
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "w2",
+          "type": "FEINT_PATH"
         },
         {
-          "id": "p3",
-          "type": "SHOT_PATH",
-          "stepNumber": 3,
           "fromWaypointId": "w2",
-          "toNodeId": "t1",
+          "id": "p4",
           "points": [
             {
               "x": 0.42,
               "y": 0.38
             },
             {
-              "x": 0.46,
+              "x": 0.45,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 3,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1155,7 +1286,6 @@
     "source_url": "https://www.erima.de/magazin/handball-hueftwurf-lernen",
     "categories": {
       "phases": [
-        "WARMUP",
         "GROUND_EXERCISE"
       ],
       "focus": [
@@ -1329,112 +1459,136 @@
     "coaching_points": "- Eng an der Schulter des Kreisläufers vorbeiziehen, um die Sperre optimal als Sichtschutz zu nutzen\n- Tiefen Körperschwerpunkt beim Passieren der Sperre sofort für den Unterarmwurf nutzen\n- Kreisläufer hält die Sperre regelkonform stabil\n- Torwart wird durch die Spielertraube maximal überrascht",
     "variations_text": "- Nur Tore durch Hüftwurf zählen doppelt\n- Verteidiger dürfen das Sperre-Absetzen aktiv übergeben/übernehmen\n- Erweiterung auf 3 gegen 3 mit zweitem Rückraumspieler",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
           "id": "d1",
-          "type": "DEFENSE_PLAYER",
           "label": "IL",
-          "x": 0.42,
-          "y": 0.3
+          "type": "DEFENSE_PLAYER",
+          "x": 0.4,
+          "y": 0.25
         },
         {
           "id": "d2",
-          "type": "DEFENSE_PLAYER",
           "label": "IR",
-          "x": 0.56,
-          "y": 0.3
+          "type": "DEFENSE_PLAYER",
+          "x": 0.57,
+          "y": 0.26
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "RM",
-          "x": 0.48,
-          "y": 0.6,
-          "hasBall": true
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.58
         },
         {
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "KM",
-          "x": 0.46,
-          "y": 0.34
+          "type": "OFFENSE_PLAYER",
+          "x": 0.47,
+          "y": 0.26
+        },
+        {
+          "hasBall": true,
+          "id": "a3",
+          "label": "RL",
+          "type": "OFFENSE_PLAYER",
+          "x": 0.22,
+          "y": 0.48
         },
         {
           "id": "w1",
           "type": "WAYPOINT",
           "x": 0.54,
-          "y": 0.4
+          "y": 0.38
         },
         {
           "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "Tor",
-          "x": 0.46,
+          "type": "EQUIPMENT_GOAL_TARGET",
+          "x": 0.45,
           "y": 0.05
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "SCREEN_BLOCK_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a2",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.47,
+              "y": 0.26
+            },
+            {
+              "x": 0.4,
+              "y": 0.25
+            }
+          ],
+          "stepNumber": 1,
           "toNodeId": "d1",
-          "points": [
-            {
-              "x": 0.46,
-              "y": 0.34
-            },
-            {
-              "x": 0.43,
-              "y": 0.31
-            }
-          ]
+          "type": "SCREEN_BLOCK_PATH"
         },
         {
+          "fromNodeId": "a3",
           "id": "p2",
-          "type": "DRIBBLE_PATH",
-          "stepNumber": 2,
-          "fromNodeId": "a1",
-          "toWaypointId": "w1",
           "points": [
             {
-              "x": 0.48,
-              "y": 0.6
+              "x": 0.22,
+              "y": 0.48
             },
             {
-              "x": 0.54,
-              "y": 0.4
+              "x": 0.5,
+              "y": 0.58
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toNodeId": "a1",
+          "type": "PASS_PATH"
         },
         {
+          "fromNodeId": "a1",
           "id": "p3",
-          "type": "SHOT_PATH",
-          "stepNumber": 3,
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.58
+            },
+            {
+              "x": 0.54,
+              "y": 0.38
+            }
+          ],
+          "stepNumber": 2,
+          "toWaypointId": "w1",
+          "type": "DRIBBLE_PATH"
+        },
+        {
           "fromWaypointId": "w1",
-          "toNodeId": "t1",
+          "id": "p4",
           "points": [
             {
               "x": 0.54,
-              "y": 0.4
+              "y": 0.38
             },
             {
-              "x": 0.46,
+              "x": 0.45,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 3,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1446,8 +1600,7 @@
     "source_url": "https://www.dhb.de/de/service/trainingshilfen/entscheidungstraining-hueftwurf/",
     "categories": {
       "phases": [
-        "GROUND_EXERCISE",
-        "TARGET_GAME"
+        "GROUND_EXERCISE"
       ],
       "focus": [
         "HIP_UNDERARM_SHOT",
@@ -1708,7 +1861,6 @@
     "source_url": "https://www.mobilesport.ch/handball/hueftwurf-zielwerfen/",
     "categories": {
       "phases": [
-        "TARGET_GAME",
         "GROUND_EXERCISE"
       ],
       "focus": [
@@ -1738,114 +1890,128 @@
     "coaching_points": "- Hütchentore geben direktes visuelles Feedback über die seitliche Präzision des Unterarmwurfs\n- Ruhiger, kontrollierter Ausfallschritt vor der 9-Meter-Linie\n- Sauberes Nachführen der Wurfhand in Richtung des Zieltores\n- Kein blindes Draufbolzen – Präzision steht an erster Stelle",
     "variations_text": "- Hütchentore schmaler stellen (auf 80 cm Breite)\n- Trainer ruft erst beim Anlauf die Nummer des Hütchentors (1, 2 oder 3) aus\n- Mit Torhüter, der versucht, die flachen Bälle abzuwehren",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
+          "hasBall": true,
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
-          "label": "W1",
-          "x": 0.34,
-          "y": 0.66,
-          "hasBall": true,
           "isQueue": true,
-          "queueCount": 5
+          "label": "W1",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.34,
+          "y": 0.66
         },
         {
-          "id": "a2",
-          "type": "OFFENSE_PLAYER",
-          "label": "W2",
-          "x": 0.66,
-          "y": 0.66,
           "hasBall": true,
+          "id": "a2",
           "isQueue": true,
-          "queueCount": 5
+          "label": "W2",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.66,
+          "y": 0.66
         },
         {
           "id": "c1",
+          "label": "L1",
           "type": "EQUIPMENT_CONE",
-          "label": "T1",
-          "x": 0.38,
-          "y": 0.28
+          "x": 0.32,
+          "y": 0.18
         },
         {
           "id": "c2",
+          "label": "L2",
           "type": "EQUIPMENT_CONE",
-          "label": "T2",
-          "x": 0.46,
-          "y": 0.28
+          "x": 0.37,
+          "y": 0.21
         },
         {
           "id": "c3",
+          "label": "M1",
           "type": "EQUIPMENT_CONE",
-          "label": "T3",
-          "x": 0.54,
-          "y": 0.28
+          "x": 0.46,
+          "y": 0.24
         },
         {
           "id": "c4",
+          "label": "M2",
           "type": "EQUIPMENT_CONE",
-          "label": "T4",
-          "x": 0.62,
-          "y": 0.28
+          "x": 0.54,
+          "y": 0.24
+        },
+        {
+          "id": "c5",
+          "label": "R1",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.63,
+          "y": 0.21
+        },
+        {
+          "id": "c6",
+          "label": "R2",
+          "type": "EQUIPMENT_CONE",
+          "x": 0.68,
+          "y": 0.18
         },
         {
           "id": "w1",
           "type": "WAYPOINT",
-          "x": 0.4,
-          "y": 0.44
+          "x": 0.42,
+          "y": 0.4
         },
         {
           "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "Tor",
-          "x": 0.46,
+          "type": "EQUIPMENT_GOAL_TARGET",
+          "x": 0.55,
           "y": 0.05
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toWaypointId": "w1",
+          "id": "p1",
           "points": [
             {
               "x": 0.34,
               "y": 0.66
             },
             {
-              "x": 0.4,
-              "y": 0.44
+              "x": 0.42,
+              "y": 0.4
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p2",
-          "type": "SHOT_PATH",
-          "stepNumber": 2,
           "fromWaypointId": "w1",
-          "toNodeId": "t1",
+          "id": "p2",
           "points": [
             {
-              "x": 0.4,
-              "y": 0.44
+              "x": 0.42,
+              "y": 0.4
             },
             {
-              "x": 0.46,
+              "x": 0.55,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 2,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1857,8 +2023,7 @@
     "source_url": "https://handballtraining.de/freiwurf-hueftwurf-unter-mauer/",
     "categories": {
       "phases": [
-        "GROUND_EXERCISE",
-        "TARGET_GAME"
+        "GROUND_EXERCISE"
       ],
       "focus": [
         "HIP_UNDERARM_SHOT",
@@ -1887,74 +2052,74 @@
     "coaching_points": "- Regelkonformität beachten: Standbein bleibt dauerhaft am Boden, nicht übertreten\n- Timing ist entscheidend: Abwurf exakt in dem Moment, in dem die Mauer in der Luft ist\n- Extrem flache Flugbahn knapp über dem Hallenboden\n- Überraschungsmoment gegenüber dem Torwart nutzen, der hinter der Mauer schlecht sieht",
     "variations_text": "- Mauer darf frei entscheiden, ob sie hochspringt oder stehen bleibt (Werfer muss blitzschnell reagieren)\n- Variante mit kurzem Ableger auf einen Mitspieler, der direkt per Hüftwurf abzieht\n- Wettkampf: Jeder Treffer unter der Mauer durch zählt 2 Punkte",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
           "id": "d1",
-          "type": "DEFENSE_PLAYER",
           "label": "M1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.44,
-          "y": 0.28
+          "y": 0.24
         },
         {
           "id": "d2",
-          "type": "DEFENSE_PLAYER",
           "label": "M2",
+          "type": "DEFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.28
+          "y": 0.25
         },
         {
           "id": "d3",
-          "type": "DEFENSE_PLAYER",
           "label": "M3",
+          "type": "DEFENSE_PLAYER",
           "x": 0.56,
-          "y": 0.28
+          "y": 0.24
         },
         {
-          "id": "a1",
-          "type": "OFFENSE_PLAYER",
-          "label": "FW",
-          "x": 0.5,
-          "y": 0.44,
           "hasBall": true,
+          "id": "a1",
           "isQueue": true,
-          "queueCount": 5
+          "label": "FW",
+          "queueCount": 5,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.5,
+          "y": 0.39
         },
         {
           "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "Flach",
-          "x": 0.54,
+          "type": "EQUIPMENT_GOAL_TARGET",
+          "x": 0.55,
           "y": 0.05
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "SHOT_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toNodeId": "t1",
+          "id": "p1",
           "points": [
             {
               "x": 0.5,
-              "y": 0.44
+              "y": 0.39
             },
             {
-              "x": 0.54,
+              "x": 0.55,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -1966,7 +2131,6 @@
     "source_url": "https://www.handball-uebungen.de/kleingruppenspiel-hueftwurf-bonus/",
     "categories": {
       "phases": [
-        "TARGET_GAME",
         "GROUND_GAME"
       ],
       "focus": [
@@ -1998,72 +2162,71 @@
     "coaching_points": "- Durch die Bonusregel suchen die Rückraumspieler aktiv nach tiefen Lücken und Block-Täuschungen\n- Hüftwürfe nur aus sinnvollen Spielsituationen erzwingen (keine unvorbereiteten Notwürfe)\n- Hohe Ballzirkulation bindet die Abwehr und öffnet seitliche Wurffenster\n- Abwehr lernt gleichzeitig, auf tiefe Würfe wachsam zu reagieren",
     "variations_text": "- Kein Prellen im Rückraum erlaubt (erhöht das Passtempo)\n- Nach einem Fehlwurf gibt es sofortigen Ballbesitzwechsel auf das zweite Tor\n- Erweiterung auf 6 gegen 6 mit gleicher Hüftwurf-Bonusregel",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
           "id": "d1",
-          "type": "DEFENSE_PLAYER",
           "label": "V1",
+          "type": "DEFENSE_PLAYER",
           "x": 0.3,
-          "y": 0.3
+          "y": 0.18
         },
         {
           "id": "d2",
-          "type": "DEFENSE_PLAYER",
           "label": "V2",
-          "x": 0.44,
-          "y": 0.28
+          "type": "DEFENSE_PLAYER",
+          "x": 0.42,
+          "y": 0.25
         },
         {
           "id": "d3",
-          "type": "DEFENSE_PLAYER",
           "label": "V3",
-          "x": 0.56,
-          "y": 0.28
+          "type": "DEFENSE_PLAYER",
+          "x": 0.58,
+          "y": 0.25
         },
         {
           "id": "d4",
-          "type": "DEFENSE_PLAYER",
           "label": "V4",
+          "type": "DEFENSE_PLAYER",
           "x": 0.7,
-          "y": 0.3
+          "y": 0.18
         },
         {
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
           "label": "RL",
+          "type": "OFFENSE_PLAYER",
           "x": 0.26,
           "y": 0.54
         },
         {
+          "hasBall": true,
           "id": "a2",
-          "type": "OFFENSE_PLAYER",
           "label": "RM",
+          "type": "OFFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.58,
-          "hasBall": true
+          "y": 0.58
         },
         {
           "id": "a3",
-          "type": "OFFENSE_PLAYER",
           "label": "RR",
+          "type": "OFFENSE_PLAYER",
           "x": 0.74,
           "y": 0.54
         },
         {
           "id": "a4",
-          "type": "OFFENSE_PLAYER",
           "label": "KM",
+          "type": "OFFENSE_PLAYER",
           "x": 0.5,
-          "y": 0.32
+          "y": 0.25
         },
         {
           "id": "w1",
@@ -2073,19 +2236,16 @@
         },
         {
           "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
           "label": "3 Pkt",
+          "type": "EQUIPMENT_GOAL_TARGET",
           "x": 0.55,
           "y": 0.05
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "PASS_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a2",
-          "toWaypointId": "w1",
+          "id": "p1",
           "points": [
             {
               "x": 0.5,
@@ -2095,14 +2255,14 @@
               "x": 0.34,
               "y": 0.42
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "PASS_PATH"
         },
         {
-          "id": "p2",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
-          "toWaypointId": "w1",
+          "id": "p2",
           "points": [
             {
               "x": 0.26,
@@ -2112,14 +2272,14 @@
               "x": 0.34,
               "y": 0.42
             }
-          ]
+          ],
+          "stepNumber": 1,
+          "toWaypointId": "w1",
+          "type": "RUN_PATH"
         },
         {
-          "id": "p3",
-          "type": "SHOT_PATH",
-          "stepNumber": 2,
           "fromWaypointId": "w1",
-          "toNodeId": "t1",
+          "id": "p3",
           "points": [
             {
               "x": 0.34,
@@ -2129,9 +2289,13 @@
               "x": 0.55,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 2,
+          "toNodeId": "t1",
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   },
   {
@@ -2143,8 +2307,7 @@
     "source_url": "https://handballtraining.de/doppelabschluss-hueftwurf-serie/",
     "categories": {
       "phases": [
-        "GROUND_EXERCISE",
-        "GOALKEEPER_WARMUP"
+        "GROUND_EXERCISE"
       ],
       "focus": [
         "HIP_UNDERARM_SHOT",
@@ -2174,141 +2337,171 @@
     "coaching_points": "- Schnelles Umschalten zwischen zwei verschiedenen Wurfwinkeln\n- Auch beim zweiten Wurf unter leichter Ermüdung tief in die Knie gehen\n- Sauberes Vorbeiziehen des Unterarms an beiden Seiten der Hindernisse\n- Hoher Rhythmus fordert gleichzeitig die Beinarbeit des Torhüters",
     "variations_text": "- Erster Wurf flach ins kurze Eck, zweiter Wurf halbhoch ins lange Eck\n- Dritter Ball erfolgt als sofortiger Gegenstoßpass vom Torwart\n- Airbodies durch zwei passive Verteidiger ersetzen",
     "tactic_board_data": {
-      "version": 1,
       "courtTemplate": "HALF_COURT_VERTICAL",
       "nodes": [
         {
+          "color": "#10b981",
           "id": "gk1",
-          "type": "GOALKEEPER",
           "label": "TW",
+          "type": "GOALKEEPER",
           "x": 0.5,
-          "y": 0.07
+          "y": 0.09
         },
         {
+          "color": "#2563eb",
           "id": "a1",
-          "type": "OFFENSE_PLAYER",
-          "label": "RL",
-          "x": 0.26,
-          "y": 0.66,
           "isQueue": true,
-          "queueCount": 6
+          "label": "RL",
+          "queueCount": 6,
+          "type": "OFFENSE_PLAYER",
+          "x": 0.24,
+          "y": 0.6
         },
         {
+          "color": "#8b5cf6",
+          "hasBall": true,
           "id": "coach1",
-          "type": "COACH_FEEDER",
           "label": "T",
+          "type": "COACH_FEEDER",
           "x": 0.5,
-          "y": 0.62,
-          "hasBall": true
+          "y": 0.6
         },
         {
+          "color": "#facc15",
           "id": "c1",
-          "type": "EQUIPMENT_CONE",
           "label": "A1",
-          "x": 0.36,
-          "y": 0.34
+          "type": "EQUIPMENT_CONE",
+          "x": 0.3,
+          "y": 0.32
         },
         {
+          "color": "#facc15",
           "id": "c2",
-          "type": "EQUIPMENT_CONE",
           "label": "A2",
-          "x": 0.64,
-          "y": 0.34
+          "type": "EQUIPMENT_CONE",
+          "x": 0.7,
+          "y": 0.32
         },
         {
           "id": "w1",
           "type": "WAYPOINT",
-          "x": 0.36,
-          "y": 0.44
+          "x": 0.38,
+          "y": 0.42
         },
         {
           "id": "w2",
           "type": "WAYPOINT",
-          "x": 0.64,
-          "y": 0.44
-        },
-        {
-          "id": "t1",
-          "type": "EQUIPMENT_GOAL_TARGET",
-          "label": "Tor",
-          "x": 0.5,
-          "y": 0.05
+          "x": 0.62,
+          "y": 0.42
         }
       ],
       "paths": [
         {
-          "id": "p1",
-          "type": "RUN_PATH",
-          "stepNumber": 1,
           "fromNodeId": "a1",
+          "id": "p1",
+          "points": [
+            {
+              "x": 0.24,
+              "y": 0.6
+            },
+            {
+              "x": 0.38,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 1,
           "toWaypointId": "w1",
-          "points": [
-            {
-              "x": 0.26,
-              "y": 0.66
-            },
-            {
-              "x": 0.36,
-              "y": 0.44
-            }
-          ]
+          "type": "RUN_PATH"
         },
         {
+          "fromNodeId": "coach1",
           "id": "p2",
-          "type": "SHOT_PATH",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.38,
+              "y": 0.42
+            }
+          ],
           "stepNumber": 2,
-          "fromWaypointId": "w1",
-          "toNodeId": "t1",
-          "points": [
-            {
-              "x": 0.36,
-              "y": 0.44
-            },
-            {
-              "x": 0.5,
-              "y": 0.05
-            }
-          ]
+          "toWaypointId": "w1",
+          "type": "PASS_PATH"
         },
         {
+          "fromWaypointId": "w1",
           "id": "p3",
-          "type": "RUN_PATH",
-          "stepNumber": 3,
-          "fromWaypointId": "w1",
-          "toWaypointId": "w2",
           "points": [
             {
-              "x": 0.36,
-              "y": 0.44
+              "x": 0.38,
+              "y": 0.42
             },
             {
-              "x": 0.5,
-              "y": 0.52
-            },
-            {
-              "x": 0.64,
-              "y": 0.44
-            }
-          ]
-        },
-        {
-          "id": "p4",
-          "type": "SHOT_PATH",
-          "stepNumber": 4,
-          "fromWaypointId": "w2",
-          "toNodeId": "t1",
-          "points": [
-            {
-              "x": 0.64,
-              "y": 0.44
-            },
-            {
-              "x": 0.5,
+              "x": 0.44,
               "y": 0.05
             }
-          ]
+          ],
+          "stepNumber": 3,
+          "type": "SHOT_PATH"
+        },
+        {
+          "fromWaypointId": "w1",
+          "id": "p4",
+          "points": [
+            {
+              "x": 0.38,
+              "y": 0.42
+            },
+            {
+              "x": 0.5,
+              "y": 0.5
+            },
+            {
+              "x": 0.62,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 4,
+          "toWaypointId": "w2",
+          "type": "RUN_PATH"
+        },
+        {
+          "fromNodeId": "coach1",
+          "id": "p5",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.6
+            },
+            {
+              "x": 0.62,
+              "y": 0.42
+            }
+          ],
+          "stepNumber": 5,
+          "toWaypointId": "w2",
+          "type": "PASS_PATH"
+        },
+        {
+          "fromWaypointId": "w2",
+          "id": "p6",
+          "points": [
+            {
+              "x": 0.62,
+              "y": 0.42
+            },
+            {
+              "x": 0.56,
+              "y": 0.05
+            }
+          ],
+          "stepNumber": 6,
+          "type": "SHOT_PATH"
         }
-      ]
+      ],
+      "version": 1
     }
   }
 ]

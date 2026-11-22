@@ -472,6 +472,14 @@ export function generateKeyframesFromPaths(board: TacticBoardData): TacticBoardD
   };
 }
 
+/**
+ * Returns true if the tactic board defines an explicit multi-frame keyframe animation
+ * (at least 2 keyframes: initial state + at least one target scene).
+ */
+export function hasExplicitTacticAnimation(board?: TacticBoardData | null): boolean {
+  return Boolean(board?.keyframes && board.keyframes.length > 1);
+}
+
 export function getTotalAnimationDurationMs(keyframes?: TacticKeyframe[]): number {
   if (!keyframes || keyframes.length <= 1) return 0;
   // Keyframe 0 is initial state; transitions are 0->1, 1->2, ...

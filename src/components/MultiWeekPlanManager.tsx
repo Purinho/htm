@@ -19,8 +19,15 @@ import type {
   TrainingSession
 } from '../types/domain';
 import { FOCUS_TAG_LABELS } from '../constants/handballLabels';
-import { addDaysIso, generateMultiWeekPlanBundle } from '../utils/multiWeekPlanUtils';
+import {
+  addDaysIso,
+  formatIsoDateDe,
+  generateMultiWeekPlanBundle,
+  getIsoWeekNumber,
+  getUpcomingMondayIso
+} from '../utils/multiWeekPlanUtils';
 import { buildSessionFromTemplate } from '../utils/sessionPlannerUtils';
+import { GermanWeekPicker } from './GermanWeekPicker';
 
 interface MultiWeekPlanManagerProps {
   activeTeam: Team;
@@ -77,7 +84,7 @@ export function MultiWeekPlanManager({
   const [newTitle, setNewTitle] = useState(
     'Aufbaublock Rückrunde: Tempospiel & Abwehr-Kooperation'
   );
-  const [newStartDate, setNewStartDate] = useState('2026-12-07');
+  const [newStartDate, setNewStartDate] = useState(() => getUpcomingMondayIso());
   const [newWeekCount, setNewWeekCount] = useState(4);
   const [newGoals, setNewGoals] = useState(
     'Steigerung der 1. & 2. Welle sowie stabile Übergaben im Innenblock.'
@@ -220,7 +227,7 @@ export function MultiWeekPlanManager({
                   >
                     {teamPlans.map((p) => (
                       <option key={p.id} value={p.id}>
-                        {p.title} ({p.start_date} – {p.end_date})
+                        {p.title} ({formatIsoDateDe(p.start_date)} – {formatIsoDateDe(p.end_date)})
                       </option>
                     ))}
                   </select>
@@ -269,13 +276,17 @@ export function MultiWeekPlanManager({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-300">Startwoche (Datum)</label>
-                <input
-                  type="date"
-                  required
+                <label
+                  htmlFor="mesocycle-start-week"
+                  className="mb-1 block text-xs text-slate-300"
+                >
+                  Startwoche (Datum)
+                </label>
+                <GermanWeekPicker
+                  id="mesocycle-start-week"
                   value={newStartDate}
-                  onChange={(e) => setNewStartDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-white"
+                  onChange={setNewStartDate}
+                  weekCount={newWeekCount}
                 />
               </div>
               <div>
@@ -347,7 +358,8 @@ export function MultiWeekPlanManager({
               <strong className="text-white">Block-Zielsetzung:</strong> {activePlan.goals}
             </div>
             <div className="text-slate-400">
-              Zeitraum: {activePlan.start_date} bis {activePlan.end_date} ({activeWeeks.length} Wochen)
+              Zeitraum: {formatIsoDateDe(activePlan.start_date)} bis{' '}
+              {formatIsoDateDe(activePlan.end_date)} ({activeWeeks.length} Wochen)
             </div>
           </div>
         )}
@@ -381,7 +393,8 @@ export function MultiWeekPlanManager({
                   <div className="space-y-3 lg:col-span-5">
                     <div className="flex items-center justify-between text-xs">
                       <span className="rounded-lg bg-slate-800 px-2.5 py-1 font-bold text-white">
-                        Woche {week.week_number} · {week.start_date} bis {weekEndDate}
+                        Woche {week.week_number} (KW {getIsoWeekNumber(week.start_date)}) ·{' '}
+                        {formatIsoDateDe(week.start_date)} – {formatIsoDateDe(weekEndDate)}
                       </span>
                       <input
                         type="color"
@@ -508,7 +521,7 @@ export function MultiWeekPlanManager({
                             <div>
                               <div className="flex items-center justify-between text-[11px]">
                                 <span className="font-bold text-blue-400">
-                                  {sess.session_date} · {sess.start_time}–{sess.end_time}
+                                  {formatIsoDateDe(sess.session_date)} · {sess.start_time}–{sess.end_time}
                                 </span>
                                 <span
                                   className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${

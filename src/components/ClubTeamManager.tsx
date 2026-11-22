@@ -13,7 +13,7 @@ import {
   Users,
   X
 } from 'lucide-react';
-import { db, queueSyncOperation } from '../db/database';
+import { db, purgePendingOutboxUpserts, queueSyncOperation } from '../db/database';
 import type {
   Club,
   ClubMember,
@@ -28,8 +28,11 @@ import type {
   TrainingSession
 } from '../types/domain';
 import { WEEKDAY_OPTIONS } from '../constants/handballLabels';
+import { isSupabaseConfigured } from '../services/supabaseClient';
+import { isLocalDemoClub } from '../utils/standardCatalogUtils';
 import { generateSecureInviteCode } from '../utils/securityUtils';
 import { ClubResetSection } from './ClubResetSection';
+import { ClubStandardCatalogSection } from './ClubStandardCatalogSection';
 
 interface ClubTeamManagerProps {
   club: Club;
@@ -46,6 +49,7 @@ interface ClubTeamManagerProps {
   clubPlanWeeks: PlanWeek[];
   onDownloadBackup?: () => Promise<void> | void;
   onResetCompleted?: (summaryMessage: string) => void;
+  onCatalogImported?: (summaryMessage: string) => void;
 }
 
 export function ClubTeamManager({
@@ -62,7 +66,8 @@ export function ClubTeamManager({
   clubPlans,
   clubPlanWeeks,
   onDownloadBackup,
-  onResetCompleted
+  onResetCompleted,
+  onCatalogImported
 }: ClubTeamManagerProps) {
   const [clubName, setClubName] = useState(club.name);
   const [clubSavedBanner, setClubSavedBanner] = useState(false);
@@ -228,16 +233,39 @@ export function ClubTeamManager({
         db.syncOutbox
       ],
       async () => {
+        const childKeys = new Set<string>();
         await db.teams.delete(teamId);
         await queueSyncOperation('teams', teamId, 'DELETE', { id: teamId });
 
-        for (const tm of assignedLinks) await db.teamMembers.delete(tm.id);
-        for (const w of teamPlanWeeks) await db.planWeeks.delete(w.id);
-        for (const p of teamPlans) await db.multiWeekPlans.delete(p.id);
-        for (const b of teamBlocks) await db.sessionBlocks.delete(b.id);
-        for (const ph of teamPhases) await db.sessionPhases.delete(ph.id);
-        for (const n of teamNotes) await db.sessionNotes.delete(n.id);
-        for (const s of teamSessions) await db.trainingSessions.delete(s.id);
+        for (const tm of assignedLinks) {
+          await db.teamMembers.delete(tm.id);
+          childKeys.add(`team_members:${tm.id}`);
+        }
+        for (const w of teamPlanWeeks) {
+          await db.planWeeks.delete(w.id);
+          childKeys.add(`plan_weeks:${w.id}`);
+        }
+        for (const p of teamPlans) {
+          await db.multiWeekPlans.delete(p.id);
+          childKeys.add(`multi_week_plans:${p.id}`);
+        }
+        for (const b of teamBlocks) {
+          await db.sessionBlocks.delete(b.id);
+          childKeys.add(`session_blocks:${b.id}`);
+        }
+        for (const ph of teamPhases) {
+          await db.sessionPhases.delete(ph.id);
+          childKeys.add(`session_phases:${ph.id}`);
+        }
+        for (const n of teamNotes) {
+          await db.sessionNotes.delete(n.id);
+          childKeys.add(`session_notes:${n.id}`);
+        }
+        for (const s of teamSessions) {
+          await db.trainingSessions.delete(s.id);
+          childKeys.add(`training_sessions:${s.id}`);
+        }
+        await purgePendingOutboxUpserts(childKeys);
       }
     );
 
@@ -343,6 +371,10 @@ export function ClubTeamManager({
       await queueSyncOperation('team_members', assignment.id, 'UPSERT', assignment);
     }
   }
+
+  const canManageStandardCatalog =
+    isClubAdmin && !isLocalDemoClub(club.id, authUserId, isSupabaseConfigured());
+  const currentMemberId = members.find((m) => m.user_id && m.user_id === authUserId)?.id;
 
   return (
     <div className="space-y-8">
@@ -851,6 +883,17 @@ export function ClubTeamManager({
           </section>
         </div>
       </div>
+
+      {/* Admin-Funktion: Standard-Übungskatalog (nur für Vereins-Admins, nicht im Demo-Modus) */}
+      {canManageStandardCatalog && (
+        <ClubStandardCatalogSection
+          club={club}
+          clubExercises={clubExercises}
+          authUserId={authUserId}
+          currentMemberId={currentMemberId}
+          onCatalogImported={onCatalogImported}
+        />
+      )}
 
       {/* Admin-Funktion: Vereins-Reset (nur für Vereins-Admins) */}
       {isClubAdmin && (

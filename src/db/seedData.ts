@@ -353,7 +353,7 @@ export async function seedInitialDataIfEmpty(): Promise<void> {
           { id: 'node-rl', type: 'OFFENSE_PLAYER', label: 'RL', x: 0.22, y: 0.48, color: '#2563eb', hasBall: true, isQueue: true, queueCount: 3 },
           { id: 'node-rm', type: 'OFFENSE_PLAYER', label: 'RM', x: 0.50, y: 0.50, color: '#2563eb' },
           { id: 'node-rr', type: 'OFFENSE_PLAYER', label: 'RR', x: 0.78, y: 0.48, color: '#2563eb', isQueue: true, queueCount: 3 },
-          { id: 'node-km', type: 'OFFENSE_PLAYER', label: 'KM', x: 0.44, y: 0.22, color: '#2563eb' },
+          { id: 'node-km', type: 'OFFENSE_PLAYER', label: 'KM', x: 0.44, y: 0.25, color: '#2563eb' },
           { id: 'node-il', type: 'DEFENSE_PLAYER', label: 'IL', x: 0.38, y: 0.25, color: '#dc2626' },
           { id: 'node-ir', type: 'DEFENSE_PLAYER', label: 'IR', x: 0.58, y: 0.25, color: '#dc2626' },
           { id: 'wp-1', type: 'WAYPOINT', x: 0.30, y: 0.36 }
@@ -505,7 +505,7 @@ export async function seedInitialDataIfEmpty(): Promise<void> {
         presetUsed: 'DEFENSE_3_2_1',
         nodes: [
           { id: 'tw', type: 'GOALKEEPER', label: 'TW', x: 0.50, y: 0.08, color: '#10b981' },
-          { id: 'd-hm', type: 'DEFENSE_PLAYER', label: 'HM', x: 0.50, y: 0.21, color: '#dc2626' },
+          { id: 'd-hm', type: 'DEFENSE_PLAYER', label: 'HM', x: 0.50, y: 0.25, color: '#dc2626' },
           { id: 'd-hl', type: 'DEFENSE_PLAYER', label: 'HL', x: 0.28, y: 0.30, color: '#dc2626' },
           { id: 'd-hr', type: 'DEFENSE_PLAYER', label: 'HR', x: 0.72, y: 0.30, color: '#dc2626' },
           { id: 'd-vm', type: 'DEFENSE_PLAYER', label: 'VM', x: 0.50, y: 0.39, color: '#dc2626' },

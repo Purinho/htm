@@ -56,8 +56,17 @@ import {
 import { getSupabaseClient, isSupabaseConfigured } from './services/supabaseClient';
 import { isSafeHttpUrl } from './utils/securityUtils';
 import {
+  addDaysIso,
+  formatIsoDateDe,
+  getIsoWeekNumber,
+  selectActiveMultiWeekPlan,
+  selectCurrentPlanWeek
+} from './utils/multiWeekPlanUtils';
+import { getLocalDateIso } from './utils/sessionPlannerUtils';
+import {
   AGE_GROUP_LABELS,
   ALL_AGE_GROUPS,
+  ATHLETICS_RECOVERY_FOCUS_TAGS,
   COMPLEXITY_LABELS,
   FOCUS_TAG_LABELS,
   PHASE_CATEGORY_LABELS,
@@ -95,6 +104,8 @@ export function App() {
   const [needsClubOnboarding, setNeedsClubOnboarding] = useState<boolean>(false);
   const [syncStatusBanner, setSyncStatusBanner] = useState<string | null>(null);
 
+const EXERCISE_PAGE_SIZE = 40;
+
   // Exercise filter & modal states
   const [searchQuery, setSearchQuery] = useState('');
   const [visibilityFilter, setVisibilityFilter] = useState<'ALL' | VisibilityLevel>('ALL');
@@ -104,6 +115,7 @@ export function App() {
   const [levelFilter, setLevelFilter] = useState<'ALL' | ComplexityLevel>('ALL');
   const [playerCountFilter, setPlayerCountFilter] = useState<string>('');
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [visibleExerciseCount, setVisibleExerciseCount] = useState(EXERCISE_PAGE_SIZE);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
@@ -350,10 +362,30 @@ export function App() {
     setTimeout(() => setSyncStatusBanner(null), 6000);
   }
 
+  function handleCatalogImported(summaryMessage: string) {
+    setSyncStatusBanner(summaryMessage);
+    setTimeout(() => setSyncStatusBanner(null), 6000);
+  }
+
   const activeTeam = useMemo(
     () => teams.find((t) => t.id === activeTeamId) ?? teams[0],
     [teams, activeTeamId]
   );
+
+  useEffect(() => {
+    setVisibleExerciseCount(EXERCISE_PAGE_SIZE);
+  }, [
+    activeClub?.id,
+    activeTeam?.id,
+    searchQuery,
+    favoritesOnly,
+    visibilityFilter,
+    ageGroupFilter,
+    phaseFilter,
+    focusFilter,
+    levelFilter,
+    playerCountFilter
+  ]);
 
   const exercisesById = useMemo(() => {
     const map = new Map(exercises.map((ex) => [ex.id, ex]));
@@ -445,9 +477,17 @@ export function App() {
     );
   }, [activeExercise, exercises]);
 
+  const todayIso = getLocalDateIso();
+
   const activePlan = useMemo(
-    () => (activeTeam ? multiWeekPlans.find((p) => p.team_id === activeTeam.id) : undefined),
-    [multiWeekPlans, activeTeam]
+    () =>
+      activeTeam
+        ? selectActiveMultiWeekPlan(
+            multiWeekPlans.filter((p) => p.team_id === activeTeam.id),
+            todayIso
+          )
+        : undefined,
+    [multiWeekPlans, activeTeam, todayIso]
   );
 
   const activePlanWeeks = useMemo(
@@ -458,6 +498,11 @@ export function App() {
             .sort((a, b) => a.week_number - b.week_number)
         : [],
     [planWeeks, activePlan]
+  );
+
+  const currentPlanWeek = useMemo(
+    () => selectCurrentPlanWeek(activePlanWeeks, todayIso),
+    [activePlanWeeks, todayIso]
   );
 
   async function handleSaveExercise(exercise: Exercise) {
@@ -573,6 +618,7 @@ export function App() {
             clubPlanWeeks={clubPlanWeeks}
             onDownloadBackup={handleDownloadBackupJson}
             onResetCompleted={handleClubResetCompleted}
+            onCatalogImported={handleCatalogImported}
           />
         </div>
       </div>
@@ -926,21 +972,25 @@ export function App() {
           {/* TAB 1: SPEED-PLANNING TRAININGS-EDITOR & VORLAGEN (MEILENSTEIN 3) */}
           {activeTab === 'DASHBOARD' && (
             <div className="space-y-6">
-              {activePlan && activePlanWeeks[1] && (
+              {activePlan && currentPlanWeek && (
                 <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/50 via-slate-900 to-slate-900 p-5">
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-emerald-400 uppercase">
                         <Sparkles className="h-4 w-4" />
-                        Aktueller Wochen-Schwerpunkt ({activePlan.title})
+                        Aktueller Wochen-Schwerpunkt · KW {getIsoWeekNumber(currentPlanWeek.start_date)} (
+                        {formatIsoDateDe(currentPlanWeek.start_date)} –{' '}
+                        {formatIsoDateDe(addDaysIso(currentPlanWeek.start_date, 6))}) · {activePlan.title}
                       </div>
                       <h2 className="mt-1 text-lg font-bold text-white">
-                        {activePlanWeeks[1].focus_theme}
+                        {currentPlanWeek.focus_theme}
                       </h2>
-                      <p className="mt-0.5 text-xs text-slate-300">{activePlanWeeks[1].notes}</p>
+                      {currentPlanWeek.notes && (
+                        <p className="mt-0.5 text-xs text-slate-300">{currentPlanWeek.notes}</p>
+                      )}
                     </div>
                     <div className="flex flex-wrap gap-1.5">
-                      {activePlanWeeks[1].focus_tags.map((tag) => (
+                      {currentPlanWeek.focus_tags.map((tag) => (
                         <span
                           key={tag}
                           className="rounded-full border border-emerald-500/40 bg-emerald-950/70 px-3 py-1 text-xs font-medium text-emerald-300"
@@ -1167,6 +1217,13 @@ export function App() {
                               </option>
                             ))}
                           </optgroup>
+                          <optgroup label="Athletik & Regeneration">
+                            {ATHLETICS_RECOVERY_FOCUS_TAGS.map((f) => (
+                              <option key={f} value={f}>
+                                {FOCUS_TAG_LABELS[f]}
+                              </option>
+                            ))}
+                          </optgroup>
                         </select>
 
                         <select
@@ -1232,7 +1289,7 @@ export function App() {
                   </div>
 
                   <div className="space-y-2.5">
-                    {filteredExercises.map((ex) => {
+                    {filteredExercises.slice(0, visibleExerciseCount).map((ex) => {
                       const isSelected = activeExercise?.id === ex.id;
                       return (
                         <div
@@ -1318,6 +1375,27 @@ export function App() {
                         </div>
                       );
                     })}
+                    {filteredExercises.length > visibleExerciseCount && (
+                      <div className="flex flex-wrap items-center gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setVisibleExerciseCount((prev) => prev + EXERCISE_PAGE_SIZE)
+                          }
+                          className="flex-1 rounded-xl border border-slate-700 bg-slate-900 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-800"
+                        >
+                          Weitere anzeigen ({Math.min(visibleExerciseCount, filteredExercises.length)} von{' '}
+                          {filteredExercises.length})
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setVisibleExerciseCount(filteredExercises.length)}
+                          className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs font-semibold text-slate-400 hover:bg-slate-900 hover:text-white"
+                        >
+                          Alle anzeigen
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1574,13 +1652,16 @@ export function App() {
                         ))}
                         {activeExercise.categories.focus.map((f) => {
                           const isTechnique = TECHNIQUE_FOCUS_TAGS.includes(f);
+                          const isAthleticsRecovery = ATHLETICS_RECOVERY_FOCUS_TAGS.includes(f);
                           return (
                             <span
                               key={f}
                               className={
                                 isTechnique
                                   ? 'rounded-md bg-amber-950/80 border border-amber-600/40 px-2.5 py-1 text-xs font-medium text-amber-200'
-                                  : 'rounded-md bg-blue-950/80 border border-blue-700/40 px-2.5 py-1 text-xs text-blue-300'
+                                  : isAthleticsRecovery
+                                    ? 'rounded-md bg-emerald-950/80 border border-emerald-600/40 px-2.5 py-1 text-xs font-medium text-emerald-200'
+                                    : 'rounded-md bg-blue-950/80 border border-blue-700/40 px-2.5 py-1 text-xs text-blue-300'
                               }
                             >
                               #{FOCUS_TAG_LABELS[f]}
@@ -1708,6 +1789,7 @@ export function App() {
               clubPlanWeeks={clubPlanWeeks}
               onDownloadBackup={handleDownloadBackupJson}
               onResetCompleted={handleClubResetCompleted}
+              onCatalogImported={handleCatalogImported}
             />
           )}
         </main>
@@ -1782,6 +1864,7 @@ export function App() {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         userEmail={authUserEmail}
+        authUserId={authUserId}
         clubs={clubs}
         activeClub={activeClub}
         onSelectClub={handleSelectClub}

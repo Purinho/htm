@@ -1544,57 +1544,109 @@ export function TacticBoardEditor({ value, onChange }: TacticBoardEditorProps) {
           {template === 'HALF_COURT_VERTICAL' && (
             <>
               <path
-                d="M 106 15 A 144 118 0 0 0 394 15 Z"
+                d="M 130 15 A 120 70 0 0 0 370 15 Z"
                 fill="#1d4ed8"
                 fillOpacity="0.45"
                 stroke="#ffffff"
                 strokeWidth="2.5"
               />
               <path
-                d="M 50 15 A 200 168 0 0 0 450 15"
+                d="M 65 15 A 185 120 0 0 0 435 15"
                 fill="none"
                 stroke="#93c5fd"
                 strokeWidth="2"
                 strokeDasharray="9 7"
               />
-              <line x1="240" y1="60" x2="260" y2="60" stroke="#ffffff" strokeWidth="2" />
-              <line x1="235" y1="98" x2="265" y2="98" stroke="#ffffff" strokeWidth="2.5" />
-              <rect x="212" y="5" width="76" height="12" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
+              <line x1="240" y1="57.5" x2="260" y2="57.5" stroke="#ffffff" strokeWidth="2" />
+              <line x1="235" y1="100" x2="265" y2="100" stroke="#ffffff" strokeWidth="2.5" />
+              <rect x="212.5" y="5" width="75" height="12" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
             </>
           )}
 
           {template === 'GOAL_SECTOR_ZOOM' && (
             <>
               <path
-                d="M 56 15 A 194 168 0 0 0 444 15 Z"
+                d="M 65 15 A 185 130 0 0 0 435 15 Z"
                 fill="#1d4ed8"
                 fillOpacity="0.45"
                 stroke="#ffffff"
                 strokeWidth="2.5"
               />
               <path
-                d="M 20 118 A 238 205 0 0 0 480 118"
+                d="M 20 15 A 230 207.5 0 0 0 480 15"
                 fill="none"
                 stroke="#93c5fd"
                 strokeWidth="2"
                 strokeDasharray="9 7"
               />
+              <line x1="235" y1="82.5" x2="265" y2="82.5" stroke="#ffffff" strokeWidth="2" />
+              <line x1="230" y1="170" x2="270" y2="170" stroke="#ffffff" strokeWidth="2.5" />
               <rect x="194" y="4" width="112" height="13" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
             </>
           )}
 
           {template === 'FULL_COURT' && (
             <>
-              <path d="M 150 15 A 100 68 0 0 0 350 15 Z" fill="#1d4ed8" fillOpacity="0.45" stroke="#ffffff" strokeWidth="2" />
-              <line x1="20" y1={height / 2} x2={width - 20} y2={height / 2} stroke="#ffffff" strokeWidth="2" />
-              <circle cx={width / 2} cy={height / 2} r="22" fill="none" stroke="#93c5fd" strokeWidth="1.5" />
               <path
-                d={`M 150 ${height - 15} A 100 68 0 0 1 350 ${height - 15} Z`}
+                d="M 20 90 A 65 85 0 0 1 20 260 Z"
                 fill="#1d4ed8"
                 fillOpacity="0.45"
                 stroke="#ffffff"
                 strokeWidth="2"
               />
+              <path
+                d="M 20 52.5 A 100 122.5 0 0 1 20 297.5"
+                fill="none"
+                stroke="#93c5fd"
+                strokeWidth="1.5"
+                strokeDasharray="7.5 5"
+              />
+              <line x1="50" y1="166" x2="50" y2="184" stroke="#ffffff" strokeWidth="1.5" />
+              <line x1="95" y1="164" x2="95" y2="186" stroke="#ffffff" strokeWidth="2" />
+              <rect x="5" y="145" width="15" height="60" fill="#ef4444" stroke="#ffffff" strokeWidth="1.5" />
+
+              <line x1={width / 2} y1="15" x2={width / 2} y2={height - 15} stroke="#ffffff" strokeWidth="2" />
+              <circle cx={width / 2} cy={height / 2} r="22.5" fill="none" stroke="#93c5fd" strokeWidth="1.5" />
+
+              <path
+                d="M 480 90 A 65 85 0 0 0 480 260 Z"
+                fill="#1d4ed8"
+                fillOpacity="0.45"
+                stroke="#ffffff"
+                strokeWidth="2"
+              />
+              <path
+                d="M 480 52.5 A 100 122.5 0 0 0 480 297.5"
+                fill="none"
+                stroke="#93c5fd"
+                strokeWidth="1.5"
+                strokeDasharray="7.5 5"
+              />
+              <line x1="450" y1="166" x2="450" y2="184" stroke="#ffffff" strokeWidth="1.5" />
+              <line x1="405" y1="164" x2="405" y2="186" stroke="#ffffff" strokeWidth="2" />
+              <rect x="480" y="145" width="15" height="60" fill="#ef4444" stroke="#ffffff" strokeWidth="1.5" />
+            </>
+          )}
+
+          {template === 'HALF_COURT_HORIZONTAL' && (
+            <>
+              <path
+                d="M 480 55 A 110 120 0 0 0 480 295 Z"
+                fill="#1d4ed8"
+                fillOpacity="0.45"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+              />
+              <path
+                d="M 480 15 A 180 160 0 0 0 480 335"
+                fill="none"
+                stroke="#93c5fd"
+                strokeWidth="2"
+                strokeDasharray="9 7"
+              />
+              <line x1="420" y1="165" x2="420" y2="185" stroke="#ffffff" strokeWidth="2" />
+              <line x1="352.5" y1="160" x2="352.5" y2="190" stroke="#ffffff" strokeWidth="2.5" />
+              <rect x="480" y="137.5" width="15" height="75" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
             </>
           )}
 

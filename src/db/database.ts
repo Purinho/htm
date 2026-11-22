@@ -76,3 +76,26 @@ export async function queueSyncOperation(
     synced: 0
   });
 }
+
+/**
+ * Removes pending UPSERT outbox entries for entities that were deleted locally
+ * (e.g., via cascading session or team deletes) so orphaned child records are never
+ * pushed after their parent is gone.
+ */
+export async function purgePendingOutboxUpserts(entityKeys: Set<string>): Promise<void> {
+  if (entityKeys.size === 0) return;
+  const pending = await db.syncOutbox.where('synced').equals(0).toArray();
+  const idsToDelete: number[] = [];
+  for (const item of pending) {
+    if (
+      item.id !== undefined &&
+      item.operation === 'UPSERT' &&
+      entityKeys.has(`${item.entity_table}:${item.entity_id}`)
+    ) {
+      idsToDelete.push(item.id);
+    }
+  }
+  if (idsToDelete.length > 0) {
+    await db.syncOutbox.bulkDelete(idsToDelete);
+  }
+}

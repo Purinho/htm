@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
+  Film,
   Filter,
   GitBranch,
   Maximize2,
@@ -40,6 +41,7 @@ import {
 } from '../utils/sessionPlannerUtils';
 import { TacticBoardPreview } from './TacticBoardPreview';
 import { FullScreenChalkboardModal } from './FullScreenChalkboardModal';
+import { hasExplicitTacticAnimation } from '../utils/tacticBoardUtils';
 
 interface HallLiveModeProps {
   activeTeam: Team;
@@ -1094,10 +1096,24 @@ export function HallLiveMode({
 
               {/* Large TacticBoard / Reference Image */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                    Taktiktafel & Animation
-                  </span>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                      Taktiktafel
+                    </span>
+                    {activeExercise &&
+                      (hasExplicitTacticAnimation(activeExercise.tactic_board_data) ? (
+                        <span className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/40 bg-emerald-950/50 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
+                          <Film className="h-3 w-3" />
+                          Animation vorhanden ({activeExercise.tactic_board_data?.keyframes?.length ?? 0} Szenen)
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 rounded-lg border border-slate-700/80 bg-slate-950 px-2 py-0.5 text-[11px] font-medium text-slate-400">
+                          <Film className="h-3 w-3" />
+                          Keine Animation
+                        </span>
+                      ))}
+                  </div>
                   <button
                     type="button"
                     onClick={() => setChalkboardOpen(true)}

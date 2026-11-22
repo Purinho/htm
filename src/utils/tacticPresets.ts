@@ -59,7 +59,7 @@ function createOffense33Nodes(): TacticNode[] {
     { id: 'off-rm', type: 'OFFENSE_PLAYER', label: 'RM', x: 0.50, y: 0.54, color: '#2563eb', hasBall: true },
     { id: 'off-rr', type: 'OFFENSE_PLAYER', label: 'RR', x: 0.76, y: 0.48, color: '#2563eb' },
     { id: 'off-ra', type: 'OFFENSE_PLAYER', label: 'RA', x: 0.90, y: 0.16, color: '#2563eb' },
-    { id: 'off-km', type: 'OFFENSE_PLAYER', label: 'KM', x: 0.45, y: 0.22, color: '#2563eb' }
+    { id: 'off-km', type: 'OFFENSE_PLAYER', label: 'KM', x: 0.45, y: 0.25, color: '#2563eb' }
   ];
 }
 
@@ -91,7 +91,7 @@ function createDefense321Nodes(): TacticNode[] {
   return [
     { id: 'def-tw', type: 'GOALKEEPER', label: 'TW', x: 0.50, y: 0.08, color: '#10b981' },
     { id: 'def-al', type: 'DEFENSE_PLAYER', label: 'AL', x: 0.16, y: 0.16, color: '#dc2626' },
-    { id: 'def-hm', type: 'DEFENSE_PLAYER', label: 'HM', x: 0.50, y: 0.22, color: '#dc2626' },
+    { id: 'def-hm', type: 'DEFENSE_PLAYER', label: 'HM', x: 0.50, y: 0.25, color: '#dc2626' },
     { id: 'def-ar', type: 'DEFENSE_PLAYER', label: 'AR', x: 0.84, y: 0.16, color: '#dc2626' },
     { id: 'def-hl', type: 'DEFENSE_PLAYER', label: 'HL', x: 0.30, y: 0.31, color: '#dc2626' },
     { id: 'def-hr', type: 'DEFENSE_PLAYER', label: 'HR', x: 0.70, y: 0.31, color: '#dc2626' },
@@ -146,7 +146,7 @@ export function buildTacticBoardPreset(
           isQueue: true,
           queueCount: 3
         },
-        { id: 'off-km', type: 'OFFENSE_PLAYER', label: 'KM', x: 0.45, y: 0.22, color: '#2563eb' },
+        { id: 'off-km', type: 'OFFENSE_PLAYER', label: 'KM', x: 0.45, y: 0.25, color: '#2563eb' },
         { id: 'def-il', type: 'DEFENSE_PLAYER', label: 'IL', x: 0.39, y: 0.25, color: '#dc2626' },
         { id: 'def-ir', type: 'DEFENSE_PLAYER', label: 'IR', x: 0.57, y: 0.25, color: '#dc2626' }
       ];

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   AlertTriangle,
   ArrowDown,
@@ -23,7 +23,7 @@ import {
   X,
   Zap
 } from 'lucide-react';
-import { db, queueSyncOperation } from '../db/database';
+import { db, purgePendingOutboxUpserts, queueSyncOperation } from '../db/database';
 import type {
   AgeGroup,
   ClubMember,
@@ -36,13 +36,16 @@ import type {
   SessionStatus,
   SessionTemplate,
   Team,
+  TrainingPhaseCategory,
   TrainingSession
 } from '../types/domain';
 import {
   AGE_GROUP_LABELS,
   ALL_AGE_GROUPS,
+  ATHLETICS_RECOVERY_FOCUS_TAGS,
   FOCUS_TAG_LABELS,
   MATERIAL_LABELS,
+  PHASE_CATEGORY_LABELS,
   TACTIC_FOCUS_TAGS,
   TECHNIQUE_FOCUS_TAGS
 } from '../constants/handballLabels';
@@ -65,6 +68,7 @@ import {
   sortSessionsChronologically,
   toggleBlockParallelWithPrevious
 } from '../utils/sessionPlannerUtils';
+import { addDaysIso, selectCurrentPlanWeek } from '../utils/multiWeekPlanUtils';
 import { TacticBoardPreview } from './TacticBoardPreview';
 
 interface TrainingSessionPlannerProps {
@@ -84,6 +88,8 @@ interface TrainingSessionPlannerProps {
   onStartHallMode?: (sessionId: string) => void;
   onPrintSession?: (session: TrainingSession) => void;
 }
+
+const PLANNER_CATALOG_PAGE_SIZE = 30;
 
 const SESSION_STATUS_LABELS: Record<SessionStatus, string> = {
   PLANNED: 'In Planung',
@@ -157,20 +163,33 @@ export function TrainingSessionPlanner({
 
   // Linked PlanWeek for Smart-Suggestions
   const linkedPlanWeek = useMemo(() => {
-    if (!currentSession) return activePlanWeeks[1] ?? activePlanWeeks[0];
-    if (currentSession.plan_week_id) {
+    if (currentSession?.plan_week_id) {
       const found = activePlanWeeks.find((pw) => pw.id === currentSession.plan_week_id);
       if (found) return found;
     }
-    return activePlanWeeks[1] ?? activePlanWeeks[0];
+    if (currentSession?.session_date) {
+      const byDate = activePlanWeeks.find(
+        (pw) =>
+          pw.start_date <= currentSession.session_date &&
+          addDaysIso(pw.start_date, 6) >= currentSession.session_date
+      );
+      if (byDate) return byDate;
+    }
+    return selectCurrentPlanWeek(activePlanWeeks, getLocalDateIso());
   }, [currentSession, activePlanWeeks]);
 
   // Right catalog panel state
   const [catalogTab, setCatalogTab] = useState<'SMART_FOCUS' | 'ALL' | 'RECENT'>('SMART_FOCUS');
   const [catalogSearch, setCatalogSearch] = useState('');
   const [catalogAgeGroup, setCatalogAgeGroup] = useState<'ALL' | AgeGroup>('ALL');
+  const [catalogPhase, setCatalogPhase] = useState<'ALL' | TrainingPhaseCategory>('ALL');
   const [catalogFocusTag, setCatalogFocusTag] = useState<'ALL' | HandballFocusTag>('ALL');
+  const [visibleCatalogCount, setVisibleCatalogCount] = useState(PLANNER_CATALOG_PAGE_SIZE);
   const [previewExerciseId, setPreviewExerciseId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setVisibleCatalogCount(PLANNER_CATALOG_PAGE_SIZE);
+  }, [catalogTab, catalogSearch, catalogAgeGroup, catalogPhase, catalogFocusTag, activeTeam.id]);
 
   // Quick-Block input state
   const [quickTitle, setQuickTitle] = useState('');
@@ -247,6 +266,13 @@ export function TrainingSessionPlanner({
       }
 
       if (
+        catalogPhase !== 'ALL' &&
+        !ex.categories.phases.includes(catalogPhase)
+      ) {
+        return false;
+      }
+
+      if (
         catalogFocusTag !== 'ALL' &&
         !ex.categories.focus.includes(catalogFocusTag)
       ) {
@@ -275,7 +301,7 @@ export function TrainingSessionPlanner({
       }
       return true;
     });
-  }, [exercises, linkedPlanWeek, blocks, activeTeam.id, catalogAgeGroup, catalogFocusTag, catalogSearch, catalogTab]);
+  }, [exercises, linkedPlanWeek, blocks, activeTeam.id, catalogAgeGroup, catalogPhase, catalogFocusTag, catalogSearch, catalogTab]);
 
   async function saveSessionBundleToDb(bundle: {
     session: TrainingSession;
@@ -541,17 +567,22 @@ export function TrainingSessionPlanner({
       'rw',
       [db.trainingSessions, db.sessionPhases, db.sessionBlocks, db.sessionNotes, db.syncOutbox],
       async () => {
+        const childKeys = new Set<string>();
         await db.trainingSessions.delete(sessionId);
         await queueSyncOperation('training_sessions', sessionId, 'DELETE', { id: sessionId });
         for (const p of sessionPhases) {
           await db.sessionPhases.delete(p.id);
+          childKeys.add(`session_phases:${p.id}`);
         }
         for (const b of sessionBlocks) {
           await db.sessionBlocks.delete(b.id);
+          childKeys.add(`session_blocks:${b.id}`);
         }
         for (const n of sessionNotes) {
           await db.sessionNotes.delete(n.id);
+          childKeys.add(`session_notes:${n.id}`);
         }
+        await purgePendingOutboxUpserts(childKeys);
       }
     );
 
@@ -1658,6 +1689,27 @@ export function TrainingSessionPlanner({
                 </div>
                 <div className="flex items-center gap-2">
                   <label
+                    htmlFor="planner-phase-filter"
+                    className="shrink-0 text-[11px] font-semibold text-slate-400"
+                  >
+                    Phase:
+                  </label>
+                  <select
+                    id="planner-phase-filter"
+                    value={catalogPhase}
+                    onChange={(e) => setCatalogPhase(e.target.value as 'ALL' | TrainingPhaseCategory)}
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-white focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="ALL">Alle Trainingsphasen</option>
+                    {(Object.keys(PHASE_CATEGORY_LABELS) as TrainingPhaseCategory[]).map((p) => (
+                      <option key={p} value={p}>
+                        {PHASE_CATEGORY_LABELS[p]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label
                     htmlFor="planner-focus-filter"
                     className="shrink-0 text-[11px] font-semibold text-slate-400"
                   >
@@ -1684,13 +1736,20 @@ export function TrainingSessionPlanner({
                         </option>
                       ))}
                     </optgroup>
+                    <optgroup label="Athletik & Regeneration">
+                      {ATHLETICS_RECOVERY_FOCUS_TAGS.map((f) => (
+                        <option key={f} value={f}>
+                          {FOCUS_TAG_LABELS[f]}
+                        </option>
+                      ))}
+                    </optgroup>
                   </select>
                 </div>
               </div>
 
               {/* Exercise Cards */}
               <div className="max-h-[460px] space-y-2.5 overflow-y-auto pr-1">
-                {smartCatalogExercises.map((ex) => {
+                {smartCatalogExercises.slice(0, visibleCatalogCount).map((ex) => {
                   const isPreviewOpen = previewExerciseId === ex.id;
                   return (
                     <div
@@ -1778,6 +1837,18 @@ export function TrainingSessionPlanner({
                     </div>
                   );
                 })}
+                {smartCatalogExercises.length > visibleCatalogCount && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setVisibleCatalogCount((prev) => prev + PLANNER_CATALOG_PAGE_SIZE)
+                    }
+                    className="w-full rounded-xl border border-slate-700 bg-slate-900 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-800"
+                  >
+                    Weitere Übungen anzeigen ({visibleCatalogCount} von{' '}
+                    {smartCatalogExercises.length})
+                  </button>
+                )}
               </div>
             </div>
 
