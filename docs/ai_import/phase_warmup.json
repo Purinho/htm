@@ -3500,7 +3500,7 @@
     "coaching_points": "- Peripheres Sehen schulen: Blick zwischen Partner/Handball und eigenem Luftballon aufteilen\n- Saubere, gut fangbare Pässe auch unter Zeitdruck spielen\n- Ruhiger Rhythmus beim Antippen des Ballons",
     "variations_text": "- Passfrequenz erhöhen oder Abstand verringern\n- Wettkampf: Welches Paar hält Ball und beide Ballons am längsten oben?\n- Ergänzung „Ballon in der Beinpresse“: Einbeinig gegenüberstehen, zweiten Ballon zwischen den Fußgelenken (Innen- oder Außenseite) einklemmen und dabei passen oder prellen",
     "tactic_board_data": {
-      "version": 1,
+      "version": 2,
       "courtTemplate": "FREE_SPACE",
       "nodes": [
         {
@@ -3509,6 +3509,7 @@
           "label": "P1 A",
           "x": 0.25,
           "y": 0.25,
+          "rotation": 180,
           "hasBall": true
         },
         {
@@ -3516,7 +3517,8 @@
           "type": "OFFENSE_PLAYER",
           "label": "P1 B",
           "x": 0.25,
-          "y": 0.75
+          "y": 0.75,
+          "rotation": 0
         },
         {
           "id": "p2a",
@@ -3524,6 +3526,7 @@
           "label": "P2 A",
           "x": 0.5,
           "y": 0.25,
+          "rotation": 180,
           "hasBall": true
         },
         {
@@ -3531,7 +3534,8 @@
           "type": "OFFENSE_PLAYER",
           "label": "P2 B",
           "x": 0.5,
-          "y": 0.75
+          "y": 0.75,
+          "rotation": 0
         },
         {
           "id": "p3a",
@@ -3539,6 +3543,7 @@
           "label": "P3 A",
           "x": 0.75,
           "y": 0.25,
+          "rotation": 180,
           "hasBall": true
         },
         {
@@ -3546,7 +3551,8 @@
           "type": "OFFENSE_PLAYER",
           "label": "P3 B",
           "x": 0.75,
-          "y": 0.75
+          "y": 0.75,
+          "rotation": 0
         }
       ],
       "paths": [
@@ -3556,6 +3562,11 @@
           "stepNumber": 1,
           "fromNodeId": "p1a",
           "toNodeId": "p1b",
+          "controlPoint": {
+            "x": 0.21,
+            "y": 0.5
+          },
+          "curved": true,
           "points": [
             {
               "x": 0.25,
@@ -3573,6 +3584,11 @@
           "stepNumber": 1,
           "fromNodeId": "p2a",
           "toNodeId": "p2b",
+          "controlPoint": {
+            "x": 0.46,
+            "y": 0.5
+          },
+          "curved": true,
           "points": [
             {
               "x": 0.5,
@@ -3590,6 +3606,11 @@
           "stepNumber": 1,
           "fromNodeId": "p3a",
           "toNodeId": "p3b",
+          "controlPoint": {
+            "x": 0.71,
+            "y": 0.5
+          },
+          "curved": true,
           "points": [
             {
               "x": 0.75,
@@ -3598,6 +3619,72 @@
             {
               "x": 0.75,
               "y": 0.75
+            }
+          ]
+        },
+        {
+          "id": "pass1_back",
+          "type": "PASS_PATH",
+          "stepNumber": 2,
+          "fromNodeId": "p1b",
+          "toNodeId": "p1a",
+          "controlPoint": {
+            "x": 0.29,
+            "y": 0.5
+          },
+          "curved": true,
+          "points": [
+            {
+              "x": 0.25,
+              "y": 0.75
+            },
+            {
+              "x": 0.25,
+              "y": 0.25
+            }
+          ]
+        },
+        {
+          "id": "pass2_back",
+          "type": "PASS_PATH",
+          "stepNumber": 2,
+          "fromNodeId": "p2b",
+          "toNodeId": "p2a",
+          "controlPoint": {
+            "x": 0.54,
+            "y": 0.5
+          },
+          "curved": true,
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.75
+            },
+            {
+              "x": 0.5,
+              "y": 0.25
+            }
+          ]
+        },
+        {
+          "id": "pass3_back",
+          "type": "PASS_PATH",
+          "stepNumber": 2,
+          "fromNodeId": "p3b",
+          "toNodeId": "p3a",
+          "controlPoint": {
+            "x": 0.79,
+            "y": 0.5
+          },
+          "curved": true,
+          "points": [
+            {
+              "x": 0.75,
+              "y": 0.75
+            },
+            {
+              "x": 0.75,
+              "y": 0.25
             }
           ]
         }

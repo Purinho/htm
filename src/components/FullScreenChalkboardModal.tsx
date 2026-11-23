@@ -16,6 +16,11 @@ import {
   getTotalAnimationDurationMs,
   interpolateTacticBoardAtTime
 } from '../utils/tacticBoardUtils';
+import {
+  cleanupOverlayHistory,
+  pushOverlayHistory,
+  requestOverlayClose
+} from '../utils/overlayHistory';
 
 interface FullScreenChalkboardModalProps {
   isOpen: boolean;
@@ -73,6 +78,40 @@ export function FullScreenChalkboardModal({
   const [loop, setLoop] = useState<boolean>(tacticBoardData?.animationSettings?.loop ?? true);
   const rafRef = useRef<number | null>(null);
   const lastFrameRef = useRef<number | null>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+  const overlayIdRef = useRef<string | null>(null);
+
+  const handleClose = () => {
+    const id = overlayIdRef.current;
+    if (id) {
+      requestOverlayClose(id, () => onCloseRef.current());
+    } else {
+      onCloseRef.current();
+    }
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const id = `chalkboard-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    overlayIdRef.current = id;
+    pushOverlayHistory(id, () => onCloseRef.current());
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      cleanupOverlayHistory(id);
+      if (overlayIdRef.current === id) {
+        overlayIdRef.current = null;
+      }
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     setIsPlaying(false);
@@ -239,7 +278,7 @@ export function FullScreenChalkboardModal({
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-slate-800 px-4 py-2 text-xs font-bold text-white hover:bg-slate-700"
           >
             <X className="h-4 w-4" />

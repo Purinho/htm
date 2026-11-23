@@ -105,7 +105,8 @@ export function TacticBoardPreview({
   const hiddenNodeIds = frame ? frame.hiddenNodeIds : new Set<string>();
   const activePathIds = frame ? frame.activePathIds : null;
   const trails = frame ? frame.trails : [];
-  const freeBallPosition = frame?.freeBallPosition;
+  const freeBallPositions =
+    frame?.freeBallPositions ?? (frame?.freeBallPosition ? [frame.freeBallPosition] : []);
 
   const width = 400;
   const height = 280;
@@ -472,17 +473,18 @@ export function TacticBoardPreview({
           );
         })}
 
-        {/* Free ball in flight */}
-        {freeBallPosition && (
+        {/* Free ball(s) in flight */}
+        {freeBallPositions.map((ball, idx) => (
           <circle
-            cx={freeBallPosition.x * width}
-            cy={freeBallPosition.y * height}
+            key={`free-ball-${idx}`}
+            cx={ball.x * width}
+            cy={ball.y * height}
             r="6.5"
             fill="#f59e0b"
             stroke="#0f172a"
             strokeWidth="1.8"
           />
-        )}
+        ))}
       </svg>
 
       {/* 60-FPS Animation Player Bar */}

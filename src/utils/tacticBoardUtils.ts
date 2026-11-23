@@ -315,6 +315,26 @@ export function createKeyframeFromBoardOrPrevious(
   };
 }
 
+function findNodeNearInStates(
+  nodes: TacticNode[],
+  pt: TacticPathPoint,
+  states: Record<string, TacticKeyframeNodeState>
+): string | undefined {
+  let bestId: string | undefined;
+  let bestDist = 0.08;
+  for (const node of nodes) {
+    if (node.type === 'WAYPOINT' || node.type.startsWith('EQUIPMENT_')) continue;
+    const st = states[node.id];
+    if (!st) continue;
+    const d = Math.hypot(st.x - pt.x, st.y - pt.y);
+    if (d <= bestDist) {
+      bestDist = d;
+      bestId = node.id;
+    }
+  }
+  return bestId;
+}
+
 /**
  * Generates an animation keyframe sequence automatically from numbered paths.
  */
@@ -337,7 +357,7 @@ export function generateKeyframesFromPaths(board: TacticBoardData): TacticBoardD
 
   const keyframes: TacticKeyframe[] = [];
   let currentStates = buildInitialNodeStates(board.nodes);
-  const initialHolder = board.nodes.find((n) => n.hasBall)?.id;
+  const initialHolders = board.nodes.filter((n) => n.hasBall).map((n) => n.id);
 
   keyframes.push({
     id: 'kf-0',
@@ -347,7 +367,7 @@ export function generateKeyframesFromPaths(board: TacticBoardData): TacticBoardD
     pauseAfterMs: 250,
     nodeStates: JSON.parse(JSON.stringify(currentStates)),
     activePathIds: [],
-    ballPosition: initialHolder ? { holderNodeId: initialHolder } : undefined
+    ballPosition: initialHolders.length === 1 ? { holderNodeId: initialHolders[0] } : undefined
   });
 
   // Group paths by stepNumber so simultaneous actions animate together
@@ -362,27 +382,14 @@ export function generateKeyframesFromPaths(board: TacticBoardData): TacticBoardD
     }
   }
 
-  const findNodeNear = (pt: TacticPathPoint, states: Record<string, TacticKeyframeNodeState>): string | undefined => {
-    let bestId: string | undefined;
-    let bestDist = 0.08;
-    for (const node of board.nodes) {
-      if (node.type === 'WAYPOINT' || node.type.startsWith('EQUIPMENT_')) continue;
-      const st = states[node.id];
-      if (!st) continue;
-      const d = Math.hypot(st.x - pt.x, st.y - pt.y);
-      if (d <= bestDist) {
-        bestDist = d;
-        bestId = node.id;
-      }
-    }
-    return bestId;
-  };
-
   stepGroups.forEach((group, groupIdx) => {
     const nextStates: Record<string, TacticKeyframeNodeState> = JSON.parse(
       JSON.stringify(currentStates)
     );
-    let ballPos: TacticKeyframe['ballPosition'];
+    const releasedBallNodeIds = new Set<string>();
+    const receivedBallNodeIds = new Set<string>();
+    const freeBallEndpoints: TacticPathPoint[] = [];
+    let ballPathCount = 0;
     const labels: string[] = [];
 
     for (const path of group.paths) {
@@ -392,30 +399,30 @@ export function generateKeyframesFromPaths(board: TacticBoardData): TacticBoardD
       const sourceNodeId =
         path.fromNodeId && nextStates[path.fromNodeId]
           ? path.fromNodeId
-          : findNodeNear(startPt, currentStates);
+          : findNodeNearInStates(board.nodes, startPt, currentStates);
       const targetNodeId =
         path.toNodeId && nextStates[path.toNodeId]
           ? path.toNodeId
-          : findNodeNear(endPt, currentStates);
+          : findNodeNearInStates(board.nodes, endPt, currentStates);
 
       if (path.type === 'PASS_PATH') {
-        labels.push(`Pass`);
-        // Remove ball from previous holders
-        for (const key of Object.keys(nextStates)) {
-          nextStates[key].hasBall = false;
+        ballPathCount++;
+        labels.push('Pass');
+        if (sourceNodeId && nextStates[sourceNodeId]) {
+          releasedBallNodeIds.add(sourceNodeId);
         }
         if (targetNodeId && nextStates[targetNodeId]) {
-          nextStates[targetNodeId].hasBall = true;
-          ballPos = { holderNodeId: targetNodeId };
+          receivedBallNodeIds.add(targetNodeId);
         } else {
-          ballPos = { x: endPt.x, y: endPt.y };
+          freeBallEndpoints.push({ x: endPt.x, y: endPt.y });
         }
       } else if (path.type === 'SHOT_PATH') {
-        labels.push(`Wurf`);
-        for (const key of Object.keys(nextStates)) {
-          nextStates[key].hasBall = false;
+        ballPathCount++;
+        labels.push('Wurf');
+        if (sourceNodeId && nextStates[sourceNodeId]) {
+          releasedBallNodeIds.add(sourceNodeId);
         }
-        ballPos = { x: endPt.x, y: endPt.y };
+        freeBallEndpoints.push({ x: endPt.x, y: endPt.y });
       } else {
         // RUN_PATH, DRIBBLE_PATH, FEINT_PATH, SCREEN_BLOCK_PATH
         labels.push(
@@ -433,16 +440,34 @@ export function generateKeyframesFromPaths(board: TacticBoardData): TacticBoardD
           const angle =
             (Math.atan2(endPt.y - startPt.y, endPt.x - startPt.x) * 180) / Math.PI + 90;
           nextStates[sourceNodeId].rotation = Math.round(angle);
-          if (nextStates[sourceNodeId].hasBall) {
-            ballPos = { holderNodeId: sourceNodeId };
-          }
         }
       }
     }
 
-    if (!ballPos) {
-      const holderId = Object.keys(nextStates).find((id) => nextStates[id].hasBall);
-      if (holderId) ballPos = { holderNodeId: holderId };
+    if (ballPathCount === 1 && releasedBallNodeIds.size === 0) {
+      const prevHolders = Object.keys(currentStates).filter((id) => currentStates[id].hasBall);
+      if (prevHolders.length === 1) {
+        releasedBallNodeIds.add(prevHolders[0]);
+      }
+    }
+
+    for (const id of releasedBallNodeIds) {
+      if (!receivedBallNodeIds.has(id) && nextStates[id]) {
+        nextStates[id].hasBall = false;
+      }
+    }
+    for (const id of receivedBallNodeIds) {
+      if (nextStates[id]) {
+        nextStates[id].hasBall = true;
+      }
+    }
+
+    const finalHolders = Object.keys(nextStates).filter((id) => nextStates[id].hasBall);
+    let ballPos: TacticKeyframe['ballPosition'];
+    if (finalHolders.length === 1 && freeBallEndpoints.length === 0) {
+      ballPos = { holderNodeId: finalHolders[0] };
+    } else if (finalHolders.length === 0 && freeBallEndpoints.length === 1) {
+      ballPos = { x: freeBallEndpoints[0].x, y: freeBallEndpoints[0].y };
     }
 
     keyframes.push({
@@ -494,6 +519,7 @@ export interface InterpolatedBoardFrame {
   nodes: TacticNode[];
   hiddenNodeIds: Set<string>;
   freeBallPosition?: { x: number; y: number };
+  freeBallPositions: { x: number; y: number }[];
   activePathIds: Set<string>;
   currentKeyframeIndex: number;
   trails: { nodeId: string; points: TacticPathPoint[]; color?: string }[];
@@ -520,6 +546,7 @@ export function interpolateTacticBoardAtTime(
     return {
       nodes: board.nodes,
       hiddenNodeIds: new Set(),
+      freeBallPositions: [],
       activePathIds: new Set(),
       currentKeyframeIndex: 0,
       trails: []
@@ -541,13 +568,15 @@ export function interpolateTacticBoardAtTime(
         rotation: st.rotation ?? n.rotation
       };
     });
+    const singleFreeBall =
+      kf.ballPosition && typeof kf.ballPosition.x === 'number' && typeof kf.ballPosition.y === 'number'
+        ? { x: kf.ballPosition.x, y: kf.ballPosition.y }
+        : undefined;
     return {
       nodes,
       hiddenNodeIds: hidden,
-      freeBallPosition:
-        kf.ballPosition && typeof kf.ballPosition.x === 'number' && typeof kf.ballPosition.y === 'number'
-          ? { x: kf.ballPosition.x, y: kf.ballPosition.y }
-          : undefined,
+      freeBallPosition: singleFreeBall,
+      freeBallPositions: singleFreeBall ? [singleFreeBall] : [],
       activePathIds: new Set(kf.activePathIds ?? []),
       currentKeyframeIndex: 0,
       trails: []
@@ -638,54 +667,143 @@ export function interpolateTacticBoardAtTime(
     };
   });
 
-  // Ball flight interpolation if ball changed holder or moved freely
-  let freeBallPosition: { x: number; y: number } | undefined;
-  const prevHolderId =
-    prevKf.ballPosition?.holderNodeId ??
-    Object.keys(prevKf.nodeStates).find((id) => prevKf.nodeStates[id]?.hasBall);
-  const nextHolderId =
-    nextKf.ballPosition?.holderNodeId ??
-    Object.keys(nextKf.nodeStates).find((id) => nextKf.nodeStates[id]?.hasBall);
+  // Ball flight interpolation: handle simultaneous PASS_PATH / SHOT_PATH actions as well as legacy single-ball keyframes
+  const freeBallPositions: { x: number; y: number }[] = [];
+  const activeBallPaths = activePaths.filter(
+    (p) => (p.type === 'PASS_PATH' || p.type === 'SHOT_PATH') && p.points.length >= 2
+  );
 
-  const prevBallPt =
-    prevHolderId && prevKf.nodeStates[prevHolderId]
-      ? { x: prevKf.nodeStates[prevHolderId].x, y: prevKf.nodeStates[prevHolderId].y }
-      : typeof prevKf.ballPosition?.x === 'number' && typeof prevKf.ballPosition?.y === 'number'
-        ? { x: prevKf.ballPosition.x, y: prevKf.ballPosition.y }
-        : undefined;
+  if (activeBallPaths.length > 0) {
+    const inFlightSourceIds = new Set<string>();
+    const inFlightTargetIds = new Set<string>();
 
-  const nextBallPt =
-    nextHolderId && nextKf.nodeStates[nextHolderId]
-      ? { x: nextKf.nodeStates[nextHolderId].x, y: nextKf.nodeStates[nextHolderId].y }
-      : typeof nextKf.ballPosition?.x === 'number' && typeof nextKf.ballPosition?.y === 'number'
-        ? { x: nextKf.ballPosition.x, y: nextKf.ballPosition.y }
-        : undefined;
+    for (const path of activeBallPaths) {
+      const firstPt = path.points[0];
+      const lastPt = path.points[path.points.length - 1];
+      const sourceId =
+        path.fromNodeId && prevKf.nodeStates[path.fromNodeId]
+          ? path.fromNodeId
+          : findNodeNearInStates(board.nodes, firstPt, prevKf.nodeStates);
+      const targetId =
+        path.type === 'PASS_PATH'
+          ? path.toNodeId && nextKf.nodeStates[path.toNodeId]
+            ? path.toNodeId
+            : findNodeNearInStates(board.nodes, lastPt, nextKf.nodeStates)
+          : undefined;
 
-  if (prevBallPt && nextBallPt && (prevHolderId !== nextHolderId || !nextHolderId)) {
-    if (segProgress < 0.95 || !nextHolderId) {
-      const passPath = activePaths.find((p) => p.type === 'PASS_PATH' || p.type === 'SHOT_PATH');
-      if (passPath?.controlPoint) {
-        freeBallPosition = evalQuadraticBezier(prevBallPt, passPath.controlPoint, nextBallPt, eased);
-      } else {
-        freeBallPosition = {
-          x: prevBallPt.x + (nextBallPt.x - prevBallPt.x) * eased,
-          y: prevBallPt.y + (nextBallPt.y - prevBallPt.y) * eased
-        };
-      }
-      // Hide attached ball on nodes while in flight
-      for (const n of nodes) {
-        n.hasBall = false;
+      const pStart =
+        sourceId && prevKf.nodeStates[sourceId]
+          ? { x: prevKf.nodeStates[sourceId].x, y: prevKf.nodeStates[sourceId].y }
+          : firstPt;
+      const pEnd =
+        targetId && nextKf.nodeStates[targetId]
+          ? { x: nextKf.nodeStates[targetId].x, y: nextKf.nodeStates[targetId].y }
+          : lastPt;
+
+      if (sourceId) inFlightSourceIds.add(sourceId);
+      if (targetId) inFlightTargetIds.add(targetId);
+
+      if (segProgress < 0.95 || !targetId) {
+        if (path.controlPoint && path.points.length === 2) {
+          freeBallPositions.push(evalQuadraticBezier(pStart, path.controlPoint, pEnd, eased));
+        } else {
+          freeBallPositions.push({
+            x: pStart.x + (pEnd.x - pStart.x) * eased,
+            y: pStart.y + (pEnd.y - pStart.y) * eased
+          });
+        }
       }
     }
-  } else if (prevHolderId && prevHolderId === nextHolderId) {
-    const holder = nodes.find((n) => n.id === prevHolderId);
-    if (holder) holder.hasBall = true;
+
+    for (const node of nodes) {
+      if (inFlightTargetIds.has(node.id) && segProgress >= 0.95) {
+        node.hasBall = Boolean(nextKf.nodeStates[node.id]?.hasBall);
+      } else if (inFlightSourceIds.has(node.id) || inFlightTargetIds.has(node.id)) {
+        node.hasBall = false;
+      } else if (prevKf.nodeStates[node.id]?.hasBall && nextKf.nodeStates[node.id]?.hasBall) {
+        node.hasBall = true;
+      } else {
+        node.hasBall = segProgress >= 0.9 ? Boolean(nextKf.nodeStates[node.id]?.hasBall) : false;
+      }
+    }
+  } else {
+    for (const node of nodes) {
+      if (prevKf.nodeStates[node.id]?.hasBall && nextKf.nodeStates[node.id]?.hasBall) {
+        node.hasBall = true;
+      }
+    }
+
+    const lostIds = Object.keys(prevKf.nodeStates).filter(
+      (id) => prevKf.nodeStates[id]?.hasBall && !nextKf.nodeStates[id]?.hasBall
+    );
+    const gainedIds = Object.keys(nextKf.nodeStates).filter(
+      (id) => !prevKf.nodeStates[id]?.hasBall && nextKf.nodeStates[id]?.hasBall
+    );
+
+    if (lostIds.length > 0 && gainedIds.length > 0) {
+      const pairCount = Math.min(lostIds.length, gainedIds.length);
+      for (let i = 0; i < pairCount; i++) {
+        const fromId = lostIds[i];
+        const toId = gainedIds[i];
+        const pStart = { x: prevKf.nodeStates[fromId].x, y: prevKf.nodeStates[fromId].y };
+        const pEnd = { x: nextKf.nodeStates[toId].x, y: nextKf.nodeStates[toId].y };
+        if (segProgress < 0.95) {
+          freeBallPositions.push({
+            x: pStart.x + (pEnd.x - pStart.x) * eased,
+            y: pStart.y + (pEnd.y - pStart.y) * eased
+          });
+          const fromNode = nodes.find((n) => n.id === fromId);
+          const toNode = nodes.find((n) => n.id === toId);
+          if (fromNode) fromNode.hasBall = false;
+          if (toNode) toNode.hasBall = false;
+        } else {
+          const toNode = nodes.find((n) => n.id === toId);
+          if (toNode) toNode.hasBall = true;
+        }
+      }
+    } else {
+      const prevHolderId =
+        prevKf.ballPosition?.holderNodeId ??
+        Object.keys(prevKf.nodeStates).find((id) => prevKf.nodeStates[id]?.hasBall);
+      const nextHolderId =
+        nextKf.ballPosition?.holderNodeId ??
+        Object.keys(nextKf.nodeStates).find((id) => nextKf.nodeStates[id]?.hasBall);
+
+      const prevBallPt =
+        prevHolderId && prevKf.nodeStates[prevHolderId]
+          ? { x: prevKf.nodeStates[prevHolderId].x, y: prevKf.nodeStates[prevHolderId].y }
+          : typeof prevKf.ballPosition?.x === 'number' && typeof prevKf.ballPosition?.y === 'number'
+            ? { x: prevKf.ballPosition.x, y: prevKf.ballPosition.y }
+            : undefined;
+
+      const nextBallPt =
+        nextHolderId && nextKf.nodeStates[nextHolderId]
+          ? { x: nextKf.nodeStates[nextHolderId].x, y: nextKf.nodeStates[nextHolderId].y }
+          : typeof nextKf.ballPosition?.x === 'number' && typeof nextKf.ballPosition?.y === 'number'
+            ? { x: nextKf.ballPosition.x, y: nextKf.ballPosition.y }
+            : undefined;
+
+      if (prevBallPt && nextBallPt && (prevHolderId !== nextHolderId || !nextHolderId)) {
+        if (segProgress < 0.95 || !nextHolderId) {
+          freeBallPositions.push({
+            x: prevBallPt.x + (nextBallPt.x - prevBallPt.x) * eased,
+            y: prevBallPt.y + (nextBallPt.y - prevBallPt.y) * eased
+          });
+          for (const n of nodes) {
+            if (n.id === prevHolderId || n.id === nextHolderId) {
+              n.hasBall = false;
+            }
+          }
+        }
+      }
+    }
   }
 
   return {
     nodes,
     hiddenNodeIds,
-    freeBallPosition,
+    freeBallPosition: freeBallPositions[0],
+    freeBallPositions,
     activePathIds,
     currentKeyframeIndex: segIndex,
     trails

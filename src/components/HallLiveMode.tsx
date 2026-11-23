@@ -746,15 +746,15 @@ export function HallLiveMode({
 
             {timerTab === 'SECTION' ? (
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="font-mono text-4xl font-black tracking-tight text-white sm:text-5xl">
+                <div className="flex min-w-0 items-center gap-4">
+                  <div className="shrink-0 font-mono text-4xl font-black tracking-tight text-white sm:text-5xl">
                     {formatSeconds(remainingSeconds)}
                   </div>
-                  <div>
-                    <div className="text-xs font-bold text-blue-400 uppercase">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-xs font-bold text-blue-400 uppercase break-words">
                       Abschnitt {activeIndex + 1} / {visibleBlocksWithPhase.length} · {activePhase.name}
                     </div>
-                    <div className="text-sm font-bold text-white">
+                    <div className="text-sm font-bold text-white break-words">
                       {activeBlock.track_label} ({activeBlock.custom_duration_min} Min geplant)
                     </div>
                   </div>

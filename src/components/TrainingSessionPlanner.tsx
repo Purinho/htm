@@ -1081,22 +1081,40 @@ export function TrainingSessionPlanner({
                   }`}
                 >
                   {/* Phase Header */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-start justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div className="flex min-w-0 flex-1 basis-[240px] flex-wrap items-center gap-x-2 gap-y-1">
                       {isTargetPhase && (
-                        <span className="rounded bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white uppercase">
+                        <span className="shrink-0 rounded bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white uppercase">
                           Aktive Phase
                         </span>
                       )}
-                      <input
-                        type="text"
-                        value={phase.name}
-                        onChange={(e) => void handleRenamePhase(phase, e.target.value)}
-                        className="bg-transparent font-bold text-white text-sm focus:border-b focus:border-blue-400 focus:outline-none"
-                      />
+                      <div className="relative grid min-w-[200px] flex-1 basis-[220px]">
+                        <span
+                          aria-hidden="true"
+                          className="invisible col-start-1 row-start-1 px-0.5 py-0.5 text-sm font-bold leading-snug whitespace-pre-wrap break-words"
+                        >
+                          {phase.name || 'Phase benennen...'}
+                        </span>
+                        <textarea
+                          rows={1}
+                          value={phase.name}
+                          placeholder="Phase benennen..."
+                          aria-label="Phasenname"
+                          onChange={(e) =>
+                            void handleRenamePhase(phase, e.target.value.replace(/\r?\n/g, ' '))
+                          }
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              e.currentTarget.blur();
+                            }
+                          }}
+                          className="col-start-1 row-start-1 w-full resize-none overflow-hidden bg-transparent px-0.5 py-0.5 text-sm font-bold leading-snug text-white focus:border-b focus:border-blue-400 focus:outline-none"
+                        />
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex shrink-0 items-center gap-1.5">
                       <div
                         className={`inline-flex items-center gap-1 rounded-lg border px-2 py-0.5 text-xs font-semibold ${
                           effectiveMin > phase.target_duration_min + 5
@@ -1280,7 +1298,7 @@ export function TrainingSessionPlanner({
                                             onChange={(e) =>
                                               void handleMoveBlockToPhase(block, e.target.value)
                                             }
-                                            className="max-w-[110px] rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 text-[11px] text-slate-300"
+                                            className="min-w-0 max-w-[220px] sm:max-w-[260px] rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 text-[11px] text-slate-300"
                                             title="Übung in eine andere Phase verschieben"
                                           >
                                             {currentPhases.map((p) => (
@@ -1594,7 +1612,7 @@ export function TrainingSessionPlanner({
                 placeholder="Neue Trainingsphase hinzufügen (z.B. 6. Individuelles Wurftraining)..."
                 value={newPhaseName}
                 onChange={(e) => setNewPhaseName(e.target.value)}
-                className="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs text-white"
+                className="min-w-[220px] flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs text-white"
               />
               <input
                 type="number"

@@ -128,6 +128,7 @@ function normalizeTacticBoard(rawBoard: unknown): TacticBoardData | undefined {
       y: clampCoord(item.y, 0.5),
       color: typeof item.color === 'string' ? item.color : undefined,
       hasBall: Boolean(item.hasBall),
+      rotation: typeof item.rotation === 'number' ? item.rotation : undefined,
       isQueue: Boolean(item.isQueue),
       queueCount: typeof item.queueCount === 'number' ? item.queueCount : undefined
     };

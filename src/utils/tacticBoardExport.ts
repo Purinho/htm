@@ -452,14 +452,20 @@ function drawBoardFrameToCanvas(
     ctx.restore();
   }
 
-  // Free ball
-  if (frame.freeBallPosition) {
+  // Free ball(s)
+  const freeBalls =
+    frame.freeBallPositions.length > 0
+      ? frame.freeBallPositions
+      : frame.freeBallPosition
+        ? [frame.freeBallPosition]
+        : [];
+  for (const ball of freeBalls) {
     ctx.save();
     ctx.fillStyle = '#f59e0b';
     ctx.strokeStyle = '#0f172a';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.arc(frame.freeBallPosition.x * width, frame.freeBallPosition.y * height, 9, 0, Math.PI * 2);
+    ctx.arc(ball.x * width, ball.y * height, 9, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
     ctx.restore();

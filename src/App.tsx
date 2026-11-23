@@ -40,6 +40,7 @@ import { TrainingSessionPlanner } from './components/TrainingSessionPlanner';
 import { MultiWeekPlanManager } from './components/MultiWeekPlanManager';
 import { HallLiveMode } from './components/HallLiveMode';
 import { FullScreenChalkboardModal } from './components/FullScreenChalkboardModal';
+import { handleOverlayPopState } from './utils/overlayHistory';
 import { PrintExportModal, type PrintExportTarget } from './components/PrintExportModal';
 import { UiConfigModal } from './components/UiConfigModal';
 import { UiConfigTourModal } from './components/UiConfigTourModal';
@@ -271,6 +272,10 @@ const EXERCISE_PAGE_SIZE = 40;
     }
 
     function handlePopState(event: PopStateEvent) {
+      if (handleOverlayPopState(event.state)) {
+        return;
+      }
+
       const state = event.state as AppHistoryState | null;
       const stateTab = state?.tab;
       const nextTab = stateTab && validTabs.includes(stateTab) ? stateTab : 'DASHBOARD';

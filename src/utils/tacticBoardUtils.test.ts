@@ -184,4 +184,95 @@ describe('tacticBoardUtils', () => {
       })
     ).toBe(true);
   });
+
+  it('animates simultaneous multi-ball passes for all pairs without collapsing to one ball', () => {
+    const legacyLuftballonBoard: TacticBoardData = {
+      version: 1,
+      courtTemplate: 'FREE_SPACE',
+      nodes: [
+        { id: 'p1a', type: 'OFFENSE_PLAYER', label: 'P1 A', x: 0.25, y: 0.25, hasBall: true },
+        { id: 'p1b', type: 'OFFENSE_PLAYER', label: 'P1 B', x: 0.25, y: 0.75 },
+        { id: 'p2a', type: 'OFFENSE_PLAYER', label: 'P2 A', x: 0.5, y: 0.25, hasBall: true },
+        { id: 'p2b', type: 'OFFENSE_PLAYER', label: 'P2 B', x: 0.5, y: 0.75 },
+        { id: 'p3a', type: 'OFFENSE_PLAYER', label: 'P3 A', x: 0.75, y: 0.25, hasBall: true },
+        { id: 'p3b', type: 'OFFENSE_PLAYER', label: 'P3 B', x: 0.75, y: 0.75 }
+      ],
+      paths: [
+        { id: 'pass1', type: 'PASS_PATH', stepNumber: 1, fromNodeId: 'p1a', toNodeId: 'p1b', points: [{ x: 0.25, y: 0.25 }, { x: 0.25, y: 0.75 }] },
+        { id: 'pass2', type: 'PASS_PATH', stepNumber: 1, fromNodeId: 'p2a', toNodeId: 'p2b', points: [{ x: 0.5, y: 0.25 }, { x: 0.5, y: 0.75 }] },
+        { id: 'pass3', type: 'PASS_PATH', stepNumber: 1, fromNodeId: 'p3a', toNodeId: 'p3b', points: [{ x: 0.75, y: 0.25 }, { x: 0.75, y: 0.75 }] }
+      ]
+    };
+
+    const animated = generateKeyframesFromPaths(legacyLuftballonBoard);
+    expect(animated.keyframes).toHaveLength(2);
+    const kf0 = animated.keyframes![0];
+    const kf1 = animated.keyframes![1];
+    expect(kf0.nodeStates.p1a.hasBall).toBe(true);
+    expect(kf0.nodeStates.p2a.hasBall).toBe(true);
+    expect(kf0.nodeStates.p3a.hasBall).toBe(true);
+    expect(kf1.nodeStates.p1a.hasBall).toBe(false);
+    expect(kf1.nodeStates.p2a.hasBall).toBe(false);
+    expect(kf1.nodeStates.p3a.hasBall).toBe(false);
+    expect(kf1.nodeStates.p1b.hasBall).toBe(true);
+    expect(kf1.nodeStates.p2b.hasBall).toBe(true);
+    expect(kf1.nodeStates.p3b.hasBall).toBe(true);
+
+    // Midpoint (timeMs = 700 into 1400ms transition) should show 3 distinct balls along x = 0.25, 0.5, 0.75
+    const midFrame = interpolateTacticBoardAtTime(animated, 700);
+    expect(midFrame.freeBallPositions).toHaveLength(3);
+    expect(midFrame.freeBallPositions.map((b) => b.x)).toEqual([0.25, 0.5, 0.75]);
+    for (const ball of midFrame.freeBallPositions) {
+      expect(ball.y).toBeCloseTo(0.5, 3);
+    }
+    expect(midFrame.nodes.every((n) => !n.hasBall)).toBe(true);
+
+    // At end of transition (segProgress >= 0.95), balls are held by p1b, p2b, p3b
+    const endFrame = interpolateTacticBoardAtTime(animated, 1400);
+    expect(endFrame.freeBallPositions).toHaveLength(0);
+    expect(endFrame.nodes.find((n) => n.id === 'p1b')?.hasBall).toBe(true);
+    expect(endFrame.nodes.find((n) => n.id === 'p2b')?.hasBall).toBe(true);
+    expect(endFrame.nodes.find((n) => n.id === 'p3b')?.hasBall).toBe(true);
+  });
+
+  it('animates curved 2-step multi-ball back-and-forth passing and preserves unrelated ball holders', () => {
+    const board: TacticBoardData = {
+      version: 2,
+      courtTemplate: 'FREE_SPACE',
+      nodes: [
+        { id: 'p1a', type: 'OFFENSE_PLAYER', label: 'P1 A', x: 0.25, y: 0.25, rotation: 180, hasBall: true },
+        { id: 'p1b', type: 'OFFENSE_PLAYER', label: 'P1 B', x: 0.25, y: 0.75, rotation: 0 },
+        { id: 'p2a', type: 'OFFENSE_PLAYER', label: 'P2 A', x: 0.5, y: 0.25, rotation: 180, hasBall: true },
+        { id: 'p2b', type: 'OFFENSE_PLAYER', label: 'P2 B', x: 0.5, y: 0.75, rotation: 0 },
+        { id: 'idle', type: 'OFFENSE_PLAYER', label: 'IDLE', x: 0.85, y: 0.5, hasBall: true }
+      ],
+      paths: [
+        { id: 'pass1', type: 'PASS_PATH', stepNumber: 1, fromNodeId: 'p1a', toNodeId: 'p1b', controlPoint: { x: 0.21, y: 0.5 }, curved: true, points: [{ x: 0.25, y: 0.25 }, { x: 0.25, y: 0.75 }] },
+        { id: 'pass2', type: 'PASS_PATH', stepNumber: 1, fromNodeId: 'p2a', toNodeId: 'p2b', controlPoint: { x: 0.46, y: 0.5 }, curved: true, points: [{ x: 0.5, y: 0.25 }, { x: 0.5, y: 0.75 }] },
+        { id: 'pass1_back', type: 'PASS_PATH', stepNumber: 2, fromNodeId: 'p1b', toNodeId: 'p1a', controlPoint: { x: 0.29, y: 0.5 }, curved: true, points: [{ x: 0.25, y: 0.75 }, { x: 0.25, y: 0.25 }] },
+        { id: 'pass2_back', type: 'PASS_PATH', stepNumber: 2, fromNodeId: 'p2b', toNodeId: 'p2a', controlPoint: { x: 0.54, y: 0.5 }, curved: true, points: [{ x: 0.5, y: 0.75 }, { x: 0.5, y: 0.25 }] }
+      ]
+    };
+
+    const animated = generateKeyframesFromPaths(board);
+    expect(animated.keyframes).toHaveLength(3);
+    expect(animated.keyframes![1].nodeStates.idle.hasBall).toBe(true);
+    expect(animated.keyframes![2].nodeStates.p1a.hasBall).toBe(true);
+    expect(animated.keyframes![2].nodeStates.p2a.hasBall).toBe(true);
+    expect(animated.keyframes![2].nodeStates.idle.hasBall).toBe(true);
+
+    // Step 1 midpoint (700ms): 2 curved balls in flight, idle player still holds its ball
+    const step1Mid = interpolateTacticBoardAtTime(animated, 700);
+    expect(step1Mid.freeBallPositions).toHaveLength(2);
+    expect(step1Mid.freeBallPositions[0].x).toBeCloseTo(0.23, 3);
+    expect(step1Mid.freeBallPositions[1].x).toBeCloseTo(0.48, 3);
+    expect(step1Mid.nodes.find((n) => n.id === 'idle')?.hasBall).toBe(true);
+
+    // Step 2 midpoint (1700 + 700 = 2400ms): 2 curved return balls in flight
+    const step2Mid = interpolateTacticBoardAtTime(animated, 2400);
+    expect(step2Mid.freeBallPositions).toHaveLength(2);
+    expect(step2Mid.freeBallPositions[0].x).toBeCloseTo(0.27, 3);
+    expect(step2Mid.freeBallPositions[1].x).toBeCloseTo(0.52, 3);
+    expect(step2Mid.nodes.find((n) => n.id === 'idle')?.hasBall).toBe(true);
+  });
 });
