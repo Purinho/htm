@@ -93,7 +93,7 @@ export async function seedInitialDataIfEmpty(): Promise<void> {
       id: 'team-mb',
       club_id: club.id,
       name: 'männliche B-Jugend',
-      age_group: 'U17 / B-Jugend (Oberliga)',
+      age_group: 'B_YOUTH',
       season: '2026/27',
       default_schedule: [
         {
@@ -121,7 +121,7 @@ export async function seedInitialDataIfEmpty(): Promise<void> {
       id: 'team-m1',
       club_id: club.id,
       name: '1. Herren',
-      age_group: 'Aktive (Verbandsliga)',
+      age_group: 'ADULTS',
       season: '2026/27',
       default_schedule: [
         {

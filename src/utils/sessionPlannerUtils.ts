@@ -5,11 +5,179 @@ import type {
   SessionBlock,
   SessionPhase,
   SessionTemplate,
+  TrainingPhaseCategory,
   TrainingSession
 } from '../types/domain';
-import { DEFAULT_AGE_GROUPS } from '../constants/handballLabels';
+import {
+  DEFAULT_AGE_GROUPS,
+  FOCUS_TAG_LABELS,
+  PHASE_CATEGORY_LABELS
+} from '../constants/handballLabels';
 import { calculateMinutesBetweenTimes } from './trainingCalculations';
 import { buildTacticBoardPreset } from './tacticPresets';
+import { isAgeGroup } from './teamAgeGroupUtils';
+
+export type PlannerCatalogTab = 'SMART_FOCUS' | 'ALL' | 'RECENT';
+
+export interface PlannerCatalogFilters {
+  catalogTab: PlannerCatalogTab;
+  catalogSearch: string;
+  catalogAgeGroup: 'ALL' | AgeGroup;
+  catalogPhase: 'ALL' | TrainingPhaseCategory;
+  catalogFocusTag: 'ALL' | HandballFocusTag;
+}
+
+export interface PlannerNavigationSnapshot {
+  teamId: string;
+  teamAgeGroup?: AgeGroup | null;
+  sessionId?: string;
+  phaseId?: string;
+  filters: PlannerCatalogFilters;
+}
+
+export interface PlannerTeamContext {
+  teamId: string;
+  ageGroup: AgeGroup | null;
+}
+
+const VALID_PLANNER_TABS = new Set<PlannerCatalogTab>(['SMART_FOCUS', 'ALL', 'RECENT']);
+
+/** Creates the default exercise catalog filter state for the training session planner. */
+export function createDefaultPlannerCatalogFilters(
+  defaultAgeGroup?: AgeGroup | null
+): PlannerCatalogFilters {
+  return {
+    catalogTab: 'SMART_FOCUS',
+    catalogSearch: '',
+    catalogAgeGroup: defaultAgeGroup ?? 'ALL',
+    catalogPhase: 'ALL',
+    catalogFocusTag: 'ALL'
+  };
+}
+
+/**
+ * Validates and normalizes persisted planner filters (e.g. from browser history state),
+ * preserving an explicit `'ALL'` age group selection while falling back on missing/invalid fields.
+ */
+export function sanitizePlannerCatalogFilters(
+  raw: unknown,
+  fallbackAgeGroup?: AgeGroup | null
+): PlannerCatalogFilters {
+  if (!raw || typeof raw !== 'object') {
+    return createDefaultPlannerCatalogFilters(fallbackAgeGroup);
+  }
+
+  const candidate = raw as Record<string, unknown>;
+  const catalogTab: PlannerCatalogTab =
+    typeof candidate.catalogTab === 'string' &&
+    VALID_PLANNER_TABS.has(candidate.catalogTab as PlannerCatalogTab)
+      ? (candidate.catalogTab as PlannerCatalogTab)
+      : 'SMART_FOCUS';
+
+  const catalogSearch = typeof candidate.catalogSearch === 'string' ? candidate.catalogSearch : '';
+
+  const catalogAgeGroup: 'ALL' | AgeGroup =
+    candidate.catalogAgeGroup === 'ALL'
+      ? 'ALL'
+      : isAgeGroup(candidate.catalogAgeGroup)
+        ? candidate.catalogAgeGroup
+        : (fallbackAgeGroup ?? 'ALL');
+
+  const catalogPhase: 'ALL' | TrainingPhaseCategory =
+    candidate.catalogPhase === 'ALL' ||
+    (typeof candidate.catalogPhase === 'string' &&
+      Object.prototype.hasOwnProperty.call(PHASE_CATEGORY_LABELS, candidate.catalogPhase))
+      ? (candidate.catalogPhase as 'ALL' | TrainingPhaseCategory)
+      : 'ALL';
+
+  const catalogFocusTag: 'ALL' | HandballFocusTag =
+    candidate.catalogFocusTag === 'ALL' ||
+    (typeof candidate.catalogFocusTag === 'string' &&
+      Object.prototype.hasOwnProperty.call(FOCUS_TAG_LABELS, candidate.catalogFocusTag))
+      ? (candidate.catalogFocusTag as 'ALL' | HandballFocusTag)
+      : 'ALL';
+
+  return {
+    catalogTab,
+    catalogSearch,
+    catalogAgeGroup,
+    catalogPhase,
+    catalogFocusTag
+  };
+}
+
+/**
+ * Reconciles planner filter and selection state when the active team or its age group changes,
+ * restoring an existing browser-history snapshot on initial mount if available.
+ */
+export function reconcilePlannerStateForTeamChange(params: {
+  previousContext: PlannerTeamContext | null;
+  nextContext: PlannerTeamContext;
+  currentFilters: PlannerCatalogFilters;
+  currentSessionId: string;
+  currentPhaseId: string;
+  historySnapshot?: PlannerNavigationSnapshot | null;
+}): {
+  filters: PlannerCatalogFilters;
+  sessionId: string;
+  phaseId: string;
+  changed: boolean;
+} {
+  const {
+    previousContext,
+    nextContext,
+    currentFilters,
+    currentSessionId,
+    currentPhaseId,
+    historySnapshot
+  } = params;
+
+  if (previousContext === null) {
+    if (historySnapshot && historySnapshot.teamId === nextContext.teamId) {
+      return {
+        filters: sanitizePlannerCatalogFilters(historySnapshot.filters, nextContext.ageGroup),
+        sessionId: typeof historySnapshot.sessionId === 'string' ? historySnapshot.sessionId : '',
+        phaseId: typeof historySnapshot.phaseId === 'string' ? historySnapshot.phaseId : '',
+        changed: true
+      };
+    }
+
+    return {
+      filters: createDefaultPlannerCatalogFilters(nextContext.ageGroup),
+      sessionId: currentSessionId,
+      phaseId: currentPhaseId,
+      changed: true
+    };
+  }
+
+  if (previousContext.teamId !== nextContext.teamId) {
+    return {
+      filters: createDefaultPlannerCatalogFilters(nextContext.ageGroup),
+      sessionId: '',
+      phaseId: '',
+      changed: true
+    };
+  }
+
+  if (previousContext.ageGroup !== nextContext.ageGroup) {
+    return {
+      filters: {
+        ...currentFilters,
+        catalogAgeGroup: nextContext.ageGroup ?? 'ALL'
+      },
+      sessionId: currentSessionId,
+      phaseId: currentPhaseId,
+      changed: true
+    };
+  }
+
+  return {
+    filters: currentFilters,
+    sessionId: currentSessionId,
+    phaseId: currentPhaseId,
+    changed: false
+  };
+}
 
 export interface SessionBundle {
   session: TrainingSession;

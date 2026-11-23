@@ -3,8 +3,11 @@ import {
   buildSessionFromTemplate,
   cloneTrainingSessionBundle,
   convertQuickBlockToCatalogExercise,
+  createDefaultPlannerCatalogFilters,
   moveBlockInPhase,
   movePhaseInSession,
+  reconcilePlannerStateForTeamChange,
+  sanitizePlannerCatalogFilters,
   selectDefaultSession,
   selectNextSessionAfterCompletion,
   toggleBlockParallelWithPrevious
@@ -252,5 +255,145 @@ describe('sessionPlannerUtils', () => {
       makeSession('s-20', '2026-11-20', 'READY')
     ];
     expect(selectNextSessionAfterCompletion(onlyOneOpen, 's-20', '2026-11-20')).toBeNull();
+  });
+
+  it('builds default planner filters with or without a team age group', () => {
+    expect(createDefaultPlannerCatalogFilters('B_YOUTH')).toEqual({
+      catalogTab: 'SMART_FOCUS',
+      catalogSearch: '',
+      catalogAgeGroup: 'B_YOUTH',
+      catalogPhase: 'ALL',
+      catalogFocusTag: 'ALL'
+    });
+
+    expect(createDefaultPlannerCatalogFilters(null)).toEqual({
+      catalogTab: 'SMART_FOCUS',
+      catalogSearch: '',
+      catalogAgeGroup: 'ALL',
+      catalogPhase: 'ALL',
+      catalogFocusTag: 'ALL'
+    });
+  });
+
+  it('sanitizes persisted planner filters while preserving explicit ALL age group', () => {
+    expect(
+      sanitizePlannerCatalogFilters(
+        {
+          catalogTab: 'ALL',
+          catalogSearch: 'Kreis',
+          catalogAgeGroup: 'ALL',
+          catalogPhase: 'GROUND_GAME',
+          catalogFocusTag: 'SHOOTING'
+        },
+        'B_YOUTH'
+      )
+    ).toEqual({
+      catalogTab: 'ALL',
+      catalogSearch: 'Kreis',
+      catalogAgeGroup: 'ALL',
+      catalogPhase: 'GROUND_GAME',
+      catalogFocusTag: 'SHOOTING'
+    });
+
+    expect(
+      sanitizePlannerCatalogFilters(
+        {
+          catalogTab: 'INVALID_TAB',
+          catalogSearch: 123,
+          catalogAgeGroup: 'INVALID_AGE',
+          catalogPhase: 'INVALID_PHASE',
+          catalogFocusTag: 'INVALID_TAG'
+        },
+        'C_YOUTH'
+      )
+    ).toEqual({
+      catalogTab: 'SMART_FOCUS',
+      catalogSearch: '',
+      catalogAgeGroup: 'C_YOUTH',
+      catalogPhase: 'ALL',
+      catalogFocusTag: 'ALL'
+    });
+  });
+
+  it('reconciles planner state across initial mount, history restore, team switch, age edit, and no-op', () => {
+    const customFilters = {
+      catalogTab: 'ALL' as const,
+      catalogSearch: 'Gegenstoß',
+      catalogAgeGroup: 'C_YOUTH' as const,
+      catalogPhase: 'GROUND_EXERCISE' as const,
+      catalogFocusTag: 'FAST_BREAK_1ST_WAVE' as const
+    };
+
+    // 1. Initial load without history snapshot
+    const initial = reconcilePlannerStateForTeamChange({
+      previousContext: null,
+      nextContext: { teamId: 'team-mb', ageGroup: 'B_YOUTH' },
+      currentFilters: createDefaultPlannerCatalogFilters(null),
+      currentSessionId: 'sess-1',
+      currentPhaseId: 'phase-1'
+    });
+    expect(initial.changed).toBe(true);
+    expect(initial.filters.catalogAgeGroup).toBe('B_YOUTH');
+    expect(initial.sessionId).toBe('sess-1');
+    expect(initial.phaseId).toBe('phase-1');
+
+    // 2. Initial load with matching history snapshot
+    const restored = reconcilePlannerStateForTeamChange({
+      previousContext: null,
+      nextContext: { teamId: 'team-mb', ageGroup: 'B_YOUTH' },
+      currentFilters: createDefaultPlannerCatalogFilters(null),
+      currentSessionId: '',
+      currentPhaseId: '',
+      historySnapshot: {
+        teamId: 'team-mb',
+        sessionId: 'sess-2',
+        phaseId: 'phase-3',
+        filters: customFilters
+      }
+    });
+    expect(restored.changed).toBe(true);
+    expect(restored.filters).toEqual(customFilters);
+    expect(restored.sessionId).toBe('sess-2');
+    expect(restored.phaseId).toBe('phase-3');
+
+    // 3. Switching teams resets filters to new team's age group and clears session/phase
+    const switched = reconcilePlannerStateForTeamChange({
+      previousContext: { teamId: 'team-mb', ageGroup: 'B_YOUTH' },
+      nextContext: { teamId: 'team-m1', ageGroup: 'ADULTS' },
+      currentFilters: customFilters,
+      currentSessionId: 'sess-2',
+      currentPhaseId: 'phase-3'
+    });
+    expect(switched.changed).toBe(true);
+    expect(switched.filters).toEqual(createDefaultPlannerCatalogFilters('ADULTS'));
+    expect(switched.sessionId).toBe('');
+    expect(switched.phaseId).toBe('');
+
+    // 4. Editing active team's age group updates only catalogAgeGroup
+    const editedAge = reconcilePlannerStateForTeamChange({
+      previousContext: { teamId: 'team-mb', ageGroup: 'B_YOUTH' },
+      nextContext: { teamId: 'team-mb', ageGroup: 'A_YOUTH' },
+      currentFilters: customFilters,
+      currentSessionId: 'sess-2',
+      currentPhaseId: 'phase-3'
+    });
+    expect(editedAge.changed).toBe(true);
+    expect(editedAge.filters).toEqual({
+      ...customFilters,
+      catalogAgeGroup: 'A_YOUTH'
+    });
+    expect(editedAge.sessionId).toBe('sess-2');
+    expect(editedAge.phaseId).toBe('phase-3');
+
+    // 5. Same team and age group is a no-op (preserves user filters)
+    const noop = reconcilePlannerStateForTeamChange({
+      previousContext: { teamId: 'team-mb', ageGroup: 'B_YOUTH' },
+      nextContext: { teamId: 'team-mb', ageGroup: 'B_YOUTH' },
+      currentFilters: customFilters,
+      currentSessionId: 'sess-2',
+      currentPhaseId: 'phase-3'
+    });
+    expect(noop.changed).toBe(false);
+    expect(noop.filters).toEqual(customFilters);
   });
 });

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { db, purgePendingOutboxUpserts, queueSyncOperation } from '../db/database';
 import type {
+  AgeGroup,
   Club,
   ClubMember,
   ClubRole,
@@ -27,10 +28,11 @@ import type {
   TeamScheduleSlot,
   TrainingSession
 } from '../types/domain';
-import { WEEKDAY_OPTIONS } from '../constants/handballLabels';
+import { AGE_GROUP_LABELS, ALL_AGE_GROUPS, WEEKDAY_OPTIONS } from '../constants/handballLabels';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { isLocalDemoClub } from '../utils/standardCatalogUtils';
 import { generateSecureInviteCode } from '../utils/securityUtils';
+import { formatTeamAgeGroupLabel, resolveTeamAgeGroup } from '../utils/teamAgeGroupUtils';
 import { ClubResetSection } from './ClubResetSection';
 import { ClubStandardCatalogSection } from './ClubStandardCatalogSection';
 
@@ -76,7 +78,7 @@ export function ClubTeamManager({
   // Team edit & delete confirmation state
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
   const [editTeamName, setEditTeamName] = useState('');
-  const [editTeamAgeGroup, setEditTeamAgeGroup] = useState('');
+  const [editTeamAgeGroup, setEditTeamAgeGroup] = useState<'' | AgeGroup>('');
   const [editTeamSeason, setEditTeamSeason] = useState('');
   const [confirmDeleteTeamId, setConfirmDeleteTeamId] = useState<string | null>(null);
 
@@ -86,7 +88,7 @@ export function ClubTeamManager({
 
   // New team form state
   const [newTeamName, setNewTeamName] = useState('');
-  const [newTeamAgeGroup, setNewTeamAgeGroup] = useState('');
+  const [newTeamAgeGroup, setNewTeamAgeGroup] = useState<'' | AgeGroup>('');
   const [newTeamSeason, setNewTeamSeason] = useState('2026/27');
 
   // New coach form state
@@ -138,14 +140,14 @@ export function ClubTeamManager({
 
   async function handleCreateTeam(e: React.FormEvent) {
     e.preventDefault();
-    if (!newTeamName.trim()) return;
+    if (!newTeamName.trim() || !newTeamAgeGroup) return;
 
     const now = new Date().toISOString();
     const newTeam: Team = {
       id: crypto.randomUUID(),
       club_id: club.id,
       name: newTeamName.trim(),
-      age_group: newTeamAgeGroup.trim() || 'Jugend / Aktive',
+      age_group: newTeamAgeGroup,
       season: newTeamSeason.trim() || '2026/27',
       default_schedule: [
         {
@@ -172,17 +174,17 @@ export function ClubTeamManager({
   function handleStartEditTeam(team: Team) {
     setEditingTeamId(team.id);
     setEditTeamName(team.name);
-    setEditTeamAgeGroup(team.age_group);
+    setEditTeamAgeGroup(resolveTeamAgeGroup(team) ?? '');
     setEditTeamSeason(team.season);
     setConfirmDeleteTeamId(null);
   }
 
   async function handleSaveTeamEdit(team: Team) {
-    if (!editTeamName.trim()) return;
+    if (!editTeamName.trim() || !editTeamAgeGroup) return;
     const updated: Team = {
       ...team,
       name: editTeamName.trim(),
-      age_group: editTeamAgeGroup.trim() || team.age_group,
+      age_group: editTeamAgeGroup,
       season: editTeamSeason.trim() || team.season,
       updated_at: new Date().toISOString()
     };
@@ -488,13 +490,22 @@ export function ClubTeamManager({
                           placeholder="Mannschaftsname"
                           className="min-w-[140px] flex-1 rounded-lg border border-blue-500/60 bg-slate-900 px-2.5 py-1 text-sm font-bold text-white focus:outline-none"
                         />
-                        <input
-                          type="text"
+                        <select
+                          aria-label="Altersklasse"
+                          required
                           value={editTeamAgeGroup}
-                          onChange={(e) => setEditTeamAgeGroup(e.target.value)}
-                          placeholder="Altersklasse"
+                          onChange={(e) => setEditTeamAgeGroup(e.target.value as '' | AgeGroup)}
                           className="w-36 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1 text-xs text-white"
-                        />
+                        >
+                          <option value="" disabled>
+                            Altersklasse wählen...
+                          </option>
+                          {ALL_AGE_GROUPS.map((ag) => (
+                            <option key={ag} value={ag}>
+                              {AGE_GROUP_LABELS[ag]}
+                            </option>
+                          ))}
+                        </select>
                         <input
                           type="text"
                           value={editTeamSeason}
@@ -504,8 +515,9 @@ export function ClubTeamManager({
                         />
                         <button
                           type="button"
+                          disabled={!editTeamName.trim() || !editTeamAgeGroup}
                           onClick={() => void handleSaveTeamEdit(team)}
-                          className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-emerald-500"
+                          className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-emerald-500 disabled:opacity-50"
                         >
                           <Check className="h-3.5 w-3.5" />
                           Speichern
@@ -525,7 +537,7 @@ export function ClubTeamManager({
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="text-base font-bold text-white">{team.name}</span>
                             <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs text-slate-300">
-                              {team.age_group}
+                              {formatTeamAgeGroupLabel(team.age_group)}
                             </span>
                             <span className="rounded-full bg-blue-950 px-2.5 py-0.5 text-xs text-blue-300">
                               Saison {team.season}
@@ -736,14 +748,28 @@ export function ClubTeamManager({
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs text-slate-300">Altersklasse / Liga</label>
-                  <input
-                    type="text"
-                    placeholder="z.B. U15 / Bezirksoberliga"
+                  <label htmlFor="new-team-age-group" className="mb-1 block text-xs text-slate-300">
+                    Altersklasse *
+                  </label>
+                  <select
+                    id="new-team-age-group"
+                    required
                     value={newTeamAgeGroup}
-                    onChange={(e) => setNewTeamAgeGroup(e.target.value)}
+                    onChange={(e) => setNewTeamAgeGroup(e.target.value as '' | AgeGroup)}
                     className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
-                  />
+                  >
+                    <option value="" disabled>
+                      Altersklasse wählen...
+                    </option>
+                    {ALL_AGE_GROUPS.map((ag) => (
+                      <option key={ag} value={ag}>
+                        {AGE_GROUP_LABELS[ag]}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1 text-[11px] text-slate-400">
+                    Wird in der Trainingsplanung als Filter vorbelegt.
+                  </p>
                 </div>
                 <div>
                   <label className="mb-1 block text-xs text-slate-300">Saison</label>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   ArrowLeft,
@@ -62,7 +62,16 @@ import {
   selectActiveMultiWeekPlan,
   selectCurrentPlanWeek
 } from './utils/multiWeekPlanUtils';
-import { getLocalDateIso } from './utils/sessionPlannerUtils';
+import {
+  createDefaultPlannerCatalogFilters,
+  getLocalDateIso,
+  reconcilePlannerStateForTeamChange,
+  sanitizePlannerCatalogFilters,
+  type PlannerCatalogFilters,
+  type PlannerNavigationSnapshot,
+  type PlannerTeamContext
+} from './utils/sessionPlannerUtils';
+import { formatTeamAgeGroupLabel, resolveTeamAgeGroup } from './utils/teamAgeGroupUtils';
 import {
   AGE_GROUP_LABELS,
   ALL_AGE_GROUPS,
@@ -85,6 +94,13 @@ import type {
 
 type NavTab = 'DASHBOARD' | 'HALL_LIVE' | 'EXERCISES' | 'PLANS' | 'CLUB_ADMIN';
 
+interface AppHistoryState {
+  tab?: NavTab;
+  exerciseId?: string;
+  mobileDetailOpen?: boolean;
+  plannerSnapshot?: PlannerNavigationSnapshot;
+}
+
 export function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('DASHBOARD');
   const [activeClubId, setActiveClubId] = useState<string>(() => {
@@ -96,6 +112,28 @@ export function App() {
   });
   const [activeTeamId, setActiveTeamId] = useState<string>('team-mb');
   const [focusedSessionId, setFocusedSessionId] = useState<string | undefined>(undefined);
+  const [plannerFilters, setPlannerFilters] = useState<PlannerCatalogFilters>(() =>
+    createDefaultPlannerCatalogFilters()
+  );
+  const [plannerSelectedSessionId, setPlannerSelectedSessionId] = useState<string>('');
+  const [plannerActivePhaseId, setPlannerActivePhaseId] = useState<string>('');
+  const appliedTeamAgeGroupContextRef = useRef<PlannerTeamContext | null>(null);
+  const activeTeamIdRef = useRef<string>('');
+  const activeTeamAgeGroupRef = useRef<AgeGroup | null>(null);
+  const plannerStateRef = useRef<{
+    filters: PlannerCatalogFilters;
+    sessionId: string;
+    phaseId: string;
+  }>({
+    filters: plannerFilters,
+    sessionId: plannerSelectedSessionId,
+    phaseId: plannerActivePhaseId
+  });
+  plannerStateRef.current = {
+    filters: plannerFilters,
+    sessionId: plannerSelectedSessionId,
+    phaseId: plannerActivePhaseId
+  };
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
@@ -218,41 +256,122 @@ const EXERCISE_PAGE_SIZE = 40;
 
   useEffect(() => {
     const validTabs: NavTab[] = ['DASHBOARD', 'HALL_LIVE', 'EXERCISES', 'PLANS', 'CLUB_ADMIN'];
-    const currentStateTab = (window.history.state as { tab?: NavTab } | null)?.tab;
+    const currentState = window.history.state as AppHistoryState | null;
+    const currentStateTab = currentState?.tab;
     if (!currentStateTab || !validTabs.includes(currentStateTab)) {
-      window.history.replaceState(
-        { tab: 'DASHBOARD' satisfies NavTab },
-        '',
-        window.location.pathname + window.location.search
-      );
+      try {
+        window.history.replaceState(
+          { tab: 'DASHBOARD' satisfies NavTab } satisfies AppHistoryState,
+          '',
+          window.location.pathname + window.location.search
+        );
+      } catch {
+        // Ignore History API errors
+      }
     }
 
     function handlePopState(event: PopStateEvent) {
-      const stateTab = (event.state as { tab?: NavTab } | null)?.tab;
-      if (stateTab && validTabs.includes(stateTab)) {
-        setActiveTab(stateTab);
-      } else {
-        setActiveTab('DASHBOARD');
+      const state = event.state as AppHistoryState | null;
+      const stateTab = state?.tab;
+      const nextTab = stateTab && validTabs.includes(stateTab) ? stateTab : 'DASHBOARD';
+
+      if (nextTab === 'DASHBOARD' && state?.plannerSnapshot) {
+        const snapshot = state.plannerSnapshot;
+        const currentTeamId = activeTeamIdRef.current;
+        if (!currentTeamId || snapshot.teamId === currentTeamId) {
+          const sanitized = sanitizePlannerCatalogFilters(
+            snapshot.filters,
+            activeTeamAgeGroupRef.current
+          );
+          const teamAgeChangedWhileAway =
+            snapshot.teamAgeGroup !== undefined &&
+            snapshot.teamAgeGroup !== activeTeamAgeGroupRef.current;
+
+          setPlannerFilters(
+            teamAgeChangedWhileAway
+              ? { ...sanitized, catalogAgeGroup: activeTeamAgeGroupRef.current ?? 'ALL' }
+              : sanitized
+          );
+          setPlannerSelectedSessionId(snapshot.sessionId ?? '');
+          setPlannerActivePhaseId(snapshot.phaseId ?? '');
+        }
       }
+
+      if (nextTab === 'EXERCISES') {
+        if (state?.exerciseId) {
+          setSelectedExerciseId(state.exerciseId);
+        }
+        setMobileDetailOpen(Boolean(state?.mobileDetailOpen));
+      } else {
+        setMobileDetailOpen(false);
+      }
+
+      setActiveTab(nextTab);
     }
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  function navigateToTab(nextTab: NavTab, options?: { keepFocusedSession?: boolean }) {
+  function navigateToTab(
+    nextTab: NavTab,
+    options?: { keepFocusedSession?: boolean; exerciseId?: string; mobileDetailOpen?: boolean }
+  ) {
     if (!options?.keepFocusedSession) {
       setFocusedSessionId(undefined);
     }
     if (nextTab === activeTab) return;
+
+    const currentTeamId = activeTeamIdRef.current;
+    if (activeTab === 'DASHBOARD' && currentTeamId) {
+      const { filters, sessionId, phaseId } = plannerStateRef.current;
+      try {
+        const existingState = (window.history.state as AppHistoryState | null) ?? {};
+        const snapshot: PlannerNavigationSnapshot = {
+          teamId: currentTeamId,
+          teamAgeGroup: activeTeamAgeGroupRef.current,
+          sessionId: sessionId || undefined,
+          phaseId: phaseId || undefined,
+          filters
+        };
+        window.history.replaceState(
+          {
+            ...existingState,
+            tab: 'DASHBOARD' satisfies NavTab,
+            plannerSnapshot: snapshot
+          } satisfies AppHistoryState,
+          '',
+          `${window.location.pathname}${window.location.search}${window.location.hash}`
+        );
+      } catch {
+        // Ignore History API errors
+      }
+    }
+
     if (nextTab !== 'EXERCISES') {
       setMobileDetailOpen(false);
     }
-    window.history.pushState(
-      { tab: nextTab },
-      '',
-      `${window.location.pathname}${window.location.search}#${nextTab.toLowerCase()}`
-    );
+
+    const nextState: AppHistoryState = {
+      tab: nextTab,
+      ...(nextTab === 'EXERCISES'
+        ? {
+            exerciseId: options?.exerciseId,
+            mobileDetailOpen: Boolean(options?.mobileDetailOpen)
+          }
+        : {})
+    };
+
+    try {
+      window.history.pushState(
+        nextState,
+        '',
+        `${window.location.pathname}${window.location.search}#${nextTab.toLowerCase()}`
+      );
+    } catch {
+      // Ignore History API errors
+    }
+
     setActiveTab(nextTab);
   }
 
@@ -357,6 +476,8 @@ const EXERCISE_PAGE_SIZE = 40;
   function handleClubResetCompleted(summaryMessage: string) {
     setSelectedExerciseId(null);
     setFocusedSessionId(undefined);
+    setPlannerSelectedSessionId('');
+    setPlannerActivePhaseId('');
     setMobileDetailOpen(false);
     setSyncStatusBanner(summaryMessage);
     setTimeout(() => setSyncStatusBanner(null), 6000);
@@ -371,6 +492,35 @@ const EXERCISE_PAGE_SIZE = 40;
     () => teams.find((t) => t.id === activeTeamId) ?? teams[0],
     [teams, activeTeamId]
   );
+
+  const activeTeamAgeGroup = useMemo(() => resolveTeamAgeGroup(activeTeam), [activeTeam]);
+
+  activeTeamIdRef.current = activeTeam?.id ?? '';
+  activeTeamAgeGroupRef.current = activeTeamAgeGroup;
+
+  useEffect(() => {
+    if (!activeTeam) return;
+    const nextContext: PlannerTeamContext = {
+      teamId: activeTeam.id,
+      ageGroup: activeTeamAgeGroup
+    };
+    const current = plannerStateRef.current;
+    const historySnapshot = (window.history.state as AppHistoryState | null)?.plannerSnapshot;
+    const reconciled = reconcilePlannerStateForTeamChange({
+      previousContext: appliedTeamAgeGroupContextRef.current,
+      nextContext,
+      currentFilters: current.filters,
+      currentSessionId: current.sessionId,
+      currentPhaseId: current.phaseId,
+      historySnapshot
+    });
+    appliedTeamAgeGroupContextRef.current = nextContext;
+    if (reconciled.changed) {
+      setPlannerFilters(reconciled.filters);
+      setPlannerSelectedSessionId(reconciled.sessionId);
+      setPlannerActivePhaseId(reconciled.phaseId);
+    }
+  }, [activeTeam?.id, activeTeamAgeGroup]);
 
   useEffect(() => {
     setVisibleExerciseCount(EXERCISE_PAGE_SIZE);
@@ -869,7 +1019,7 @@ const EXERCISE_PAGE_SIZE = 40;
               {activeTeam.name}
             </span>
             <span className="hidden text-xs text-slate-400 sm:inline">
-              {activeTeam.age_group} · Saison {activeTeam.season}
+              {formatTeamAgeGroupLabel(activeTeam.age_group)} · Saison {activeTeam.season}
             </span>
           </div>
 
@@ -1015,6 +1165,12 @@ const EXERCISE_PAGE_SIZE = 40;
                 notes={notes}
                 activePlanWeeks={activePlanWeeks}
                 focusedSessionId={focusedSessionId}
+                catalogFilters={plannerFilters}
+                onChangeCatalogFilters={setPlannerFilters}
+                selectedSessionId={plannerSelectedSessionId}
+                onSelectSessionId={setPlannerSelectedSessionId}
+                activePhaseId={plannerActivePhaseId}
+                onSelectPhaseId={setPlannerActivePhaseId}
                 onEditExercise={(ex) => {
                   setEditingExercise(ex);
                   setVariantParentExercise(null);
@@ -1023,7 +1179,7 @@ const EXERCISE_PAGE_SIZE = 40;
                 onOpenExercise={(ex) => {
                   setSelectedExerciseId(ex.id);
                   setMobileDetailOpen(true);
-                  navigateToTab('EXERCISES');
+                  navigateToTab('EXERCISES', { exerciseId: ex.id, mobileDetailOpen: true });
                 }}
                 onStartHallMode={
                   uiFeatures.hallLiveMode
@@ -1763,6 +1919,8 @@ const EXERCISE_PAGE_SIZE = 40;
               templates={templates}
               onOpenSessionInEditor={(sessionId) => {
                 setFocusedSessionId(sessionId);
+                setPlannerSelectedSessionId(sessionId);
+                setPlannerActivePhaseId('');
                 navigateToTab('DASHBOARD', { keepFocusedSession: true });
               }}
               onStartHallMode={(sessionId) => {

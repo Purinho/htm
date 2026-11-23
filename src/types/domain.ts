@@ -219,6 +219,7 @@ export interface Team {
   id: string;
   club_id: string;
   name: string;
+  /** Canonical AgeGroup code (e.g. 'B_YOUTH', 'ADULTS'); legacy free-text values remain supported via teamAgeGroupUtils. */
   age_group: string;
   season: string;
   default_schedule: TeamScheduleSlot[];

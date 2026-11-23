@@ -20,6 +20,7 @@ import {
   calculatePhaseEffectiveDuration,
   calculateSessionTotalDuration
 } from '../utils/trainingCalculations';
+import { formatTeamAgeGroupLabel } from '../utils/teamAgeGroupUtils';
 import { TacticBoardPreview } from './TacticBoardPreview';
 
 export type PrintExportTarget =
@@ -140,7 +141,8 @@ export function PrintExportModal({ target, onClose }: PrintExportModalProps) {
             <div className="flex flex-wrap items-start justify-between gap-4 border-b-2 border-slate-900 pb-3">
               <div>
                 <div className="text-[11px] font-bold tracking-wider text-blue-700 uppercase">
-                  {target.team.name} · {target.team.age_group} · Saison {target.team.season}
+                  {target.team.name} · {formatTeamAgeGroupLabel(target.team.age_group)} · Saison{' '}
+                  {target.team.season}
                 </div>
                 <h1 className="mt-0.5 text-2xl font-extrabold text-slate-900">
                   {target.session.title}

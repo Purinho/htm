@@ -66,9 +66,12 @@ import {
   selectDefaultSession,
   selectNextSessionAfterCompletion,
   sortSessionsChronologically,
-  toggleBlockParallelWithPrevious
+  toggleBlockParallelWithPrevious,
+  type PlannerCatalogFilters,
+  type PlannerCatalogTab
 } from '../utils/sessionPlannerUtils';
 import { addDaysIso, selectCurrentPlanWeek } from '../utils/multiWeekPlanUtils';
+import { resolveTeamAgeGroup } from '../utils/teamAgeGroupUtils';
 import { TacticBoardPreview } from './TacticBoardPreview';
 
 interface TrainingSessionPlannerProps {
@@ -83,6 +86,12 @@ interface TrainingSessionPlannerProps {
   notes: SessionNote[];
   activePlanWeeks: PlanWeek[];
   focusedSessionId?: string;
+  catalogFilters: PlannerCatalogFilters;
+  onChangeCatalogFilters: React.Dispatch<React.SetStateAction<PlannerCatalogFilters>>;
+  selectedSessionId: string;
+  onSelectSessionId: (sessionId: string) => void;
+  activePhaseId: string;
+  onSelectPhaseId: (phaseId: string) => void;
   onEditExercise: (exercise: Exercise) => void;
   onOpenExercise?: (exercise: Exercise) => void;
   onStartHallMode?: (sessionId: string) => void;
@@ -110,11 +119,37 @@ export function TrainingSessionPlanner({
   notes,
   activePlanWeeks,
   focusedSessionId,
+  catalogFilters,
+  onChangeCatalogFilters,
+  selectedSessionId,
+  onSelectSessionId,
+  activePhaseId,
+  onSelectPhaseId,
   onEditExercise,
   onOpenExercise,
   onStartHallMode,
   onPrintSession
 }: TrainingSessionPlannerProps) {
+  const setSelectedSessionId = onSelectSessionId;
+  const setActivePhaseId = onSelectPhaseId;
+  const { catalogTab, catalogSearch, catalogAgeGroup, catalogPhase, catalogFocusTag } =
+    catalogFilters;
+
+  function updateCatalogFilter<K extends keyof PlannerCatalogFilters>(
+    key: K,
+    value: PlannerCatalogFilters[K]
+  ) {
+    onChangeCatalogFilters((prev) => ({ ...prev, [key]: value }));
+  }
+
+  const setCatalogTab = (tab: PlannerCatalogTab) => updateCatalogFilter('catalogTab', tab);
+  const setCatalogSearch = (search: string) => updateCatalogFilter('catalogSearch', search);
+  const setCatalogAgeGroup = (ag: 'ALL' | AgeGroup) => updateCatalogFilter('catalogAgeGroup', ag);
+  const setCatalogPhase = (phase: 'ALL' | TrainingPhaseCategory) =>
+    updateCatalogFilter('catalogPhase', phase);
+  const setCatalogFocusTag = (tag: 'ALL' | HandballFocusTag) =>
+    updateCatalogFilter('catalogFocusTag', tag);
+
   const [draggedBlockId, setDraggedBlockId] = useState<string | null>(null);
   const [dragOverPhaseId, setDragOverPhaseId] = useState<string | null>(null);
   const teamSessions = useMemo(
@@ -122,7 +157,6 @@ export function TrainingSessionPlanner({
     [sessions, activeTeam.id]
   );
 
-  const [selectedSessionId, setSelectedSessionId] = useState<string>(focusedSessionId ?? '');
   const currentSession = useMemo(() => {
     const targetId = selectedSessionId || focusedSessionId;
     if (targetId) {
@@ -142,7 +176,6 @@ export function TrainingSessionPlanner({
     [phases, currentSession]
   );
 
-  const [activePhaseId, setActivePhaseId] = useState<string>('');
   const targetPhase = useMemo(() => {
     if (activePhaseId) {
       const found = currentPhases.find((p) => p.id === activePhaseId);
@@ -179,11 +212,6 @@ export function TrainingSessionPlanner({
   }, [currentSession, activePlanWeeks]);
 
   // Right catalog panel state
-  const [catalogTab, setCatalogTab] = useState<'SMART_FOCUS' | 'ALL' | 'RECENT'>('SMART_FOCUS');
-  const [catalogSearch, setCatalogSearch] = useState('');
-  const [catalogAgeGroup, setCatalogAgeGroup] = useState<'ALL' | AgeGroup>('ALL');
-  const [catalogPhase, setCatalogPhase] = useState<'ALL' | TrainingPhaseCategory>('ALL');
-  const [catalogFocusTag, setCatalogFocusTag] = useState<'ALL' | HandballFocusTag>('ALL');
   const [visibleCatalogCount, setVisibleCatalogCount] = useState(PLANNER_CATALOG_PAGE_SIZE);
   const [previewExerciseId, setPreviewExerciseId] = useState<string | null>(null);
 
@@ -666,11 +694,13 @@ export function TrainingSessionPlanner({
   }
 
   async function handlePromoteQuickBlockToCatalog(block: SessionBlock) {
+    const teamAgeGroup = resolveTeamAgeGroup(activeTeam);
     const { exercise, updatedBlock } = convertQuickBlockToCatalogExercise({
       block,
       clubId,
       teamId: activeTeam.id,
-      focusTags: linkedPlanWeek?.focus_tags
+      focusTags: linkedPlanWeek?.focus_tags,
+      ageGroups: teamAgeGroup ? [teamAgeGroup] : undefined
     });
     await db.transaction('rw', [db.exercises, db.sessionBlocks], async () => {
       await db.exercises.put(exercise);
@@ -1749,7 +1779,29 @@ export function TrainingSessionPlanner({
 
               {/* Exercise Cards */}
               <div className="max-h-[460px] space-y-2.5 overflow-y-auto pr-1">
-                {smartCatalogExercises.slice(0, visibleCatalogCount).map((ex) => {
+                {smartCatalogExercises.length === 0 ? (
+                  <div className="rounded-xl border border-dashed border-slate-800 bg-slate-950/60 p-4 text-center space-y-2">
+                    <div className="text-xs text-slate-400">
+                      Keine Übungen für die aktuellen Filter gefunden.
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChangeCatalogFilters({
+                          catalogTab: 'ALL',
+                          catalogSearch: '',
+                          catalogAgeGroup: 'ALL',
+                          catalogPhase: 'ALL',
+                          catalogFocusTag: 'ALL'
+                        })
+                      }
+                      className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-blue-300 hover:bg-slate-700"
+                    >
+                      Alle Filter zurücksetzen
+                    </button>
+                  </div>
+                ) : (
+                  smartCatalogExercises.slice(0, visibleCatalogCount).map((ex) => {
                   const isPreviewOpen = previewExerciseId === ex.id;
                   return (
                     <div
@@ -1836,7 +1888,8 @@ export function TrainingSessionPlanner({
                       </div>
                     </div>
                   );
-                })}
+                  })
+                )}
                 {smartCatalogExercises.length > visibleCatalogCount && (
                   <button
                     type="button"
