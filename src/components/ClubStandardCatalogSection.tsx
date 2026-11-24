@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BookOpenCheck, Check, Download, Loader2 } from 'lucide-react';
+import { BookOpenCheck, Check, Download, Loader2, RefreshCw } from 'lucide-react';
 import type { Club, Exercise } from '../types/domain';
 import {
   fetchStandardCatalogManifest,
@@ -65,6 +65,7 @@ export function ClubStandardCatalogSection({
   const [manifest, setManifest] = useState<StandardCatalogManifest | null>(null);
   const [manifestLoading, setManifestLoading] = useState(true);
   const [manifestError, setManifestError] = useState<string | null>(null);
+  const [manifestRetryKey, setManifestRetryKey] = useState(0);
   const [isBusy, setIsBusy] = useState(false);
   const [progress, setProgress] = useState<StandardCatalogImportProgress | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -80,7 +81,7 @@ export function ClubStandardCatalogSection({
     let cancelled = false;
     setManifestLoading(true);
     setManifestError(null);
-    void fetchStandardCatalogManifest()
+    void fetchStandardCatalogManifest(true)
       .then((data) => {
         if (!cancelled) {
           setManifest(data);
@@ -104,7 +105,7 @@ export function ClubStandardCatalogSection({
     return () => {
       cancelled = true;
     };
-  }, [club.id]);
+  }, [club.id, manifestRetryKey]);
 
   const delta = useMemo(() => {
     if (!manifest) return null;
@@ -192,8 +193,17 @@ export function ClubStandardCatalogSection({
         )}
 
         {manifestError && (
-          <div className="rounded-xl border border-rose-500/40 bg-rose-950/40 p-3 text-xs text-rose-200">
-            {manifestError}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-500/40 bg-rose-950/40 p-3 text-xs text-rose-200">
+            <span>{manifestError}</span>
+            <button
+              type="button"
+              disabled={manifestLoading}
+              onClick={() => setManifestRetryKey((prev) => prev + 1)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-rose-400/40 bg-rose-900/50 px-3 py-1.5 text-xs font-semibold text-rose-100 hover:bg-rose-800/60 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              Erneut versuchen
+            </button>
           </div>
         )}
 

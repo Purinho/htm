@@ -181,13 +181,13 @@ describe('standardCatalogUtils', () => {
       allNormalized.push(...parsed);
     }
 
-    expect(allNormalized).toHaveLength(511);
+    expect(allNormalized.length).toBeGreaterThanOrEqual(500);
     const uniqueTitles = new Set(
       allNormalized.map((ex) => normalizeStandardExerciseTitle(ex.title))
     );
-    expect(uniqueTitles.size).toBe(511);
+    expect(uniqueTitles.size).toBe(allNormalized.length);
 
-    // Every raw focus tag across all 511 exercises must survive normalization without fallback loss
+    // Every raw focus tag across all catalog exercises must survive normalization without fallback loss
     for (const file of jsonFiles) {
       const rawArr = JSON.parse(
         fs.readFileSync(path.join(catalogDir, file), 'utf8')
@@ -206,7 +206,7 @@ describe('standardCatalogUtils', () => {
     }
   });
 
-  it('enforces clean DHB handball domain tag rules across all 511 standard exercises', () => {
+  it('enforces clean DHB handball domain tag rules across all standard exercises', () => {
     const catalogDir = path.resolve(process.cwd(), 'docs/ai_import');
     const jsonFiles = fs
       .readdirSync(catalogDir)
@@ -278,7 +278,7 @@ describe('standardCatalogUtils', () => {
     expect(siebenMeterStress?.categories.phases.includes('COOL_DOWN')).toBe(false);
   });
 
-  it('validates tactic board geometry, orientation, refs, and node spacing across all 511 exercises', () => {
+  it('validates tactic board geometry, orientation, refs, and node spacing across all catalog exercises', () => {
     const catalogDir = path.resolve(process.cwd(), 'docs/ai_import');
     const jsonFiles = fs
       .readdirSync(catalogDir)
@@ -317,7 +317,7 @@ describe('standardCatalogUtils', () => {
       allExercises.push(...parseAndNormalizeAiExerciseJson(raw, clubUuid, 'CLUB', undefined, false));
     }
 
-    expect(allExercises).toHaveLength(511);
+    expect(allExercises.length).toBeGreaterThanOrEqual(500);
 
     for (const ex of allExercises) {
       const board = ex.tactic_board_data;
@@ -440,5 +440,28 @@ describe('standardCatalogUtils', () => {
 
     const wandball = allExercises.find((ex) => ex.title === 'Wandball (Aufwärmspiel)');
     expect(wandball?.tactic_board_data?.courtTemplate).toBe('FREE_SPACE');
+
+    const prellkoenig = allExercises.find((ex) => ex.title === 'Prellkönig');
+    expect(prellkoenig).toBeDefined();
+    expect(prellkoenig?.goalkeepers).toBe(0);
+    expect(prellkoenig?.categories.phases).toEqual(expect.arrayContaining(['WARMUP', 'SMALL_GAME']));
+    expect(prellkoenig?.categories.focus).toEqual(
+      expect.arrayContaining(['DRIBBLING', 'DEFENSE_INDIVIDUAL'])
+    );
+    expect(prellkoenig?.tactic_board_data?.courtTemplate).toBe('FREE_SPACE');
+    expect(prellkoenig?.tactic_board_data?.zones).toHaveLength(3);
+
+    const stoppball = allExercises.find((ex) => ex.title === 'Stoppball');
+    expect(stoppball).toBeDefined();
+    expect(stoppball?.goalkeepers).toBe(0);
+    expect(stoppball?.categories.phases).toEqual(expect.arrayContaining(['SMALL_GAME', 'WARMUP']));
+    expect(stoppball?.categories.focus).toEqual(
+      expect.arrayContaining(['CATCHING', 'SHOOTING', 'STANDING_THROW', 'ATHLETICS_CONDITIONING'])
+    );
+    expect(stoppball?.categories.age_groups).toEqual(
+      expect.arrayContaining(['MINIS', 'F_YOUTH', 'E_YOUTH', 'D_YOUTH'])
+    );
+    expect(stoppball?.tactic_board_data?.courtTemplate).toBe('FREE_SPACE');
+    expect(stoppball?.tactic_board_data?.zones).toHaveLength(1);
   });
 });

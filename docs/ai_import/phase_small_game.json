@@ -2143,5 +2143,267 @@
       ],
       "version": 1
     }
+  },
+  {
+    "title": "Stoppball",
+    "default_duration_min": 10,
+    "min_players": 6,
+    "max_players": 20,
+    "goalkeepers": 0,
+    "categories": {
+      "phases": [
+        "SMALL_GAME",
+        "WARMUP"
+      ],
+      "focus": [
+        "CATCHING",
+        "SHOOTING",
+        "STANDING_THROW",
+        "ATHLETICS_CONDITIONING"
+      ],
+      "level": "BASIC",
+      "age_groups": [
+        "MINIS",
+        "F_YOUTH",
+        "E_YOUTH",
+        "D_YOUTH"
+      ]
+    },
+    "materials": [
+      {
+        "type": "BALL",
+        "quantity": 1
+      }
+    ],
+    "setup_description": "Ein Mitspieler wird als „Beginner“ (Werfer) bestimmt und stellt sich mit einem Ball (je nach Altersklasse ein Soft- oder ein Handball) in die Mitte der freien Spielfläche. Alle anderen Mitspieler stellen sich in einem engen Kreis um ihn herum auf.",
+    "flow_description": "1. Der „Beginner“ in der Kreismitte wirft den Ball hoch in die Luft.\n2. Solange der Ball in der Luft ist, rennen die anderen Mitspieler so schnell wie möglich in alle Richtungen auseinander.\n3. Fängt der Werfer den Ball wieder sicher auf, ruft er laut „STOPP!“ – alle Kinder müssen sofort an ihrer aktuellen Position stehen bleiben.\n4. Jetzt versucht der Werfer, einen der stehenden Mitspieler gezielt abzuwerfen (unterhalb der Schultern).\n5. Gelingt ihm ein Treffer, muss der Getroffene an seiner Stelle in die Mitte gehen und den Ball hochwerfen – das Spiel beginnt von vorn. Verfehlt der Werfer, startet derselbe Spieler (oder nach Ansage ein neu bestimmter Werfer) die nächste Runde.",
+    "coaching_points": "- Den Ball kontrolliert und senkrecht hochwerfen, damit er sicher wieder gefangen werden kann\n- Auf das „STOPP!“-Signal sofort reaktionsschnell abbremsen und stabil stehen bleiben\n- Beim Abwerfen kontrolliert zielen (Schlagwurf-Grundbewegung, sicher unterhalb von Kopf/Schultern) und altersgerechten Ball (Soft- oder Handball) wählen\n- Beim Auseinanderlaufen auf freie Laufwege achten, um Zusammenstöße zu vermeiden",
+    "variations_text": "- Abstand verkürzen: Ist der Abstand vom Werfer zu den anderen Kindern zu groß, darf der Werfer sich dem Abzuwerfenden mit 1 bis 3 Schritten (je nach Abstand) nähern\n- Koordinative Fluchtformen: Die Kinder auf der Kreisbahn fliehen im Spinnengang, im Bärengang, mit Froschhüpfern, mit Einbeinsprüngen oder paarweise mit Handfassung",
+    "tactic_board_data": {
+      "version": 2,
+      "courtTemplate": "FREE_SPACE",
+      "nodes": [
+        {
+          "id": "w",
+          "type": "OFFENSE_PLAYER",
+          "label": "W",
+          "x": 0.5,
+          "y": 0.5,
+          "hasBall": true
+        },
+        {
+          "id": "s1",
+          "type": "DEFENSE_PLAYER",
+          "label": "S1",
+          "x": 0.5,
+          "y": 0.34
+        },
+        {
+          "id": "s2",
+          "type": "DEFENSE_PLAYER",
+          "label": "S2",
+          "x": 0.63,
+          "y": 0.42
+        },
+        {
+          "id": "s3",
+          "type": "DEFENSE_PLAYER",
+          "label": "S3",
+          "x": 0.63,
+          "y": 0.58
+        },
+        {
+          "id": "s4",
+          "type": "DEFENSE_PLAYER",
+          "label": "S4",
+          "x": 0.5,
+          "y": 0.66
+        },
+        {
+          "id": "s5",
+          "type": "DEFENSE_PLAYER",
+          "label": "S5",
+          "x": 0.37,
+          "y": 0.58
+        },
+        {
+          "id": "s6",
+          "type": "DEFENSE_PLAYER",
+          "label": "S6",
+          "x": 0.37,
+          "y": 0.42
+        },
+        {
+          "id": "wp1",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.12
+        },
+        {
+          "id": "wp2",
+          "type": "WAYPOINT",
+          "x": 0.84,
+          "y": 0.24
+        },
+        {
+          "id": "wp3",
+          "type": "WAYPOINT",
+          "x": 0.84,
+          "y": 0.76
+        },
+        {
+          "id": "wp4",
+          "type": "WAYPOINT",
+          "x": 0.5,
+          "y": 0.88
+        },
+        {
+          "id": "wp5",
+          "type": "WAYPOINT",
+          "x": 0.16,
+          "y": 0.76
+        },
+        {
+          "id": "wp6",
+          "type": "WAYPOINT",
+          "x": 0.16,
+          "y": 0.24
+        }
+      ],
+      "paths": [
+        {
+          "id": "p1",
+          "type": "RUN_PATH",
+          "stepNumber": 1,
+          "fromNodeId": "s1",
+          "toWaypointId": "wp1",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.34
+            },
+            {
+              "x": 0.5,
+              "y": 0.12
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "RUN_PATH",
+          "stepNumber": 1,
+          "fromNodeId": "s2",
+          "toWaypointId": "wp2",
+          "points": [
+            {
+              "x": 0.63,
+              "y": 0.42
+            },
+            {
+              "x": 0.84,
+              "y": 0.24
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "RUN_PATH",
+          "stepNumber": 1,
+          "fromNodeId": "s3",
+          "toWaypointId": "wp3",
+          "points": [
+            {
+              "x": 0.63,
+              "y": 0.58
+            },
+            {
+              "x": 0.84,
+              "y": 0.76
+            }
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "RUN_PATH",
+          "stepNumber": 1,
+          "fromNodeId": "s4",
+          "toWaypointId": "wp4",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.66
+            },
+            {
+              "x": 0.5,
+              "y": 0.88
+            }
+          ]
+        },
+        {
+          "id": "p5",
+          "type": "RUN_PATH",
+          "stepNumber": 1,
+          "fromNodeId": "s5",
+          "toWaypointId": "wp5",
+          "points": [
+            {
+              "x": 0.37,
+              "y": 0.58
+            },
+            {
+              "x": 0.16,
+              "y": 0.76
+            }
+          ]
+        },
+        {
+          "id": "p6",
+          "type": "RUN_PATH",
+          "stepNumber": 1,
+          "fromNodeId": "s6",
+          "toWaypointId": "wp6",
+          "points": [
+            {
+              "x": 0.37,
+              "y": 0.42
+            },
+            {
+              "x": 0.16,
+              "y": 0.24
+            }
+          ]
+        },
+        {
+          "id": "p7",
+          "type": "SHOT_PATH",
+          "stepNumber": 2,
+          "fromNodeId": "w",
+          "toWaypointId": "wp2",
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.5
+            },
+            {
+              "x": 0.84,
+              "y": 0.24
+            }
+          ]
+        }
+      ],
+      "zones": [
+        {
+          "id": "z_circle",
+          "shape": "ELLIPSE",
+          "x": 0.5,
+          "y": 0.5,
+          "width": 0.3,
+          "height": 0.36,
+          "color": "#3b82f6",
+          "opacity": 0.14,
+          "label": "Startkreis"
+        }
+      ]
+    }
   }
 ]

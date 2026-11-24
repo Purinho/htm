@@ -165,7 +165,21 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
-        globIgnores: ['catalog/**']
+        globIgnores: ['catalog/**'],
+        runtimeCaching: [
+          {
+            urlPattern: /\/catalog\/.*\.json$/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'standard-catalog-cache',
+              networkTimeoutSeconds: 5,
+              expiration: {
+                maxEntries: 40,
+                maxAgeSeconds: 60 * 60 * 24 * 30
+              }
+            }
+          }
+        ]
       }
     })
   ]

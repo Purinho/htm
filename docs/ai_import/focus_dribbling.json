@@ -3001,5 +3001,144 @@
         }
       ]
     }
+  },
+  {
+    "title": "Prellkönig",
+    "default_duration_min": 12,
+    "min_players": 6,
+    "max_players": 20,
+    "goalkeepers": 0,
+    "source_url": "https://handball.guru/sessions/abwehrgrundlagen-in-der-e-jugend",
+    "categories": {
+      "phases": [
+        "WARMUP",
+        "SMALL_GAME"
+      ],
+      "focus": [
+        "DRIBBLING",
+        "DEFENSE_INDIVIDUAL",
+        "FOOTWORK_DEFENSE",
+        "OFFENSE_INDIVIDUAL"
+      ],
+      "level": "BASIC",
+      "age_groups": [
+        "F_YOUTH",
+        "E_YOUTH",
+        "D_YOUTH",
+        "C_YOUTH",
+        "B_YOUTH",
+        "A_YOUTH",
+        "ADULTS"
+      ]
+    },
+    "materials": [
+      {
+        "type": "BALL",
+        "quantity": 16
+      },
+      {
+        "type": "CONE",
+        "quantity": 12
+      }
+    ],
+    "setup_description": "Mit Hütchen oder Hallenlinien werden 3 bis 4 klar abgegrenzte Felder bzw. Zonen nebeneinander markiert (Feld 1 als Startfeld bis zum obersten Feld, dem „Königsfeld“). Jeder Spieler erhält einen eigenen Handball. Zu Beginn starten alle Spieler gemeinsam im 1. Feld.",
+    "flow_description": "1. Alle Spieler starten gleichzeitig im 1. Feld (Startfeld) und prellen dort kontinuierlich ihren eigenen Handball.\n2. Ziel des Spiels ist es, durch aktives Herausprellen der Bälle anderer Spieler schrittweise aufzusteigen und das oberste Feld („Königsfeld“) zu erreichen.\n3. Aufstieg: Gelingt es einem Spieler, mit der freien Hand den Ball eines anderen Spielers erfolgreich herauszuprellen, steigt er sofort ein Feld auf (Feld 1 → Feld 2 → Feld 3 / Königsfeld). Im obersten Feld sichert ein erfolgreiches Herausprellen den Platz bzw. bringt einen Königspunkt.\n4. Abstieg: Wird der eigene Ball herausgeprellt (oder geht er durch einen Prellfehler wie Doppeldribbling/Festhalten bzw. Verlassen des Feldes verloren), steigt der Spieler sofort ein Feld ab (im 1. Feld verbleibt man im Startfeld).\n5. Gespielt wird auf Zeit (z. B. 2–3 Durchgänge à 3–4 Minuten); wer bei Ablauf der Zeit im höchsten Feld steht (bzw. dort die meisten Bälle herausgeprellt hat), ist „Prellkönig“.",
+    "coaching_points": "- Aktives Herausprellen üben: Mit schnellem, gezieltem Impuls der freien Hand den gegnerischen Ball beim Aufsteigen nach dem Bodenkontakt angreifen, statt nur passiv auszuweichen\n- Tiefe, athletische Grundstellung und schnelle Beinarbeit für explosive Richtungswechsel im Zweikampf\n- Kopf oben halten und peripheres Sehen schulen, um ungeschützte Bälle im Raum früh zu erkennen\n- Eigenen Ball während der Attacke körperfern und tief kontrollieren sowie regelkonform mit dem Körper abschirmen (ohne Schubsen oder Klammern)",
+    "variations_text": "- Handvorgabe: In den oberen Feldern (z. B. ab Feld 2) darf nur mit der schwachen Hand geprellt werden, um das Halten und Weiteraufsteigen anspruchsvoller zu gestalten\n- Feldverkleinerung: Die höheren Felder kleiner markieren als Feld 1, um Zweikampfdichte und Druck im Kampf um das Königsfeld zu erhöhen\n- Körperkontakt (ab D-Jugend): Aktives Abschirmen des eigenen Balls mit dem Körper erlauben, ohne zu schubsen oder zu klammern\n- Aktivitätsregel: Wer im obersten Feld zu passiv spielt und nicht aktiv versucht herauszuprellen, steigt nach Traineransage ein Feld ab",
+    "tactic_board_data": {
+      "version": 2,
+      "courtTemplate": "FREE_SPACE",
+      "nodes": [
+        { "id": "c1", "type": "EQUIPMENT_CONE", "x": 0.07, "y": 0.11 },
+        { "id": "c2", "type": "EQUIPMENT_CONE", "x": 0.35, "y": 0.11 },
+        { "id": "c3", "type": "EQUIPMENT_CONE", "x": 0.65, "y": 0.11 },
+        { "id": "c4", "type": "EQUIPMENT_CONE", "x": 0.92, "y": 0.14 },
+        { "id": "c5", "type": "EQUIPMENT_CONE", "x": 0.07, "y": 0.89 },
+        { "id": "c6", "type": "EQUIPMENT_CONE", "x": 0.35, "y": 0.89 },
+        { "id": "c7", "type": "EQUIPMENT_CONE", "x": 0.65, "y": 0.89 },
+        { "id": "c8", "type": "EQUIPMENT_CONE", "x": 0.92, "y": 0.86 },
+        { "id": "p1", "type": "OFFENSE_PLAYER", "label": "S1", "x": 0.16, "y": 0.28, "hasBall": true },
+        { "id": "p2", "type": "OFFENSE_PLAYER", "label": "S2", "x": 0.26, "y": 0.34, "hasBall": true },
+        { "id": "p3", "type": "OFFENSE_PLAYER", "label": "S3", "x": 0.18, "y": 0.74, "hasBall": true },
+        { "id": "p4", "type": "OFFENSE_PLAYER", "label": "S4", "x": 0.27, "y": 0.68, "hasBall": true },
+        { "id": "p5", "type": "OFFENSE_PLAYER", "label": "S5", "x": 0.46, "y": 0.28, "hasBall": true },
+        { "id": "p6", "type": "OFFENSE_PLAYER", "label": "S6", "x": 0.56, "y": 0.72, "hasBall": true },
+        { "id": "p7", "type": "OFFENSE_PLAYER", "label": "S7", "x": 0.78, "y": 0.28, "hasBall": true },
+        { "id": "p8", "type": "OFFENSE_PLAYER", "label": "S8", "x": 0.84, "y": 0.70, "hasBall": true },
+        { "id": "wp_up1", "type": "WAYPOINT", "x": 0.42, "y": 0.34 },
+        { "id": "wp_up2", "type": "WAYPOINT", "x": 0.73, "y": 0.34 },
+        { "id": "wp_down1", "type": "WAYPOINT", "x": 0.58, "y": 0.62 }
+      ],
+      "paths": [
+        {
+          "id": "path_up1",
+          "type": "DRIBBLE_PATH",
+          "stepNumber": 1,
+          "fromNodeId": "p2",
+          "toWaypointId": "wp_up1",
+          "points": [
+            { "x": 0.26, "y": 0.34 },
+            { "x": 0.42, "y": 0.34 }
+          ]
+        },
+        {
+          "id": "path_up2",
+          "type": "DRIBBLE_PATH",
+          "stepNumber": 2,
+          "fromNodeId": "p5",
+          "toWaypointId": "wp_up2",
+          "points": [
+            { "x": 0.46, "y": 0.28 },
+            { "x": 0.73, "y": 0.34 }
+          ]
+        },
+        {
+          "id": "path_down1",
+          "type": "RUN_PATH",
+          "stepNumber": 3,
+          "fromNodeId": "p8",
+          "toWaypointId": "wp_down1",
+          "points": [
+            { "x": 0.84, "y": 0.70 },
+            { "x": 0.58, "y": 0.62 }
+          ]
+        }
+      ],
+      "zones": [
+        {
+          "id": "z_f1",
+          "shape": "RECT",
+          "x": 0.20,
+          "y": 0.50,
+          "width": 0.26,
+          "height": 0.78,
+          "color": "#3b82f6",
+          "opacity": 0.18,
+          "label": "Feld 1 (Start)"
+        },
+        {
+          "id": "z_f2",
+          "shape": "RECT",
+          "x": 0.50,
+          "y": 0.50,
+          "width": 0.26,
+          "height": 0.78,
+          "color": "#22c55e",
+          "opacity": 0.18,
+          "label": "Feld 2"
+        },
+        {
+          "id": "z_f3",
+          "shape": "RECT",
+          "x": 0.80,
+          "y": 0.50,
+          "width": 0.24,
+          "height": 0.72,
+          "color": "#f59e0b",
+          "opacity": 0.22,
+          "label": "Feld 3 (König)"
+        }
+      ]
+    }
   }
 ]

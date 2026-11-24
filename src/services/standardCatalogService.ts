@@ -32,9 +32,18 @@ export async function fetchStandardCatalogManifest(
   }
 
   const promise = (async () => {
-    const response = await fetch(`${getCatalogBaseUrl()}manifest.json`, {
-      cache: forceRefresh ? 'no-cache' : 'default'
-    });
+    const manifestUrl = `${getCatalogBaseUrl()}manifest.json`;
+    let response: Response;
+    try {
+      response = await fetch(manifestUrl, {
+        cache: 'no-cache'
+      });
+    } catch (err) {
+      const detail = err instanceof Error && err.message ? ` (${err.message})` : '';
+      throw new Error(
+        `Standard-Katalog-Manifest (${manifestUrl}) konnte nicht geladen werden (Netzwerkfehler / Server nicht erreichbar)${detail}. Bitte prüfe die Verbindung bzw. ob der lokale Dev-/Preview-Server läuft.`
+      );
+    }
     if (!response.ok) {
       throw new Error(
         `Standard-Katalog-Manifest konnte nicht geladen werden (HTTP ${response.status}).`
