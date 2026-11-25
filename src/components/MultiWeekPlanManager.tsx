@@ -1,14 +1,17 @@
 import { useMemo, useState } from 'react';
 import {
+  AlertTriangle,
+  Bookmark,
   CalendarPlus,
   CalendarRange,
   Edit3,
   Play,
   Plus,
   Sparkles,
-  Tag
+  Tag,
+  Trash2
 } from 'lucide-react';
-import { db, queueSyncOperation } from '../db/database';
+import { db, purgePendingOutboxUpserts, queueSyncOperation } from '../db/database';
 import type {
   ClubMember,
   HandballFocusTag,
@@ -21,12 +24,14 @@ import type {
 import { FOCUS_TAG_LABELS } from '../constants/handballLabels';
 import {
   addDaysIso,
+  buildMultiWeekPlanDeletionPlan,
   formatIsoDateDe,
   generateMultiWeekPlanBundle,
   getIsoWeekNumber,
   getUpcomingMondayIso
 } from '../utils/multiWeekPlanUtils';
 import { buildSessionFromTemplate } from '../utils/sessionPlannerUtils';
+import { reconcileSelectedTemplateId } from '../utils/sessionTemplateUtils';
 import { GermanWeekPicker } from './GermanWeekPicker';
 
 interface MultiWeekPlanManagerProps {
@@ -38,6 +43,7 @@ interface MultiWeekPlanManagerProps {
   templates: SessionTemplate[];
   onOpenSessionInEditor: (sessionId: string) => void;
   onStartHallMode: (sessionId: string) => void;
+  onOpenTemplateManager?: () => void;
 }
 
 const ALL_FOCUS_TAGS = Object.keys(FOCUS_TAG_LABELS) as HandballFocusTag[];
@@ -50,7 +56,8 @@ export function MultiWeekPlanManager({
   sessions,
   templates,
   onOpenSessionInEditor,
-  onStartHallMode
+  onStartHallMode,
+  onOpenTemplateManager
 }: MultiWeekPlanManagerProps) {
   const teamPlans = useMemo(
     () =>
@@ -90,15 +97,40 @@ export function MultiWeekPlanManager({
     'Steigerung der 1. & 2. Welle sowie stabile Übergaben im Innenblock.'
   );
   const [newTemplateId, setNewTemplateId] = useState<string>(templates[0]?.id ?? '');
+  const effectiveTemplateId = useMemo(
+    () => reconcileSelectedTemplateId(newTemplateId, templates),
+    [newTemplateId, templates]
+  );
 
   // Expanded tag selector per week
   const [editingTagsWeekId, setEditingTagsWeekId] = useState<string | null>(null);
+
+  // Plan deletion confirmation state
+  const [confirmDeletePlanId, setConfirmDeletePlanId] = useState<string | null>(null);
+  const [deleteLinkedSessions, setDeleteLinkedSessions] = useState(false);
+  const [isDeletingPlan, setIsDeletingPlan] = useState(false);
+
+  const activeWeekIds = useMemo(
+    () => new Set(activeWeeks.map((week) => week.id)),
+    [activeWeeks]
+  );
+
+  const linkedSessionsForActivePlan = useMemo(
+    () =>
+      sessions.filter((s) => Boolean(s.plan_week_id && activeWeekIds.has(s.plan_week_id))),
+    [sessions, activeWeekIds]
+  );
+
+  const completedLinkedSessionsCount = useMemo(
+    () => linkedSessionsForActivePlan.filter((s) => s.status === 'COMPLETED').length,
+    [linkedSessionsForActivePlan]
+  );
 
   async function handleGeneratePlan(e: React.FormEvent) {
     e.preventDefault();
     if (!newTitle.trim()) return;
 
-    const defaultTemplate = templates.find((t) => t.id === newTemplateId);
+    const defaultTemplate = templates.find((t) => t.id === effectiveTemplateId);
     const bundle = generateMultiWeekPlanBundle({
       team: activeTeam,
       title: newTitle,
@@ -205,6 +237,112 @@ export function MultiWeekPlanManager({
     );
   }
 
+  async function handleDeletePlan(planId: string) {
+    if (isDeletingPlan) return;
+    setIsDeletingPlan(true);
+
+    try {
+      await db.transaction(
+        'rw',
+        [
+          db.multiWeekPlans,
+          db.planWeeks,
+          db.trainingSessions,
+          db.sessionPhases,
+          db.sessionBlocks,
+          db.sessionNotes,
+          db.syncOutbox
+        ],
+        async () => {
+          const planWeeksForPlan = await db.planWeeks
+            .where('multi_week_plan_id')
+            .equals(planId)
+            .toArray();
+          const weekIds = planWeeksForPlan.map((w) => w.id);
+          const linkedSessions =
+            weekIds.length > 0
+              ? await db.trainingSessions.where('plan_week_id').anyOf(weekIds).toArray()
+              : [];
+          const linkedSessionIds = linkedSessions.map((s) => s.id);
+
+          const linkedPhases =
+            deleteLinkedSessions && linkedSessionIds.length > 0
+              ? await db.sessionPhases
+                  .where('training_session_id')
+                  .anyOf(linkedSessionIds)
+                  .toArray()
+              : [];
+          const phaseIds = linkedPhases.map((p) => p.id);
+          const linkedBlocks =
+            deleteLinkedSessions && phaseIds.length > 0
+              ? await db.sessionBlocks
+                  .where('session_phase_id')
+                  .anyOf(phaseIds)
+                  .toArray()
+              : [];
+          const linkedNotes =
+            deleteLinkedSessions && linkedSessionIds.length > 0
+              ? await db.sessionNotes
+                  .where('training_session_id')
+                  .anyOf(linkedSessionIds)
+                  .toArray()
+              : [];
+
+          const deletionPlan = buildMultiWeekPlanDeletionPlan({
+            planId,
+            planWeeks: planWeeksForPlan,
+            sessions: linkedSessions,
+            phases: linkedPhases,
+            blocks: linkedBlocks,
+            notes: linkedNotes,
+            deleteLinkedSessions
+          });
+
+          await db.multiWeekPlans.delete(planId);
+          if (deletionPlan.planWeekIdsToDelete.length > 0) {
+            await db.planWeeks.bulkDelete(deletionPlan.planWeekIdsToDelete);
+          }
+          if (deletionPlan.blockIdsToDelete.length > 0) {
+            await db.sessionBlocks.bulkDelete(deletionPlan.blockIdsToDelete);
+          }
+          if (deletionPlan.noteIdsToDelete.length > 0) {
+            await db.sessionNotes.bulkDelete(deletionPlan.noteIdsToDelete);
+          }
+          if (deletionPlan.phaseIdsToDelete.length > 0) {
+            await db.sessionPhases.bulkDelete(deletionPlan.phaseIdsToDelete);
+          }
+          if (deletionPlan.sessionIdsToDelete.length > 0) {
+            await db.trainingSessions.bulkDelete(deletionPlan.sessionIdsToDelete);
+          }
+          if (deletionPlan.sessionsToUnlink.length > 0) {
+            await db.trainingSessions.bulkPut(deletionPlan.sessionsToUnlink);
+          }
+
+          await purgePendingOutboxUpserts(deletionPlan.outboxUpsertKeysToPurge);
+
+          for (const session of deletionPlan.sessionsToUnlink) {
+            await queueSyncOperation('training_sessions', session.id, 'UPSERT', {
+              ...session,
+              plan_week_id: null
+            });
+          }
+          for (const sessionId of deletionPlan.sessionIdsToDelete) {
+            await queueSyncOperation('training_sessions', sessionId, 'DELETE', { id: sessionId });
+          }
+          await queueSyncOperation('multi_week_plans', planId, 'DELETE', { id: planId });
+        }
+      );
+
+      setConfirmDeletePlanId(null);
+      setDeleteLinkedSessions(false);
+      setEditingTagsWeekId(null);
+      const remainingPlans = teamPlans.filter((p) => p.id !== planId);
+      setSelectedPlanId(remainingPlans[0]?.id ?? '');
+    } finally {
+      setIsDeletingPlan(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Top Header & Plan Selector */}
@@ -218,19 +356,42 @@ export function MultiWeekPlanManager({
               <span className="text-xs font-bold tracking-wider text-blue-400 uppercase">
                 Mesozyklus- & Mehrwochenplanung ({activeTeam.name})
               </span>
-              <div className="mt-0.5 flex items-center gap-2">
+              <div className="mt-0.5 flex flex-wrap items-center gap-2">
                 {teamPlans.length > 0 ? (
-                  <select
-                    value={activePlan?.id ?? ''}
-                    onChange={(e) => setSelectedPlanId(e.target.value)}
-                    className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-sm font-bold text-white"
-                  >
-                    {teamPlans.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.title} ({formatIsoDateDe(p.start_date)} – {formatIsoDateDe(p.end_date)})
-                      </option>
-                    ))}
-                  </select>
+                  <>
+                    <select
+                      value={activePlan?.id ?? ''}
+                      onChange={(e) => {
+                        setSelectedPlanId(e.target.value);
+                        setConfirmDeletePlanId(null);
+                        setDeleteLinkedSessions(false);
+                      }}
+                      className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-sm font-bold text-white"
+                    >
+                      {teamPlans.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.title} ({formatIsoDateDe(p.start_date)} – {formatIsoDateDe(p.end_date)})
+                        </option>
+                      ))}
+                    </select>
+                    {activePlan && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowCreateForm(false);
+                          setDeleteLinkedSessions(false);
+                          setConfirmDeletePlanId((prev) =>
+                            prev === activePlan.id ? null : activePlan.id
+                          );
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-rose-300 hover:border-rose-700/60 hover:bg-rose-950/50"
+                        title="Aktuellen Mesozyklus löschen"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Mesozyklus löschen
+                      </button>
+                    )}
+                  </>
                 ) : (
                   <span className="text-sm font-bold text-white">Noch kein Plan angelegt</span>
                 )}
@@ -240,13 +401,87 @@ export function MultiWeekPlanManager({
 
           <button
             type="button"
-            onClick={() => setShowCreateForm((prev) => !prev)}
+            onClick={() => {
+              setShowCreateForm((prev) => !prev);
+              setConfirmDeletePlanId(null);
+              setDeleteLinkedSessions(false);
+            }}
             className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-600/20 hover:bg-blue-500"
           >
             <Plus className="h-4 w-4" />
             Neuen Mehrwochenplan & Trainingstage generieren
           </button>
         </div>
+
+        {/* Inline Deletion Confirmation */}
+        {activePlan && confirmDeletePlanId === activePlan.id && (
+          <div className="mt-4 rounded-xl border border-rose-500/40 bg-rose-950/25 p-4 space-y-3">
+            <div className="flex items-start gap-2.5">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
+              <div className="space-y-1 text-xs">
+                <div className="font-bold text-rose-100">
+                  Mesozyklus „{activePlan.title}“ löschen?
+                </div>
+                <p className="text-slate-300">
+                  Der Mesozyklus und seine {activeWeeks.length} Wochen-Schwerpunkte werden dauerhaft gelöscht.
+                </p>
+              </div>
+            </div>
+
+            {linkedSessionsForActivePlan.length > 0 && (
+              <div className="rounded-lg border border-rose-500/30 bg-slate-950/60 p-3 space-y-1.5 text-xs">
+                <label className="flex cursor-pointer items-start gap-2 text-slate-200">
+                  <input
+                    type="checkbox"
+                    checked={deleteLinkedSessions}
+                    onChange={(e) => setDeleteLinkedSessions(e.target.checked)}
+                    className="mt-0.5 h-3.5 w-3.5 rounded border-slate-600 bg-slate-900 text-rose-600 focus:ring-rose-500"
+                  />
+                  <span>
+                    Auch {linkedSessionsForActivePlan.length} verknüpfte{' '}
+                    {linkedSessionsForActivePlan.length === 1
+                      ? 'Trainingseinheit'
+                      : 'Trainingseinheiten'}{' '}
+                    dauerhaft mitlöschen
+                    {completedLinkedSessionsCount > 0 && (
+                      <span className="ml-1 font-semibold text-amber-300">
+                        ({completedLinkedSessionsCount} bereits durchgeführt)
+                      </span>
+                    )}
+                  </span>
+                </label>
+                <p className="pl-5 text-[11px] text-slate-400">
+                  {deleteLinkedSessions
+                    ? 'Alle verknüpften Trainingseinheiten werden inklusive ihrer Phasen, Übungsblöcke und Notizen gelöscht.'
+                    : 'Ohne Haken bleiben alle Trainingseinheiten als eigenständige Termine erhalten (Verknüpfung zum Mesozyklus wird gelöst).'}
+                </p>
+              </div>
+            )}
+
+            <div className="flex flex-wrap justify-end gap-2">
+              <button
+                type="button"
+                disabled={isDeletingPlan}
+                onClick={() => {
+                  setConfirmDeletePlanId(null);
+                  setDeleteLinkedSessions(false);
+                }}
+                className="rounded-xl bg-slate-800 px-3.5 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700 disabled:opacity-50"
+              >
+                Abbrechen
+              </button>
+              <button
+                type="button"
+                disabled={isDeletingPlan}
+                onClick={() => void handleDeletePlan(activePlan.id)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-rose-500 disabled:opacity-50"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                {isDeletingPlan ? 'Wird gelöscht...' : 'Mesozyklus endgültig löschen'}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Generator Form */}
         {showCreateForm && (
@@ -316,11 +551,23 @@ export function MultiWeekPlanManager({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-300">
-                  Standard-Vorlage für generierte Trainingstage
-                </label>
+                <div className="mb-1 flex items-center justify-between gap-2">
+                  <label className="block text-xs text-slate-300">
+                    Standard-Vorlage für generierte Trainingstage
+                  </label>
+                  {onOpenTemplateManager && (
+                    <button
+                      type="button"
+                      onClick={onOpenTemplateManager}
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-400 hover:text-blue-300"
+                    >
+                      <Bookmark className="h-3 w-3" />
+                      Vorlagen verwalten
+                    </button>
+                  )}
+                </div>
                 <select
-                  value={newTemplateId}
+                  value={effectiveTemplateId}
                   onChange={(e) => setNewTemplateId(e.target.value)}
                   className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-white"
                 >

@@ -466,7 +466,9 @@ export function buildTemplateFromSession(params: {
     description: params.description.trim() || 'Aus bestehender Trainingseinheit gespeichert',
     default_duration_min: params.session.planned_duration_min,
     phases_template: sortedPhases.map((p) => {
-      const firstBlock = params.blocks.find((b) => b.session_phase_id === p.id);
+      const firstBlock = params.blocks
+        .filter((b) => b.session_phase_id === p.id)
+        .sort((a, b) => a.time_slot_index - b.time_slot_index)[0];
       return {
         name: p.name,
         target_duration_min: p.target_duration_min,

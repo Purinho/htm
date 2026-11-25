@@ -4,6 +4,7 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpRight,
+  Bookmark,
   BookmarkPlus,
   BookOpen,
   CheckCircle2,
@@ -71,6 +72,7 @@ import {
   type PlannerCatalogTab
 } from '../utils/sessionPlannerUtils';
 import { addDaysIso, selectCurrentPlanWeek } from '../utils/multiWeekPlanUtils';
+import { reconcileSelectedTemplateId } from '../utils/sessionTemplateUtils';
 import { resolveTeamAgeGroup } from '../utils/teamAgeGroupUtils';
 import { TacticBoardPreview } from './TacticBoardPreview';
 
@@ -96,6 +98,7 @@ interface TrainingSessionPlannerProps {
   onOpenExercise?: (exercise: Exercise) => void;
   onStartHallMode?: (sessionId: string) => void;
   onPrintSession?: (session: TrainingSession) => void;
+  onOpenTemplateManager?: (initialDraft?: SessionTemplate) => void;
 }
 
 const PLANNER_CATALOG_PAGE_SIZE = 30;
@@ -128,7 +131,8 @@ export function TrainingSessionPlanner({
   onEditExercise,
   onOpenExercise,
   onStartHallMode,
-  onPrintSession
+  onPrintSession,
+  onOpenTemplateManager
 }: TrainingSessionPlannerProps) {
   const setSelectedSessionId = onSelectSessionId;
   const setActivePhaseId = onSelectPhaseId;
@@ -238,6 +242,10 @@ export function TrainingSessionPlanner({
   const [newSessionTitle, setNewSessionTitle] = useState('Donnerstagstraining');
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(
     templates[0]?.id ?? ''
+  );
+  const effectiveSelectedTemplateId = useMemo(
+    () => reconcileSelectedTemplateId(selectedTemplateId, templates),
+    [selectedTemplateId, templates]
   );
 
   // New Phase form
@@ -364,7 +372,7 @@ export function TrainingSessionPlanner({
 
   async function handleCreateSessionFromTemplate(e: React.FormEvent) {
     e.preventDefault();
-    const tpl = templates.find((t) => t.id === selectedTemplateId);
+    const tpl = templates.find((t) => t.id === effectiveSelectedTemplateId);
     const bundle = buildSessionFromTemplate({
       teamId: activeTeam.id,
       sessionDate: newSessionDate,
@@ -406,6 +414,10 @@ export function TrainingSessionPlanner({
       phases: currentPhases,
       blocks: currentBlocks
     });
+    if (onOpenTemplateManager) {
+      onOpenTemplateManager(tpl);
+      return;
+    }
     await db.sessionTemplates.put(tpl);
     await queueSyncOperation('session_templates', tpl.id, 'UPSERT', tpl);
     setSavedTemplateBanner(`Vorlage „${tpl.title}" gespeichert!`);
@@ -811,6 +823,18 @@ export function TrainingSessionPlanner({
                   Als Vorlage speichern
                 </button>
 
+                {onOpenTemplateManager && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenTemplateManager()}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700"
+                    title="Trainingstag-Vorlagen ansehen, bearbeiten, duplizieren oder löschen"
+                  >
+                    <Bookmark className="h-3.5 w-3.5 text-blue-400" />
+                    Vorlagen ({templates.length})
+                  </button>
+                )}
+
                 {confirmDeleteSessionId === currentSession.id ? (
                   <div className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/50 bg-rose-950/60 px-2.5 py-1.5 text-xs">
                     <span className="font-semibold text-rose-200">Einheit löschen?</span>
@@ -901,10 +925,10 @@ export function TrainingSessionPlanner({
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <label className="text-xs text-slate-300">Trainings-Vorlage:</label>
                 <select
-                  value={selectedTemplateId}
+                  value={effectiveSelectedTemplateId}
                   onChange={(e) => setSelectedTemplateId(e.target.value)}
                   className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-white"
                 >
@@ -915,6 +939,16 @@ export function TrainingSessionPlanner({
                     </option>
                   ))}
                 </select>
+                {onOpenTemplateManager && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenTemplateManager()}
+                    className="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700"
+                  >
+                    <Bookmark className="h-3.5 w-3.5 text-blue-400" />
+                    Verwalten
+                  </button>
+                )}
               </div>
 
               <div className="flex gap-2">

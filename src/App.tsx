@@ -44,6 +44,7 @@ import { handleOverlayPopState } from './utils/overlayHistory';
 import { PrintExportModal, type PrintExportTarget } from './components/PrintExportModal';
 import { UiConfigModal } from './components/UiConfigModal';
 import { UiConfigTourModal } from './components/UiConfigTourModal';
+import { SessionTemplateManagerModal } from './components/SessionTemplateManagerModal';
 import {
   getFallbackTabIfDisabled,
   loadUiPreferences,
@@ -72,6 +73,7 @@ import {
   type PlannerNavigationSnapshot,
   type PlannerTeamContext
 } from './utils/sessionPlannerUtils';
+import { sortSessionTemplates } from './utils/sessionTemplateUtils';
 import { formatTeamAgeGroupLabel, resolveTeamAgeGroup } from './utils/teamAgeGroupUtils';
 import {
   AGE_GROUP_LABELS,
@@ -89,6 +91,7 @@ import type {
   ComplexityLevel,
   Exercise,
   HandballFocusTag,
+  SessionTemplate,
   TrainingPhaseCategory,
   VisibilityLevel
 } from './types/domain';
@@ -168,6 +171,9 @@ const EXERCISE_PAGE_SIZE = 40;
   const [uiPreferences, setUiPreferences] = useState<UiPreferences>(() => loadUiPreferences());
   const [uiConfigModalOpen, setUiConfigModalOpen] = useState(false);
   const [uiTourModalOpen, setUiTourModalOpen] = useState(() => !loadUiPreferences().tourCompleted);
+  const [templateManagerOpen, setTemplateManagerOpen] = useState(false);
+  const [templateManagerInitialDraft, setTemplateManagerInitialDraft] =
+    useState<SessionTemplate | null>(null);
   const [isInstalledPwa, setIsInstalledPwa] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     const nav = window.navigator as Navigator & { standalone?: boolean };
@@ -438,7 +444,10 @@ const EXERCISE_PAGE_SIZE = 40;
     [allExercises, activeClub]
   );
   const templates = useMemo(
-    () => (activeClub ? allTemplates.filter((st) => st.club_id === activeClub.id) : allTemplates),
+    () =>
+      sortSessionTemplates(
+        activeClub ? allTemplates.filter((st) => st.club_id === activeClub.id) : allTemplates
+      ),
     [allTemplates, activeClub]
   );
   const isAnyClubAdmin = useMemo(
@@ -702,6 +711,29 @@ const EXERCISE_PAGE_SIZE = 40;
     };
     await db.exercises.put(updated);
     await queueSyncOperation('exercises', updated.id, 'UPSERT', updated);
+  }
+
+  function handleOpenTemplateManager(initialDraft?: SessionTemplate) {
+    setTemplateManagerInitialDraft(initialDraft ?? null);
+    setTemplateManagerOpen(true);
+  }
+
+  async function handleSaveSessionTemplate(template: SessionTemplate) {
+    await db.transaction('rw', [db.sessionTemplates, db.syncOutbox], async () => {
+      await db.sessionTemplates.put(template);
+      await queueSyncOperation('session_templates', template.id, 'UPSERT', template);
+    });
+    setSyncStatusBanner(`✓ Vorlage „${template.title}“ gespeichert.`);
+    setTimeout(() => setSyncStatusBanner(null), 3500);
+  }
+
+  async function handleDeleteSessionTemplate(templateId: string) {
+    await db.transaction('rw', [db.sessionTemplates, db.syncOutbox], async () => {
+      await db.sessionTemplates.delete(templateId);
+      await queueSyncOperation('session_templates', templateId, 'DELETE', { id: templateId });
+    });
+    setSyncStatusBanner('✓ Trainingstag-Vorlage gelöscht.');
+    setTimeout(() => setSyncStatusBanner(null), 3500);
   }
 
   async function handleManualCloudSync() {
@@ -1194,6 +1226,7 @@ const EXERCISE_PAGE_SIZE = 40;
                       }
                     : undefined
                 }
+                onOpenTemplateManager={handleOpenTemplateManager}
                 onPrintSession={
                   uiFeatures.printExport
                     ? (session) => {
@@ -1922,6 +1955,7 @@ const EXERCISE_PAGE_SIZE = 40;
               planWeeks={planWeeks}
               sessions={sessions}
               templates={templates}
+              onOpenTemplateManager={() => handleOpenTemplateManager()}
               onOpenSessionInEditor={(sessionId) => {
                 setFocusedSessionId(sessionId);
                 setPlannerSelectedSessionId(sessionId);
@@ -2071,13 +2105,27 @@ const EXERCISE_PAGE_SIZE = 40;
       onClose={() => setChalkboardOpen(false)}
     />
 
-    <UiConfigModal
-      isOpen={uiConfigModalOpen}
-      preferences={uiPreferences}
-      onChangePreferences={handleUpdateUiPreferences}
-      onOpenTour={() => setUiTourModalOpen(true)}
-      onClose={() => setUiConfigModalOpen(false)}
-    />
+      <UiConfigModal
+        isOpen={uiConfigModalOpen}
+        preferences={uiPreferences}
+        onChangePreferences={handleUpdateUiPreferences}
+        onOpenTour={() => setUiTourModalOpen(true)}
+        onClose={() => setUiConfigModalOpen(false)}
+      />
+
+      <SessionTemplateManagerModal
+        isOpen={templateManagerOpen}
+        clubId={activeClub.id}
+        templates={templates}
+        exercises={exercises}
+        initialDraft={templateManagerInitialDraft}
+        onSaveTemplate={handleSaveSessionTemplate}
+        onDeleteTemplate={handleDeleteSessionTemplate}
+        onClose={() => {
+          setTemplateManagerOpen(false);
+          setTemplateManagerInitialDraft(null);
+        }}
+      />
 
     {uiTourModalOpen && !showAuthModal && (
       <UiConfigTourModal

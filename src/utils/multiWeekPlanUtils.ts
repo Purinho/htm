@@ -3,6 +3,7 @@ import type {
   MultiWeekPlan,
   PlanWeek,
   SessionBlock,
+  SessionNote,
   SessionPhase,
   SessionTemplate,
   Team,
@@ -265,5 +266,107 @@ export function generateMultiWeekPlanBundle(params: {
     sessions,
     phases,
     blocks
+  };
+}
+
+export interface MultiWeekPlanDeletionPlan {
+  planId: string;
+  planWeekIdsToDelete: string[];
+  sessionsToUnlink: TrainingSession[];
+  sessionIdsToDelete: string[];
+  phaseIdsToDelete: string[];
+  blockIdsToDelete: string[];
+  noteIdsToDelete: string[];
+  outboxUpsertKeysToPurge: Set<string>;
+}
+
+/**
+ * Computes the local Dexie and Sync-Outbox operations needed to delete a MultiWeekPlan,
+ * either unlinking explicitly associated sessions or cascading deletion into them.
+ */
+export function buildMultiWeekPlanDeletionPlan(params: {
+  planId: string;
+  planWeeks: PlanWeek[];
+  sessions: TrainingSession[];
+  phases: SessionPhase[];
+  blocks: SessionBlock[];
+  notes: SessionNote[];
+  deleteLinkedSessions: boolean;
+  nowIso?: string;
+}): MultiWeekPlanDeletionPlan {
+  const { planId, planWeeks, sessions, phases, blocks, notes, deleteLinkedSessions } = params;
+  const nowIso = params.nowIso ?? new Date().toISOString();
+
+  const planWeekIdsToDelete = planWeeks
+    .filter((pw) => pw.multi_week_plan_id === planId)
+    .map((pw) => pw.id);
+  const weekIdSet = new Set(planWeekIdsToDelete);
+
+  const linkedSessions = sessions.filter((s) =>
+    Boolean(s.plan_week_id && weekIdSet.has(s.plan_week_id))
+  );
+
+  const outboxUpsertKeysToPurge = new Set<string>([`multi_week_plans:${planId}`]);
+  for (const weekId of planWeekIdsToDelete) {
+    outboxUpsertKeysToPurge.add(`plan_weeks:${weekId}`);
+  }
+
+  if (!deleteLinkedSessions) {
+    const sessionsToUnlink = linkedSessions.map((session) => {
+      const next: TrainingSession = { ...session, updated_at: nowIso };
+      delete next.plan_week_id;
+      return next;
+    });
+
+    return {
+      planId,
+      planWeekIdsToDelete,
+      sessionsToUnlink,
+      sessionIdsToDelete: [],
+      phaseIdsToDelete: [],
+      blockIdsToDelete: [],
+      noteIdsToDelete: [],
+      outboxUpsertKeysToPurge
+    };
+  }
+
+  const sessionIdsToDelete = linkedSessions.map((s) => s.id);
+  const sessionIdSet = new Set(sessionIdsToDelete);
+
+  const phaseIdsToDelete = phases
+    .filter((p) => sessionIdSet.has(p.training_session_id))
+    .map((p) => p.id);
+  const phaseIdSet = new Set(phaseIdsToDelete);
+
+  const blockIdsToDelete = blocks
+    .filter((b) => phaseIdSet.has(b.session_phase_id))
+    .map((b) => b.id);
+
+  const noteIdsToDelete = notes
+    .filter((n) => sessionIdSet.has(n.training_session_id))
+    .map((n) => n.id);
+
+  for (const sessionId of sessionIdsToDelete) {
+    outboxUpsertKeysToPurge.add(`training_sessions:${sessionId}`);
+  }
+  for (const phaseId of phaseIdsToDelete) {
+    outboxUpsertKeysToPurge.add(`session_phases:${phaseId}`);
+  }
+  for (const blockId of blockIdsToDelete) {
+    outboxUpsertKeysToPurge.add(`session_blocks:${blockId}`);
+  }
+  for (const noteId of noteIdsToDelete) {
+    outboxUpsertKeysToPurge.add(`session_notes:${noteId}`);
+  }
+
+  return {
+    planId,
+    planWeekIdsToDelete,
+    sessionsToUnlink: [],
+    sessionIdsToDelete,
+    phaseIdsToDelete,
+    blockIdsToDelete,
+    noteIdsToDelete,
+    outboxUpsertKeysToPurge
   };
 }
