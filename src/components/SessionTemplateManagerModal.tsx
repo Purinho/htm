@@ -26,6 +26,7 @@ interface SessionTemplateManagerModalProps {
   templates: SessionTemplate[];
   exercises: Exercise[];
   initialDraft?: SessionTemplate | null;
+  canManageTemplates?: boolean;
   onSaveTemplate: (template: SessionTemplate) => Promise<void>;
   onDeleteTemplate: (templateId: string) => Promise<void>;
   onClose: () => void;
@@ -44,6 +45,7 @@ export function SessionTemplateManagerModal({
   templates,
   exercises,
   initialDraft,
+  canManageTemplates = true,
   onSaveTemplate,
   onDeleteTemplate,
   onClose
@@ -125,6 +127,7 @@ export function SessionTemplateManagerModal({
   }
 
   function handleCreateNewDraft() {
+    if (!canManageTemplates) return;
     setDraft(createBlankSessionTemplateDraft(clubId));
     setIsFromSessionDraft(false);
     setConfirmDeleteId(null);
@@ -133,7 +136,7 @@ export function SessionTemplateManagerModal({
   }
 
   function handleDuplicateCurrent() {
-    if (!draft) return;
+    if (!canManageTemplates || !draft) return;
     setDraft(duplicateSessionTemplate(draft, clubId));
     setIsFromSessionDraft(false);
     setConfirmDeleteId(null);
@@ -142,7 +145,7 @@ export function SessionTemplateManagerModal({
   }
 
   function updatePhaseAt(index: number, patch: Partial<SessionTemplatePhase>) {
-    if (!draft) return;
+    if (!canManageTemplates || !draft) return;
     const nextPhases = draft.phases_template.map((phase, idx) =>
       idx === index ? { ...phase, ...patch } : phase
     );
@@ -150,7 +153,7 @@ export function SessionTemplateManagerModal({
   }
 
   function handleMovePhase(index: number, direction: 'UP' | 'DOWN') {
-    if (!draft) return;
+    if (!canManageTemplates || !draft) return;
     setDraft({
       ...draft,
       phases_template: moveTemplatePhase(draft.phases_template, index, direction)
@@ -158,7 +161,7 @@ export function SessionTemplateManagerModal({
   }
 
   function handleAddPhase() {
-    if (!draft) return;
+    if (!canManageTemplates || !draft) return;
     setDraft({
       ...draft,
       phases_template: [
@@ -169,7 +172,7 @@ export function SessionTemplateManagerModal({
   }
 
   function handleRemovePhase(index: number) {
-    if (!draft || draft.phases_template.length <= 1) return;
+    if (!canManageTemplates || !draft || draft.phases_template.length <= 1) return;
     setDraft({
       ...draft,
       phases_template: draft.phases_template.filter((_, idx) => idx !== index)
@@ -178,7 +181,7 @@ export function SessionTemplateManagerModal({
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    if (!draft || isSaving) return;
+    if (!canManageTemplates || !draft || isSaving) return;
 
     const normalized = normalizeSessionTemplateDraft(draft);
     if (!normalized.valid) {
@@ -200,7 +203,7 @@ export function SessionTemplateManagerModal({
   }
 
   async function handleConfirmDelete(templateId: string) {
-    if (isSaving) return;
+    if (!canManageTemplates || isSaving) return;
     setIsSaving(true);
     setErrorMsg(null);
     try {
@@ -224,16 +227,21 @@ export function SessionTemplateManagerModal({
       <div className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <Bookmark className="h-5 w-5 text-blue-400" />
-              <h2 className="text-lg font-bold text-white">Trainingstag-Vorlagen verwalten</h2>
+            <div>
+              <div className="flex items-center gap-2">
+                <Bookmark className="h-5 w-5 text-blue-400" />
+                <h2 className="text-lg font-bold text-white">
+                  {canManageTemplates
+                    ? 'Trainingstag-Vorlagen verwalten'
+                    : 'Trainingstag-Vorlagen (Nur Lesen)'}
+                </h2>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">
+                {canManageTemplates
+                  ? `Erstelle, bearbeite, dupliziere oder lösche wiederverwendbare Ablauf-Vorlagen für Einzeltrainings und Mehrwochenpläne (${templates.length} gespeichert).`
+                  : `Wiederverwendbare Ablauf-Vorlagen des Vereins einsehen (${templates.length} gespeichert). Bearbeiten und Löschen sind nur für Vereins-Admins möglich.`}
+              </p>
             </div>
-            <p className="mt-1 text-xs text-slate-400">
-              Erstelle, bearbeite, dupliziere oder lösche wiederverwendbare Ablauf-Vorlagen für
-              Einzeltrainings und Mehrwochenpläne ({templates.length} gespeichert).
-            </p>
-          </div>
           <button
             type="button"
             onClick={onClose}
@@ -249,14 +257,16 @@ export function SessionTemplateManagerModal({
           {/* Left column: Template list */}
           <div className="flex max-h-[38vh] flex-col border-b border-slate-800 bg-slate-950/50 lg:col-span-4 lg:max-h-none lg:border-r lg:border-b-0">
             <div className="space-y-2.5 border-b border-slate-800 p-4">
-              <button
-                type="button"
-                onClick={handleCreateNewDraft}
-                className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-blue-500"
-              >
-                <Plus className="h-4 w-4" />
-                Neue Vorlage
-              </button>
+              {canManageTemplates && (
+                <button
+                  type="button"
+                  onClick={handleCreateNewDraft}
+                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-blue-500"
+                >
+                  <Plus className="h-4 w-4" />
+                  Neue Vorlage
+                </button>
+              )}
 
               <div className="relative">
                 <Search className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
@@ -321,28 +331,38 @@ export function SessionTemplateManagerModal({
                   Keine Vorlage ausgewählt
                 </div>
                 <p className="max-w-sm text-xs text-slate-400">
-                  Wähle links eine bestehende Trainingstag-Vorlage aus oder erstelle eine neue
-                  Struktur für deine Trainingsplanung.
+                  {canManageTemplates
+                    ? 'Wähle links eine bestehende Trainingstag-Vorlage aus oder erstelle eine neue Struktur für deine Trainingsplanung.'
+                    : 'Wähle links eine bestehende Trainingstag-Vorlage zur Ansicht aus.'}
                 </p>
-                <button
-                  type="button"
-                  onClick={handleCreateNewDraft}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500"
-                >
-                  <Plus className="h-4 w-4" />
-                  Neue Vorlage anlegen
-                </button>
+                {canManageTemplates && (
+                  <button
+                    type="button"
+                    onClick={handleCreateNewDraft}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Neue Vorlage anlegen
+                  </button>
+                )}
               </div>
             ) : (
               <form onSubmit={handleSave} className="flex flex-1 flex-col overflow-hidden">
                 {/* Editor scroll body */}
                 <div className="flex-1 space-y-5 overflow-y-auto p-5">
+                  {!canManageTemplates && (
+                    <div className="rounded-xl border border-amber-500/40 bg-amber-950/25 px-3.5 py-2 text-xs text-amber-200">
+                      <strong>Nur Lesezugriff:</strong> Vereins-Vorlagen können nur von
+                      Vereins-Admins angelegt, bearbeitet oder gelöscht werden. Du kannst sie beim
+                      Erstellen von Trainingstagen anwenden.
+                    </div>
+                  )}
                   {/* Status & actions row */}
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                     <div className="flex flex-wrap items-center gap-2">
                       {isExistingTemplate ? (
                         <span className="rounded-full border border-blue-500/40 bg-blue-950/60 px-2.5 py-0.5 text-[11px] font-semibold text-blue-300">
-                          Vorlage bearbeiten
+                          {canManageTemplates ? 'Vorlage bearbeiten' : 'Vorlage ansehen'}
                         </span>
                       ) : (
                         <span className="rounded-full border border-emerald-500/40 bg-emerald-950/60 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
@@ -354,7 +374,7 @@ export function SessionTemplateManagerModal({
                       </span>
                     </div>
 
-                    {isExistingTemplate && (
+                    {canManageTemplates && isExistingTemplate && (
                       <div className="flex flex-wrap items-center gap-2">
                         <button
                           type="button"
@@ -427,10 +447,11 @@ export function SessionTemplateManagerModal({
                       <input
                         type="text"
                         required
+                        disabled={!canManageTemplates}
                         value={draft.title}
                         onChange={(e) => setDraft({ ...draft, title: e.target.value })}
                         placeholder="z. B. Standard-Hallentraining 90 Min (Tempospiel)"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none disabled:opacity-75"
                       />
                     </div>
 
@@ -440,10 +461,11 @@ export function SessionTemplateManagerModal({
                       </label>
                       <textarea
                         rows={2}
+                        disabled={!canManageTemplates}
                         value={draft.description}
                         onChange={(e) => setDraft({ ...draft, description: e.target.value })}
                         placeholder="Kurze Notiz zum Einsatzbereich oder Schwerpunkt dieser Vorlage…"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none disabled:opacity-75"
                       />
                     </div>
                   </div>
@@ -459,14 +481,16 @@ export function SessionTemplateManagerModal({
                           Reihenfolge, Zielzeit und optionale Standard-Übung je Phase festlegen.
                         </p>
                       </div>
-                      <button
-                        type="button"
-                        onClick={handleAddPhase}
-                        className="inline-flex items-center gap-1 rounded-lg border border-blue-500/40 bg-blue-950/40 px-2.5 py-1.5 text-xs font-semibold text-blue-300 hover:bg-blue-900/50"
-                      >
-                        <Plus className="h-3.5 w-3.5" />
-                        Phase hinzufügen
-                      </button>
+                      {canManageTemplates && (
+                        <button
+                          type="button"
+                          onClick={handleAddPhase}
+                          className="inline-flex items-center gap-1 rounded-lg border border-blue-500/40 bg-blue-950/40 px-2.5 py-1.5 text-xs font-semibold text-blue-300 hover:bg-blue-900/50"
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                          Phase hinzufügen
+                        </button>
+                      )}
                     </div>
 
                     <div className="space-y-2.5">
@@ -484,36 +508,39 @@ export function SessionTemplateManagerModal({
                                 #{idx + 1}
                               </span>
 
-                              <div className="flex items-center gap-1">
-                                <button
-                                  type="button"
-                                  onClick={() => handleMovePhase(idx, 'UP')}
-                                  disabled={idx === 0}
-                                  className="rounded-lg border border-slate-700 bg-slate-800 p-1 text-slate-300 hover:bg-slate-700 disabled:opacity-35"
-                                  title="Phase nach oben"
-                                  aria-label="Phase nach oben"
-                                >
-                                  <ArrowUp className="h-3.5 w-3.5" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleMovePhase(idx, 'DOWN')}
-                                  disabled={idx === draft.phases_template.length - 1}
-                                  className="rounded-lg border border-slate-700 bg-slate-800 p-1 text-slate-300 hover:bg-slate-700 disabled:opacity-35"
-                                  title="Phase nach unten"
-                                  aria-label="Phase nach unten"
-                                >
-                                  <ArrowDown className="h-3.5 w-3.5" />
-                                </button>
-                              </div>
+                              {canManageTemplates && (
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMovePhase(idx, 'UP')}
+                                    disabled={idx === 0}
+                                    className="rounded-lg border border-slate-700 bg-slate-800 p-1 text-slate-300 hover:bg-slate-700 disabled:opacity-35"
+                                    title="Phase nach oben"
+                                    aria-label="Phase nach oben"
+                                  >
+                                    <ArrowUp className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMovePhase(idx, 'DOWN')}
+                                    disabled={idx === draft.phases_template.length - 1}
+                                    className="rounded-lg border border-slate-700 bg-slate-800 p-1 text-slate-300 hover:bg-slate-700 disabled:opacity-35"
+                                    title="Phase nach unten"
+                                    aria-label="Phase nach unten"
+                                  >
+                                    <ArrowDown className="h-3.5 w-3.5" />
+                                  </button>
+                                </div>
+                              )}
 
                               <input
                                 type="text"
                                 required
+                                disabled={!canManageTemplates}
                                 value={phase.name}
                                 onChange={(e) => updatePhaseAt(idx, { name: e.target.value })}
                                 placeholder="Phasen-Name"
-                                className="min-w-[180px] flex-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs font-semibold text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+                                className="min-w-[180px] flex-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs font-semibold text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none disabled:opacity-75"
                               />
 
                               <div className="flex items-center gap-1">
@@ -522,38 +549,42 @@ export function SessionTemplateManagerModal({
                                   min={5}
                                   max={180}
                                   step={5}
+                                  disabled={!canManageTemplates}
                                   value={phase.target_duration_min}
                                   onChange={(e) =>
                                     updatePhaseAt(idx, {
                                       target_duration_min: Number(e.target.value)
                                     })
                                   }
-                                  className="w-16 rounded-lg border border-slate-700 bg-slate-900 px-2 py-1.5 text-right text-xs font-semibold text-white focus:border-blue-500 focus:outline-none"
+                                  className="w-16 rounded-lg border border-slate-700 bg-slate-900 px-2 py-1.5 text-right text-xs font-semibold text-white focus:border-blue-500 focus:outline-none disabled:opacity-75"
                                 />
                                 <span className="text-[11px] text-slate-400">Min</span>
                               </div>
 
-                              <button
-                                type="button"
-                                onClick={() => handleRemovePhase(idx)}
-                                disabled={draft.phases_template.length <= 1}
-                                className="rounded-lg border border-slate-700 bg-slate-800 p-1.5 text-rose-300 hover:bg-rose-950/50 disabled:opacity-35"
-                                title="Phase entfernen"
-                                aria-label="Phase entfernen"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </button>
+                              {canManageTemplates && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemovePhase(idx)}
+                                  disabled={draft.phases_template.length <= 1}
+                                  className="rounded-lg border border-slate-700 bg-slate-800 p-1.5 text-rose-300 hover:bg-rose-950/50 disabled:opacity-35"
+                                  title="Phase entfernen"
+                                  aria-label="Phase entfernen"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              )}
                             </div>
 
                             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                               <select
+                                disabled={!canManageTemplates}
                                 value={selectedExerciseId}
                                 onChange={(e) =>
                                   updatePhaseAt(idx, {
                                     default_exercise_id: e.target.value || undefined
                                   })
                                 }
-                                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-200 focus:border-blue-500 focus:outline-none"
+                                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-200 focus:border-blue-500 focus:outline-none disabled:opacity-75"
                               >
                                 <option value="">— Keine Standard-Übung (leere Phase) —</option>
                                 {hasMissingExercise && (
@@ -570,6 +601,7 @@ export function SessionTemplateManagerModal({
 
                               <input
                                 type="text"
+                                disabled={!canManageTemplates}
                                 value={phase.default_track_label ?? ''}
                                 onChange={(e) =>
                                   updatePhaseAt(idx, {
@@ -577,7 +609,7 @@ export function SessionTemplateManagerModal({
                                   })
                                 }
                                 placeholder="Spur / Gruppe (optional, z. B. Alle Spieler)"
-                                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+                                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:outline-none disabled:opacity-75"
                               />
                             </div>
                           </div>
@@ -596,13 +628,15 @@ export function SessionTemplateManagerModal({
                   >
                     Schließen
                   </button>
-                  <button
-                    type="submit"
-                    disabled={isSaving}
-                    className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
-                  >
-                    {isSaving ? 'Speichere…' : 'Vorlage speichern'}
-                  </button>
+                  {canManageTemplates && (
+                    <button
+                      type="submit"
+                      disabled={isSaving}
+                      className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
+                    >
+                      {isSaving ? 'Speichere…' : 'Vorlage speichern'}
+                    </button>
+                  )}
                 </div>
               </form>
             )}

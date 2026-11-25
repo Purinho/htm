@@ -396,6 +396,7 @@ export function convertQuickBlockToCatalogExercise(params: {
   teamId: string;
   focusTags?: HandballFocusTag[];
   ageGroups?: AgeGroup[];
+  createdByMemberId?: string;
 }): { exercise: Exercise; updatedBlock: SessionBlock } {
   const now = new Date().toISOString();
   const exerciseId = crypto.randomUUID();
@@ -403,6 +404,7 @@ export function convertQuickBlockToCatalogExercise(params: {
   const exercise: Exercise = {
     id: exerciseId,
     club_id: params.clubId,
+    ...(params.createdByMemberId ? { created_by_member_id: params.createdByMemberId } : {}),
     visibility: 'CLUB',
     owner_team_id: params.teamId,
     title: params.block.quick_block_title?.trim() || 'Neue Trainingsübung aus Quick-Block',

@@ -94,6 +94,10 @@ interface TrainingSessionPlannerProps {
   onSelectSessionId: (sessionId: string) => void;
   activePhaseId: string;
   onSelectPhaseId: (phaseId: string) => void;
+  canEditTeam?: boolean;
+  canManageTemplates?: boolean;
+  canEditExercise?: (exercise: Exercise) => boolean;
+  currentMemberId?: string;
   onEditExercise: (exercise: Exercise) => void;
   onOpenExercise?: (exercise: Exercise) => void;
   onStartHallMode?: (sessionId: string) => void;
@@ -128,6 +132,10 @@ export function TrainingSessionPlanner({
   onSelectSessionId,
   activePhaseId,
   onSelectPhaseId,
+  canEditTeam = true,
+  canManageTemplates = true,
+  canEditExercise,
+  currentMemberId,
   onEditExercise,
   onOpenExercise,
   onStartHallMode,
@@ -255,7 +263,25 @@ export function TrainingSessionPlanner({
   // Note input per block
   const [noteBlockId, setNoteBlockId] = useState<string | null>(null);
   const [noteContent, setNoteContent] = useState('');
-  const [noteAuthorId, setNoteAuthorId] = useState<string>(members[0]?.id ?? '');
+  const [noteAuthorId, setNoteAuthorId] = useState<string>(
+    currentMemberId ?? members[0]?.id ?? ''
+  );
+
+  useEffect(() => {
+    if (currentMemberId) {
+      setNoteAuthorId(currentMemberId);
+    }
+  }, [currentMemberId]);
+
+  useEffect(() => {
+    if (!canEditTeam) {
+      setShowNewSessionForm(false);
+      setConfirmDeleteSessionId(null);
+      setNoteBlockId(null);
+      setDraggedBlockId(null);
+      setDragOverPhaseId(null);
+    }
+  }, [activeTeam.id, canEditTeam]);
 
   // Template save feedback & delete confirmation
   const [savedTemplateBanner, setSavedTemplateBanner] = useState<string | null>(null);
@@ -372,6 +398,7 @@ export function TrainingSessionPlanner({
 
   async function handleCreateSessionFromTemplate(e: React.FormEvent) {
     e.preventDefault();
+    if (!canEditTeam) return;
     const tpl = templates.find((t) => t.id === effectiveSelectedTemplateId);
     const bundle = buildSessionFromTemplate({
       teamId: activeTeam.id,
@@ -381,14 +408,14 @@ export function TrainingSessionPlanner({
       title: newSessionTitle,
       planWeekId: linkedPlanWeek?.id,
       template: tpl,
-      defaultCoachMemberId: members[0]?.id
+      defaultCoachMemberId: currentMemberId ?? members[0]?.id
     });
     await saveSessionBundleToDb(bundle);
     setShowNewSessionForm(false);
   }
 
   async function handleCloneCurrentSession() {
-    if (!currentSession) return;
+    if (!canEditTeam || !currentSession) return;
     // Default next date: +2 days
     const baseDate = new Date(currentSession.session_date);
     baseDate.setDate(baseDate.getDate() + 2);
@@ -405,7 +432,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleSaveCurrentAsTemplate() {
-    if (!currentSession) return;
+    if (!canManageTemplates || !currentSession) return;
     const tpl = buildTemplateFromSession({
       clubId,
       title: `Vorlage: ${currentSession.title}`,
@@ -425,7 +452,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleUpdateSessionHeader(patch: Partial<TrainingSession>) {
-    if (!currentSession) return;
+    if (!canEditTeam || !currentSession) return;
     const nextStart = patch.start_time ?? currentSession.start_time;
     const nextEnd = patch.end_time ?? currentSession.end_time;
     const plannedMin = calculateMinutesBetweenTimes(nextStart, nextEnd);
@@ -454,7 +481,7 @@ export function TrainingSessionPlanner({
 
   async function handleAddPhase(e: React.FormEvent) {
     e.preventDefault();
-    if (!currentSession || !newPhaseName.trim()) return;
+    if (!canEditTeam || !currentSession || !newPhaseName.trim()) return;
     const now = new Date().toISOString();
     const newPhase: SessionPhase = {
       id: crypto.randomUUID(),
@@ -471,6 +498,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleDeletePhase(phaseId: string) {
+    if (!canEditTeam) return;
     const phaseBlocks = currentBlocks.filter((b) => b.session_phase_id === phaseId);
     await db.transaction('rw', [db.sessionPhases, db.sessionBlocks, db.syncOutbox], async () => {
       await db.sessionPhases.delete(phaseId);
@@ -483,6 +511,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleMovePhase(phaseId: string, direction: 'UP' | 'DOWN') {
+    if (!canEditTeam) return;
     const changed = movePhaseInSession(currentPhases, phaseId, direction);
     if (changed.length === 0) return;
     await db.transaction('rw', [db.sessionPhases, db.syncOutbox], async () => {
@@ -494,6 +523,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleRenamePhase(phase: SessionPhase, name: string) {
+    if (!canEditTeam) return;
     const updated: SessionPhase = {
       ...phase,
       name,
@@ -504,6 +534,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleUpdatePhaseTargetDuration(phase: SessionPhase, targetMin: number) {
+    if (!canEditTeam) return;
     const updated: SessionPhase = {
       ...phase,
       target_duration_min: Math.max(5, Math.min(90, targetMin || 15)),
@@ -514,7 +545,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleDropBlock(targetPhaseId: string, targetBlockId?: string) {
-    if (!draggedBlockId) return;
+    if (!canEditTeam || !draggedBlockId) return;
     const dragged = currentBlocks.find((b) => b.id === draggedBlockId);
     setDraggedBlockId(null);
     setDragOverPhaseId(null);
@@ -556,6 +587,7 @@ export function TrainingSessionPlanner({
     blockId: string,
     direction: 'UP' | 'DOWN'
   ) {
+    if (!canEditTeam) return;
     const phaseBlocks = currentBlocks.filter((b) => b.session_phase_id === phaseId);
     const changed = moveBlockInPhase(phaseBlocks, blockId, direction);
     if (changed.length === 0) return;
@@ -568,6 +600,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleToggleBlockParallel(phaseId: string, blockId: string) {
+    if (!canEditTeam) return;
     const phaseBlocks = currentBlocks.filter((b) => b.session_phase_id === phaseId);
     const changed = toggleBlockParallelWithPrevious(phaseBlocks, blockId);
     if (changed.length === 0) return;
@@ -580,7 +613,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleMoveBlockToPhase(block: SessionBlock, targetPhaseId: string) {
-    if (block.session_phase_id === targetPhaseId) return;
+    if (!canEditTeam || block.session_phase_id === targetPhaseId) return;
     const targetBlocks = currentBlocks.filter((b) => b.session_phase_id === targetPhaseId);
     const nextSlot =
       targetBlocks.length > 0
@@ -598,6 +631,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleDeleteSession(sessionId: string) {
+    if (!canEditTeam) return;
     const sessionPhases = phases.filter((p) => p.training_session_id === sessionId);
     const phaseIds = new Set(sessionPhases.map((p) => p.id));
     const sessionBlocks = blocks.filter((b) => phaseIds.has(b.session_phase_id));
@@ -632,7 +666,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleAddExerciseToPhase(exercise: Exercise, asParallelTrack: boolean) {
-    if (!targetPhase) return;
+    if (!canEditTeam || !targetPhase) return;
     const blocksInTarget = currentBlocks.filter((b) => b.session_phase_id === targetPhase.id);
     const maxSlot =
       blocksInTarget.length > 0
@@ -649,7 +683,7 @@ export function TrainingSessionPlanner({
       exercise_id: exercise.id,
       time_slot_index: slotIndex,
       track_label: asParallelTrack ? 'Spur B: Parallel-Gruppe' : 'Alle Spieler',
-      assigned_member_id: members[0]?.id,
+      assigned_member_id: currentMemberId ?? members[0]?.id,
       custom_duration_min: exercise.default_duration_min,
       updated_at: now
     };
@@ -660,7 +694,7 @@ export function TrainingSessionPlanner({
 
   async function handleAddQuickBlock(e: React.FormEvent) {
     e.preventDefault();
-    if (!targetPhase || !quickTitle.trim()) return;
+    if (!canEditTeam || !targetPhase || !quickTitle.trim()) return;
     const blocksInTarget = currentBlocks.filter((b) => b.session_phase_id === targetPhase.id);
     const maxSlot =
       blocksInTarget.length > 0
@@ -678,7 +712,7 @@ export function TrainingSessionPlanner({
       quick_block_description: quickDesc.trim() || undefined,
       time_slot_index: slotIndex,
       track_label: quickTrackLabel.trim() || (quickIsParallel ? 'Spur B' : 'Alle Spieler'),
-      assigned_member_id: members[0]?.id,
+      assigned_member_id: currentMemberId ?? members[0]?.id,
       custom_duration_min: quickDuration,
       updated_at: now
     };
@@ -691,6 +725,7 @@ export function TrainingSessionPlanner({
   }
 
   async function handleUpdateBlock(block: SessionBlock, patch: Partial<SessionBlock>) {
+    if (!canEditTeam) return;
     const updated: SessionBlock = {
       ...block,
       ...patch,
@@ -701,18 +736,21 @@ export function TrainingSessionPlanner({
   }
 
   async function handleDeleteBlock(blockId: string) {
+    if (!canEditTeam) return;
     await db.sessionBlocks.delete(blockId);
     await queueSyncOperation('session_blocks', blockId, 'DELETE', { id: blockId });
   }
 
   async function handlePromoteQuickBlockToCatalog(block: SessionBlock) {
+    if (!canEditTeam) return;
     const teamAgeGroup = resolveTeamAgeGroup(activeTeam);
     const { exercise, updatedBlock } = convertQuickBlockToCatalogExercise({
       block,
       clubId,
       teamId: activeTeam.id,
       focusTags: linkedPlanWeek?.focus_tags,
-      ageGroups: teamAgeGroup ? [teamAgeGroup] : undefined
+      ageGroups: teamAgeGroup ? [teamAgeGroup] : undefined,
+      createdByMemberId: currentMemberId
     });
     await db.transaction('rw', [db.exercises, db.sessionBlocks], async () => {
       await db.exercises.put(exercise);
@@ -724,8 +762,9 @@ export function TrainingSessionPlanner({
 
   async function handleAddBlockNote(e: React.FormEvent, blockId: string) {
     e.preventDefault();
-    if (!currentSession || !noteContent.trim()) return;
-    const author = members.find((m) => m.id === noteAuthorId) ?? members[0];
+    if (!canEditTeam || !currentSession || !noteContent.trim()) return;
+    const author =
+      members.find((m) => m.id === (noteAuthorId || currentMemberId)) ?? members[0];
     const now = new Date().toISOString();
     const newNote: SessionNote = {
       id: crypto.randomUUID(),
@@ -748,6 +787,15 @@ export function TrainingSessionPlanner({
 
   return (
     <div className="space-y-6">
+      {!canEditTeam && (
+        <div className="rounded-2xl border border-amber-500/40 bg-amber-950/25 px-5 py-3 text-xs text-amber-200">
+          <strong>Nur Lesezugriff:</strong> Du bist der Mannschaft{' '}
+          <strong>{activeTeam.name}</strong> nicht als Trainer zugewiesen. Du kannst die
+          Trainingseinheiten einsehen, drucken und im Hallen-Modus anzeigen, aber nicht verändern
+          oder löschen.
+        </div>
+      )}
+
       {/* Top Action & Session Selector Bar */}
       <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-lg">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
@@ -792,76 +840,88 @@ export function TrainingSessionPlanner({
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={() => setShowNewSessionForm((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-blue-500"
-            >
-              <Plus className="h-4 w-4" />
-              Neues Training (aus Vorlage)
-            </button>
+            {canEditTeam && (
+              <button
+                type="button"
+                onClick={() => setShowNewSessionForm((prev) => !prev)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-blue-500"
+              >
+                <Plus className="h-4 w-4" />
+                Neues Training (aus Vorlage)
+              </button>
+            )}
 
             {currentSession && (
               <>
-                <button
-                  type="button"
-                  onClick={handleCloneCurrentSession}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700"
-                  title="Gesamtes Training inkl. Phasen & Spuren auf neuen Tag kopieren"
-                >
-                  <Copy className="h-3.5 w-3.5 text-blue-400" />
-                  Training kopieren
-                </button>
+                {canEditTeam && (
+                  <button
+                    type="button"
+                    onClick={handleCloneCurrentSession}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700"
+                    title="Gesamtes Training inkl. Phasen & Spuren auf neuen Tag kopieren"
+                  >
+                    <Copy className="h-3.5 w-3.5 text-blue-400" />
+                    Training kopieren
+                  </button>
+                )}
 
-                <button
-                  type="button"
-                  onClick={handleSaveCurrentAsTemplate}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700"
-                  title="Phasen-Ablauf als wiederverwendbare Vereins-Vorlage speichern"
-                >
-                  <BookmarkPlus className="h-3.5 w-3.5 text-emerald-400" />
-                  Als Vorlage speichern
-                </button>
+                {canManageTemplates && (
+                  <button
+                    type="button"
+                    onClick={handleSaveCurrentAsTemplate}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700"
+                    title="Phasen-Ablauf als wiederverwendbare Vereins-Vorlage speichern"
+                  >
+                    <BookmarkPlus className="h-3.5 w-3.5 text-emerald-400" />
+                    Als Vorlage speichern
+                  </button>
+                )}
 
                 {onOpenTemplateManager && (
                   <button
                     type="button"
                     onClick={() => onOpenTemplateManager()}
                     className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700"
-                    title="Trainingstag-Vorlagen ansehen, bearbeiten, duplizieren oder löschen"
+                    title={
+                      canManageTemplates
+                        ? 'Trainingstag-Vorlagen ansehen, bearbeiten, duplizieren oder löschen'
+                        : 'Trainingstag-Vorlagen des Vereins einsehen'
+                    }
                   >
                     <Bookmark className="h-3.5 w-3.5 text-blue-400" />
                     Vorlagen ({templates.length})
                   </button>
                 )}
 
-                {confirmDeleteSessionId === currentSession.id ? (
-                  <div className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/50 bg-rose-950/60 px-2.5 py-1.5 text-xs">
-                    <span className="font-semibold text-rose-200">Einheit löschen?</span>
+                {canEditTeam && (
+                  confirmDeleteSessionId === currentSession.id ? (
+                    <div className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/50 bg-rose-950/60 px-2.5 py-1.5 text-xs">
+                      <span className="font-semibold text-rose-200">Einheit löschen?</span>
+                      <button
+                        type="button"
+                        onClick={() => void handleDeleteSession(currentSession.id)}
+                        className="rounded-lg bg-rose-600 px-2 py-0.5 font-bold text-white hover:bg-rose-500"
+                      >
+                        Ja
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteSessionId(null)}
+                        className="rounded-lg bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700"
+                      >
+                        Nein
+                      </button>
+                    </div>
+                  ) : (
                     <button
                       type="button"
-                      onClick={() => void handleDeleteSession(currentSession.id)}
-                      className="rounded-lg bg-rose-600 px-2 py-0.5 font-bold text-white hover:bg-rose-500"
+                      onClick={() => setConfirmDeleteSessionId(currentSession.id)}
+                      className="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-800 px-2.5 py-2 text-xs font-semibold text-rose-300 hover:bg-rose-950/50 hover:border-rose-700/50"
+                      title="Aktuelle Trainingseinheit löschen"
                     >
-                      Ja
+                      <Trash2 className="h-3.5 w-3.5" />
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setConfirmDeleteSessionId(null)}
-                      className="rounded-lg bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700"
-                    >
-                      Nein
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setConfirmDeleteSessionId(currentSession.id)}
-                    className="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-800 px-2.5 py-2 text-xs font-semibold text-rose-300 hover:bg-rose-950/50 hover:border-rose-700/50"
-                    title="Aktuelle Trainingseinheit löschen"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                  )
                 )}
               </>
             )}
@@ -875,7 +935,7 @@ export function TrainingSessionPlanner({
         )}
 
         {/* Inline Form: Neues Training aus Vorlage anlegen */}
-        {showNewSessionForm && (
+        {canEditTeam && showNewSessionForm && (
           <form
             onSubmit={handleCreateSessionFromTemplate}
             className="mt-4 rounded-xl border border-blue-500/40 bg-blue-950/20 p-4 space-y-3"
@@ -980,9 +1040,10 @@ export function TrainingSessionPlanner({
                 </label>
                 <input
                   type="text"
+                  disabled={!canEditTeam}
                   value={currentSession.title}
                   onChange={(e) => handleUpdateSessionHeader({ title: e.target.value })}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs font-bold text-white"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs font-bold text-white disabled:opacity-75"
                 />
               </div>
 
@@ -991,9 +1052,10 @@ export function TrainingSessionPlanner({
                 <div className="flex items-center gap-1">
                   <input
                     type="date"
+                    disabled={!canEditTeam}
                     value={currentSession.session_date}
                     onChange={(e) => handleUpdateSessionHeader({ session_date: e.target.value })}
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-2 py-1.5 text-xs text-white"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-2 py-1.5 text-xs text-white disabled:opacity-75"
                   />
                 </div>
               </div>
@@ -1001,11 +1063,12 @@ export function TrainingSessionPlanner({
               <div>
                 <label className="mb-1 block text-[11px] text-slate-400">Status</label>
                 <select
+                  disabled={!canEditTeam}
                   value={currentSession.status}
                   onChange={(e) =>
                     handleUpdateSessionHeader({ status: e.target.value as SessionStatus })
                   }
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-emerald-300"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-emerald-300 disabled:opacity-75"
                 >
                   {(Object.keys(SESSION_STATUS_LABELS) as SessionStatus[]).map((st) => (
                     <option key={st} value={st}>
@@ -1095,7 +1158,7 @@ export function TrainingSessionPlanner({
                   key={phase.id}
                   onClick={() => setActivePhaseId(phase.id)}
                   onDragOver={(e) => {
-                    if (!draggedBlockId) return;
+                    if (!canEditTeam || !draggedBlockId) return;
                     e.preventDefault();
                     setDragOverPhaseId(phase.id);
                   }}
@@ -1104,6 +1167,7 @@ export function TrainingSessionPlanner({
                   }}
                   onDrop={(e) => {
                     e.preventDefault();
+                    if (!canEditTeam) return;
                     void handleDropBlock(phase.id);
                   }}
                   className={`cursor-pointer rounded-2xl border p-5 transition ${
@@ -1131,6 +1195,7 @@ export function TrainingSessionPlanner({
                         </span>
                         <textarea
                           rows={1}
+                          disabled={!canEditTeam}
                           value={phase.name}
                           placeholder="Phase benennen..."
                           aria-label="Phasenname"
@@ -1143,7 +1208,7 @@ export function TrainingSessionPlanner({
                               e.currentTarget.blur();
                             }
                           }}
-                          className="col-start-1 row-start-1 w-full resize-none overflow-hidden bg-transparent px-0.5 py-0.5 text-sm font-bold leading-snug text-white focus:border-b focus:border-blue-400 focus:outline-none"
+                          className="col-start-1 row-start-1 w-full resize-none overflow-hidden bg-transparent px-0.5 py-0.5 text-sm font-bold leading-snug text-white focus:border-b focus:border-blue-400 focus:outline-none disabled:opacity-85"
                         />
                       </div>
                     </div>
@@ -1167,49 +1232,54 @@ export function TrainingSessionPlanner({
                           type="number"
                           min={5}
                           max={90}
+                          disabled={!canEditTeam}
                           value={phase.target_duration_min}
                           onChange={(e) =>
                             void handleUpdatePhaseTargetDuration(phase, Number(e.target.value))
                           }
-                          className="w-10 rounded bg-slate-900/80 px-1 text-center font-bold text-white focus:outline-none"
+                          className="w-10 rounded bg-slate-900/80 px-1 text-center font-bold text-white focus:outline-none disabled:opacity-75"
                         />
                         <span>Min</span>
                       </div>
-                      <button
-                        type="button"
-                        disabled={phaseIndex === 0}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          void handleMovePhase(phase.id, 'UP');
-                        }}
-                        className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
-                        title="Phase nach oben verschieben"
-                      >
-                        <ArrowUp className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        disabled={phaseIndex === currentPhases.length - 1}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          void handleMovePhase(phase.id, 'DOWN');
-                        }}
-                        className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
-                        title="Phase nach unten verschieben"
-                      >
-                        <ArrowDown className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          void handleDeletePhase(phase.id);
-                        }}
-                        className="rounded-lg p-1 text-slate-500 hover:bg-rose-950/50 hover:text-rose-400"
-                        title="Phase löschen"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      {canEditTeam && (
+                        <>
+                          <button
+                            type="button"
+                            disabled={phaseIndex === 0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleMovePhase(phase.id, 'UP');
+                            }}
+                            className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
+                            title="Phase nach oben verschieben"
+                          >
+                            <ArrowUp className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={phaseIndex === currentPhases.length - 1}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleMovePhase(phase.id, 'DOWN');
+                            }}
+                            className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
+                            title="Phase nach unten verschieben"
+                          >
+                            <ArrowDown className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleDeletePhase(phase.id);
+                            }}
+                            className="rounded-lg p-1 text-slate-500 hover:bg-rose-950/50 hover:text-rose-400"
+                            title="Phase löschen"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -1247,8 +1317,9 @@ export function TrainingSessionPlanner({
                                 return (
                                   <div
                                     key={block.id}
-                                    draggable
+                                    draggable={canEditTeam}
                                     onDragStart={(e) => {
+                                      if (!canEditTeam) return;
                                       e.stopPropagation();
                                       setDraggedBlockId(block.id);
                                     }}
@@ -1257,12 +1328,13 @@ export function TrainingSessionPlanner({
                                       setDragOverPhaseId(null);
                                     }}
                                     onDragOver={(e) => {
-                                      if (!draggedBlockId || draggedBlockId === block.id) return;
+                                      if (!canEditTeam || !draggedBlockId || draggedBlockId === block.id) return;
                                       e.preventDefault();
                                     }}
                                     onDrop={(e) => {
                                       e.preventDefault();
                                       e.stopPropagation();
+                                      if (!canEditTeam) return;
                                       void handleDropBlock(phase.id, block.id);
                                     }}
                                     onClick={(e) => e.stopPropagation()}
@@ -1275,23 +1347,26 @@ export function TrainingSessionPlanner({
                                     {/* Track label, duration & coach selector */}
                                     <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                                       <div className="flex items-center gap-1.5">
-                                        <span
-                                          className="cursor-grab text-slate-500 hover:text-slate-300"
-                                          title="Block per Drag & Drop verschieben"
-                                        >
-                                          <GripVertical className="h-4 w-4" />
-                                        </span>
+                                        {canEditTeam && (
+                                          <span
+                                            className="cursor-grab text-slate-500 hover:text-slate-300"
+                                            title="Block per Drag & Drop verschieben"
+                                          >
+                                            <GripVertical className="h-4 w-4" />
+                                          </span>
+                                        )}
                                         <input
-                                        type="text"
-                                        value={block.track_label}
-                                        onChange={(e) =>
-                                          void handleUpdateBlock(block, {
-                                            track_label: e.target.value
-                                          })
-                                        }
-                                        className="min-w-0 w-full max-w-[160px] rounded bg-blue-950/80 px-2 py-0.5 text-[11px] font-semibold text-blue-300 focus:outline-none"
-                                        title="Spur / Gruppe umbenennen"
-                                      />
+                                          type="text"
+                                          disabled={!canEditTeam}
+                                          value={block.track_label}
+                                          onChange={(e) =>
+                                            void handleUpdateBlock(block, {
+                                              track_label: e.target.value
+                                            })
+                                          }
+                                          className="min-w-0 w-full max-w-[160px] rounded bg-blue-950/80 px-2 py-0.5 text-[11px] font-semibold text-blue-300 focus:outline-none disabled:opacity-85"
+                                          title="Spur / Gruppe umbenennen"
+                                        />
                                       </div>
 
                                       <div className="flex flex-wrap items-center gap-1.5">
@@ -1299,24 +1374,26 @@ export function TrainingSessionPlanner({
                                           type="number"
                                           min={3}
                                           max={60}
+                                          disabled={!canEditTeam}
                                           value={block.custom_duration_min}
                                           onChange={(e) =>
                                             void handleUpdateBlock(block, {
                                               custom_duration_min: Number(e.target.value)
                                             })
                                           }
-                                          className="w-14 rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 text-center text-xs font-bold text-white"
+                                          className="w-14 rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 text-center text-xs font-bold text-white disabled:opacity-75"
                                         />
                                         <span className="text-[11px] text-slate-400">Min</span>
 
                                         <select
+                                          disabled={!canEditTeam}
                                           value={block.assigned_member_id ?? ''}
                                           onChange={(e) =>
                                             void handleUpdateBlock(block, {
                                               assigned_member_id: e.target.value || undefined
                                             })
                                           }
-                                          className="rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 text-[11px] text-slate-300"
+                                          className="rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 text-[11px] text-slate-300 disabled:opacity-75"
                                         >
                                           <option value="">Trainer...</option>
                                           {members.map((m) => (
@@ -1326,7 +1403,7 @@ export function TrainingSessionPlanner({
                                           ))}
                                         </select>
 
-                                        {currentPhases.length > 1 && (
+                                        {canEditTeam && currentPhases.length > 1 && (
                                           <select
                                             value={phase.id}
                                             onChange={(e) =>
@@ -1343,7 +1420,7 @@ export function TrainingSessionPlanner({
                                           </select>
                                         )}
 
-                                        {(isParallelSlot || slotOrderIndex > 0) && (
+                                        {canEditTeam && (isParallelSlot || slotOrderIndex > 0) && (
                                           <button
                                             type="button"
                                             onClick={() =>
@@ -1364,41 +1441,45 @@ export function TrainingSessionPlanner({
                                           </button>
                                         )}
 
-                                        <button
-                                          type="button"
-                                          disabled={!isParallelSlot && slotOrderIndex === 0}
-                                          onClick={() =>
-                                            void handleMoveBlockInPhase(phase.id, block.id, 'UP')
-                                          }
-                                          className="rounded p-0.5 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
-                                          title="Innerhalb der Phase nach oben verschieben"
-                                        >
-                                          <ArrowUp className="h-3.5 w-3.5" />
-                                        </button>
+                                        {canEditTeam && (
+                                          <>
+                                            <button
+                                              type="button"
+                                              disabled={!isParallelSlot && slotOrderIndex === 0}
+                                              onClick={() =>
+                                                void handleMoveBlockInPhase(phase.id, block.id, 'UP')
+                                              }
+                                              className="rounded p-0.5 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
+                                              title="Innerhalb der Phase nach oben verschieben"
+                                            >
+                                              <ArrowUp className="h-3.5 w-3.5" />
+                                            </button>
 
-                                        <button
-                                          type="button"
-                                          disabled={
-                                            !isParallelSlot &&
-                                            slotOrderIndex === sortedSlots.length - 1
-                                          }
-                                          onClick={() =>
-                                            void handleMoveBlockInPhase(phase.id, block.id, 'DOWN')
-                                          }
-                                          className="rounded p-0.5 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
-                                          title="Innerhalb der Phase nach unten verschieben"
-                                        >
-                                          <ArrowDown className="h-3.5 w-3.5" />
-                                        </button>
+                                            <button
+                                              type="button"
+                                              disabled={
+                                                !isParallelSlot &&
+                                                slotOrderIndex === sortedSlots.length - 1
+                                              }
+                                              onClick={() =>
+                                                void handleMoveBlockInPhase(phase.id, block.id, 'DOWN')
+                                              }
+                                              className="rounded p-0.5 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30"
+                                              title="Innerhalb der Phase nach unten verschieben"
+                                            >
+                                              <ArrowDown className="h-3.5 w-3.5" />
+                                            </button>
 
-                                        <button
-                                          type="button"
-                                          onClick={() => void handleDeleteBlock(block.id)}
-                                          className="text-slate-500 hover:text-rose-400"
-                                          title="Block aus Phase entfernen"
-                                        >
-                                          <Trash2 className="h-3.5 w-3.5" />
-                                        </button>
+                                            <button
+                                              type="button"
+                                              onClick={() => void handleDeleteBlock(block.id)}
+                                              className="text-slate-500 hover:text-rose-400"
+                                              title="Block aus Phase entfernen"
+                                            >
+                                              <Trash2 className="h-3.5 w-3.5" />
+                                            </button>
+                                          </>
+                                        )}
                                       </div>
                                     </div>
 
@@ -1433,15 +1514,18 @@ export function TrainingSessionPlanner({
                                                 Details
                                               </button>
                                             )}
-                                            <button
-                                              type="button"
-                                              onClick={() => onEditExercise(linkedEx)}
-                                              className="inline-flex items-center gap-1 rounded bg-slate-800 px-2 py-0.5 text-[11px] text-blue-300 hover:bg-slate-700"
-                                              title="Übung & Taktikskizze bearbeiten"
-                                            >
-                                              <Edit3 className="h-3 w-3" />
-                                              Bearbeiten
-                                            </button>
+                                            {canEditTeam &&
+                                              (!canEditExercise || canEditExercise(linkedEx)) && (
+                                                <button
+                                                  type="button"
+                                                  onClick={() => onEditExercise(linkedEx)}
+                                                  className="inline-flex items-center gap-1 rounded bg-slate-800 px-2 py-0.5 text-[11px] text-blue-300 hover:bg-slate-700"
+                                                  title="Übung & Taktikskizze bearbeiten"
+                                                >
+                                                  <Edit3 className="h-3 w-3" />
+                                                  Bearbeiten
+                                                </button>
+                                              )}
                                           </div>
                                         </div>
                                         <p className="mt-1 text-xs text-slate-300 line-clamp-2">
@@ -1455,30 +1539,34 @@ export function TrainingSessionPlanner({
                                             <Zap className="h-3 w-3" />
                                             Freier Quick-Block
                                           </span>
-                                          <button
-                                            type="button"
-                                            onClick={() =>
-                                              void handlePromoteQuickBlockToCatalog(block)
-                                            }
-                                            className="inline-flex items-center gap-1 rounded bg-emerald-600/90 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-emerald-500"
-                                            title="Diesen freien Block mit 1 Klick als dauerhafte Übung in der Übungsdatenbank speichern"
-                                          >
-                                            <BookOpen className="h-3 w-3" />
-                                            In Übungsdatenbank umwandeln
-                                          </button>
+                                          {canEditTeam && (
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                void handlePromoteQuickBlockToCatalog(block)
+                                              }
+                                              className="inline-flex items-center gap-1 rounded bg-emerald-600/90 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-emerald-500"
+                                              title="Diesen freien Block mit 1 Klick als dauerhafte Übung in der Übungsdatenbank speichern"
+                                            >
+                                              <BookOpen className="h-3 w-3" />
+                                              In Übungsdatenbank umwandeln
+                                            </button>
+                                          )}
                                         </div>
                                         <input
                                           type="text"
+                                          disabled={!canEditTeam}
                                           value={block.quick_block_title ?? ''}
                                           onChange={(e) =>
                                             void handleUpdateBlock(block, {
                                               quick_block_title: e.target.value
                                             })
                                           }
-                                          className="w-full rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs font-bold text-white"
+                                          className="w-full rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs font-bold text-white disabled:opacity-80"
                                         />
                                         <textarea
                                           rows={2}
+                                          disabled={!canEditTeam}
                                           placeholder="Kurzbeschreibung / Coaching-Fokus..."
                                           value={block.quick_block_description ?? ''}
                                           onChange={(e) =>
@@ -1486,7 +1574,7 @@ export function TrainingSessionPlanner({
                                               quick_block_description: e.target.value
                                             })
                                           }
-                                          className="w-full rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-200"
+                                          className="w-full rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-200 disabled:opacity-80"
                                         />
                                       </div>
                                     )}
@@ -1505,64 +1593,66 @@ export function TrainingSessionPlanner({
                                         </div>
                                       ))}
 
-                                      {noteBlockId === block.id ? (
-                                        <form
-                                          onSubmit={(e) => void handleAddBlockNote(e, block.id)}
-                                          className="flex flex-wrap items-center gap-1.5 pt-1"
-                                        >
-                                          <select
-                                            value={noteAuthorId}
-                                            onChange={(e) => setNoteAuthorId(e.target.value)}
-                                            className="rounded border border-slate-700 bg-slate-900 px-1.5 py-1 text-[11px] text-white"
+                                      {canEditTeam && (
+                                        noteBlockId === block.id ? (
+                                          <form
+                                            onSubmit={(e) => void handleAddBlockNote(e, block.id)}
+                                            className="flex flex-wrap items-center gap-1.5 pt-1"
                                           >
-                                            {members.map((m) => (
-                                              <option key={m.id} value={m.id}>
-                                                {m.display_name.split(' (')[0]}
-                                              </option>
-                                            ))}
-                                          </select>
-                                          <input
-                                            type="text"
-                                            required
-                                            autoFocus
-                                            placeholder="Trainer-Notiz..."
-                                            value={noteContent}
-                                            onChange={(e) => setNoteContent(e.target.value)}
-                                            onKeyDown={(e) => {
-                                              if (e.key === 'Escape') {
+                                            <select
+                                              value={noteAuthorId}
+                                              onChange={(e) => setNoteAuthorId(e.target.value)}
+                                              className="rounded border border-slate-700 bg-slate-900 px-1.5 py-1 text-[11px] text-white"
+                                            >
+                                              {members.map((m) => (
+                                                <option key={m.id} value={m.id}>
+                                                  {m.display_name.split(' (')[0]}
+                                                </option>
+                                              ))}
+                                            </select>
+                                            <input
+                                              type="text"
+                                              required
+                                              autoFocus
+                                              placeholder="Trainer-Notiz..."
+                                              value={noteContent}
+                                              onChange={(e) => setNoteContent(e.target.value)}
+                                              onKeyDown={(e) => {
+                                                if (e.key === 'Escape') {
+                                                  setNoteBlockId(null);
+                                                  setNoteContent('');
+                                                }
+                                              }}
+                                              className="min-w-[120px] flex-1 rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-white"
+                                            />
+                                            <button
+                                              type="submit"
+                                              className="rounded bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-blue-500"
+                                            >
+                                              OK
+                                            </button>
+                                            <button
+                                              type="button"
+                                              onClick={() => {
                                                 setNoteBlockId(null);
                                                 setNoteContent('');
-                                              }
-                                            }}
-                                            className="min-w-[120px] flex-1 rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-white"
-                                          />
-                                          <button
-                                            type="submit"
-                                            className="rounded bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-blue-500"
-                                          >
-                                            OK
-                                          </button>
+                                              }}
+                                              className="inline-flex items-center justify-center rounded border border-slate-700 bg-slate-800 p-1 text-slate-300 hover:bg-slate-700 hover:text-white"
+                                              title="Abbrechen"
+                                            >
+                                              <X className="h-3.5 w-3.5" />
+                                            </button>
+                                          </form>
+                                        ) : (
                                           <button
                                             type="button"
-                                            onClick={() => {
-                                              setNoteBlockId(null);
-                                              setNoteContent('');
-                                            }}
-                                            className="inline-flex items-center justify-center rounded border border-slate-700 bg-slate-800 p-1 text-slate-300 hover:bg-slate-700 hover:text-white"
-                                            title="Abbrechen"
+                                            onClick={() => setNoteBlockId(block.id)}
+                                            className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-blue-300"
                                           >
-                                            <X className="h-3.5 w-3.5" />
+                                            <MessageSquarePlus className="h-3 w-3" />
+                                            + Trainer-Notiz
                                           </button>
-                                        </form>
-                                      ) : (
-                                        <button
-                                          type="button"
-                                          onClick={() => setNoteBlockId(block.id)}
-                                          className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-blue-300"
-                                        >
-                                          <MessageSquarePlus className="h-3 w-3" />
-                                          + Trainer-Notiz
-                                        </button>
+                                        )
                                       )}
                                     </div>
                                   </div>
@@ -1576,7 +1666,7 @@ export function TrainingSessionPlanner({
                   </div>
 
                   {/* Quick-Block Speed-Bar inside the Active Phase */}
-                  {isTargetPhase && (
+                  {canEditTeam && isTargetPhase && (
                     <form
                       onSubmit={handleAddQuickBlock}
                       onClick={(e) => e.stopPropagation()}
@@ -1636,34 +1726,36 @@ export function TrainingSessionPlanner({
             })}
 
             {/* Add new phase form */}
-            <form
-              onSubmit={handleAddPhase}
-              className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/70 p-4"
-            >
-              <input
-                type="text"
-                required
-                placeholder="Neue Trainingsphase hinzufügen (z.B. 6. Individuelles Wurftraining)..."
-                value={newPhaseName}
-                onChange={(e) => setNewPhaseName(e.target.value)}
-                className="min-w-[220px] flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs text-white"
-              />
-              <input
-                type="number"
-                min={5}
-                max={60}
-                value={newPhaseDuration}
-                onChange={(e) => setNewPhaseDuration(Number(e.target.value))}
-                className="w-20 rounded-xl border border-slate-700 bg-slate-950 px-2.5 py-2 text-xs text-white"
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-800 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-700"
+            {canEditTeam && (
+              <form
+                onSubmit={handleAddPhase}
+                className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/70 p-4"
               >
-                <Plus className="h-4 w-4" />
-                Phase anlegen
-              </button>
-            </form>
+                <input
+                  type="text"
+                  required
+                  placeholder="Neue Trainingsphase hinzufügen (z.B. 6. Individuelles Wurftraining)..."
+                  value={newPhaseName}
+                  onChange={(e) => setNewPhaseName(e.target.value)}
+                  className="min-w-[220px] flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs text-white"
+                />
+                <input
+                  type="number"
+                  min={5}
+                  max={60}
+                  value={newPhaseDuration}
+                  onChange={(e) => setNewPhaseDuration(Number(e.target.value))}
+                  className="w-20 rounded-xl border border-slate-700 bg-slate-950 px-2.5 py-2 text-xs text-white"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-800 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-700"
+                >
+                  <Plus className="h-4 w-4" />
+                  Phase anlegen
+                </button>
+              </form>
+            )}
           </div>
 
           {/* RIGHT COLUMN (5 Cols): Smart Exercise Catalog & Packing List */}
@@ -1920,24 +2012,26 @@ export function TrainingSessionPlanner({
                         <TacticBoardPreview data={ex.tactic_board_data} />
                       )}
 
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => void handleAddExerciseToPhase(ex, false)}
-                          className="flex-1 rounded-lg bg-blue-600 py-1.5 text-xs font-semibold text-white hover:bg-blue-500"
-                        >
-                          + In Phase einfügen
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => void handleAddExerciseToPhase(ex, true)}
-                          className="inline-flex items-center gap-1 rounded-lg border border-amber-500/40 bg-amber-950/30 px-2.5 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-900/40"
-                          title="Parallel zum bestehenden Block in dieser Phase ausführen (z.B. Gruppe B / Torwart)"
-                        >
-                          <Layers className="h-3.5 w-3.5" />
-                          + Parallel
-                        </button>
-                      </div>
+                      {canEditTeam && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => void handleAddExerciseToPhase(ex, false)}
+                            className="flex-1 rounded-lg bg-blue-600 py-1.5 text-xs font-semibold text-white hover:bg-blue-500"
+                          >
+                            + In Phase einfügen
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => void handleAddExerciseToPhase(ex, true)}
+                            className="inline-flex items-center gap-1 rounded-lg border border-amber-500/40 bg-amber-950/30 px-2.5 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-900/40"
+                            title="Parallel zum bestehenden Block in dieser Phase ausführen (z.B. Gruppe B / Torwart)"
+                          >
+                            <Layers className="h-3.5 w-3.5" />
+                            + Parallel
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                   })

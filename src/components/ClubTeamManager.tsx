@@ -44,6 +44,7 @@ interface ClubTeamManagerProps {
   activeTeamId: string;
   onSelectTeam: (teamId: string) => void;
   isClubAdmin: boolean;
+  assignedTeamIds?: Set<string>;
   authUserId: string | null;
   clubExercises: Exercise[];
   clubSessions: TrainingSession[];
@@ -62,6 +63,7 @@ export function ClubTeamManager({
   activeTeamId,
   onSelectTeam,
   isClubAdmin,
+  assignedTeamIds,
   authUserId,
   clubExercises,
   clubSessions,
@@ -106,7 +108,7 @@ export function ClubTeamManager({
   const [slotHall, setSlotHall] = useState('Sporthalle Nord');
 
   async function handleSaveClubName() {
-    if (!clubName.trim()) return;
+    if (!isClubAdmin || !clubName.trim()) return;
     const updated: Club = {
       ...club,
       name: clubName.trim(),
@@ -119,6 +121,7 @@ export function ClubTeamManager({
   }
 
   async function handleRegenerateInviteCode() {
+    if (!isClubAdmin) return;
     const updated: Club = {
       ...club,
       invite_code: generateSecureInviteCode(club.name),
@@ -129,6 +132,7 @@ export function ClubTeamManager({
   }
 
   async function handleCopyInviteCode() {
+    if (!isClubAdmin) return;
     try {
       await navigator.clipboard.writeText(club.invite_code);
       setCopiedCode(true);
@@ -140,7 +144,7 @@ export function ClubTeamManager({
 
   async function handleCreateTeam(e: React.FormEvent) {
     e.preventDefault();
-    if (!newTeamName.trim() || !newTeamAgeGroup) return;
+    if (!isClubAdmin || !newTeamName.trim() || !newTeamAgeGroup) return;
 
     const now = new Date().toISOString();
     const newTeam: Team = {
@@ -172,6 +176,7 @@ export function ClubTeamManager({
   }
 
   function handleStartEditTeam(team: Team) {
+    if (!isClubAdmin) return;
     setEditingTeamId(team.id);
     setEditTeamName(team.name);
     setEditTeamAgeGroup(resolveTeamAgeGroup(team) ?? '');
@@ -180,7 +185,7 @@ export function ClubTeamManager({
   }
 
   async function handleSaveTeamEdit(team: Team) {
-    if (!editTeamName.trim() || !editTeamAgeGroup) return;
+    if (!isClubAdmin || !editTeamName.trim() || !editTeamAgeGroup) return;
     const updated: Team = {
       ...team,
       name: editTeamName.trim(),
@@ -194,7 +199,7 @@ export function ClubTeamManager({
   }
 
   async function handleDeleteTeam(teamId: string) {
-    if (teams.length <= 1) return;
+    if (!isClubAdmin || teams.length <= 1) return;
 
     const teamSessions = await db.trainingSessions.where('team_id').equals(teamId).toArray();
     const sessionIds = teamSessions.map((s) => s.id);
@@ -289,6 +294,7 @@ export function ClubTeamManager({
 
   async function handleAddScheduleSlot(e: React.FormEvent) {
     e.preventDefault();
+    if (!isClubAdmin) return;
     const targetTeam = teams.find((t) => t.id === scheduleTeamId);
     if (!targetTeam) return;
 
@@ -313,6 +319,7 @@ export function ClubTeamManager({
   }
 
   async function handleRemoveScheduleSlot(team: Team, slotId: string) {
+    if (!isClubAdmin) return;
     const updatedTeam: Team = {
       ...team,
       default_schedule: team.default_schedule.filter((s) => s.id !== slotId),
@@ -324,7 +331,7 @@ export function ClubTeamManager({
 
   async function handleAddCoach(e: React.FormEvent) {
     e.preventDefault();
-    if (!newCoachName.trim()) return;
+    if (!isClubAdmin || !newCoachName.trim()) return;
 
     const now = new Date().toISOString();
     const member: ClubMember = {
@@ -356,6 +363,7 @@ export function ClubTeamManager({
   }
 
   async function handleToggleTeamAssignment(teamId: string, memberId: string) {
+    if (!isClubAdmin) return;
     const existing = teamMembers.find(
       (tm) => tm.team_id === teamId && tm.club_member_id === memberId
     );
@@ -380,9 +388,18 @@ export function ClubTeamManager({
 
   return (
     <div className="space-y-8">
+      {!isClubAdmin && (
+        <div className="rounded-2xl border border-amber-500/40 bg-amber-950/25 px-5 py-3.5 text-xs text-amber-200">
+          <strong>Hinweis zum Berechtigungskonzept (Trainer-Rolle):</strong> Vereinsdaten,
+          Einladungscodes, Mannschaften, Trainer-Zuordnungen und der Vereins-Reset können nur von
+          einem <strong>Vereins-Admin</strong> geändert werden. Du kannst hier alle Mannschaften
+          einsehen und über <em>„Auswählen“</em> zwischen Teams wechseln.
+        </div>
+      )}
+
       {/* 1. Ebene: Verein (Mandant) & Einladungs-Code */}
       <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-lg">
-        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className={`flex flex-wrap items-start justify-between gap-4 ${isClubAdmin ? 'border-b border-slate-800 pb-5' : ''}`}>
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600/20 text-blue-400">
               <Building2 className="h-6 w-6" />
@@ -395,58 +412,66 @@ export function ClubTeamManager({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 rounded-xl border border-blue-500/30 bg-blue-950/40 px-4 py-2.5">
-            <div>
-              <div className="text-[11px] text-slate-400">Vereins-Einladungscode für Trainer</div>
-              <div className="font-mono text-base font-bold tracking-wider text-blue-300">
-                {club.invite_code}
+          {isClubAdmin ? (
+            <div className="flex items-center gap-2 rounded-xl border border-blue-500/30 bg-blue-950/40 px-4 py-2.5">
+              <div>
+                <div className="text-[11px] text-slate-400">Vereins-Einladungscode für Trainer</div>
+                <div className="font-mono text-base font-bold tracking-wider text-blue-300">
+                  {club.invite_code}
+                </div>
               </div>
+              <button
+                type="button"
+                onClick={handleCopyInviteCode}
+                className="ml-2 rounded-lg bg-slate-800 p-2 text-slate-200 hover:bg-slate-700"
+                title="Code kopieren"
+              >
+                {copiedCode ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
+              </button>
+              <button
+                type="button"
+                onClick={handleRegenerateInviteCode}
+                className="rounded-lg bg-slate-800 p-2 text-slate-200 hover:bg-slate-700"
+                title="Neuen Einladungscode generieren"
+              >
+                <RefreshCw className="h-4 w-4" />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={handleCopyInviteCode}
-              className="ml-2 rounded-lg bg-slate-800 p-2 text-slate-200 hover:bg-slate-700"
-              title="Code kopieren"
-            >
-              {copiedCode ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
-            </button>
-            <button
-              type="button"
-              onClick={handleRegenerateInviteCode}
-              className="rounded-lg bg-slate-800 p-2 text-slate-200 hover:bg-slate-700"
-              title="Neuen Einladungscode generieren"
-            >
-              <RefreshCw className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-5 flex flex-wrap items-end gap-3">
-          <div className="min-w-[260px] flex-1">
-            <label className="mb-1.5 block text-xs font-medium text-slate-300">
-              Vereinsname / Spielgemeinschaft
-            </label>
-            <input
-              type="text"
-              value={clubName}
-              onChange={(e) => setClubName(e.target.value)}
-              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={handleSaveClubName}
-            className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
-          >
-            Vereinsname speichern
-          </button>
-          {clubSavedBanner && (
-            <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400">
-              <Check className="h-4 w-4" />
-              Gespeichert
+          ) : (
+            <span className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-1.5 text-xs font-semibold text-slate-300">
+              Rolle: Trainer (Nur Lesen)
             </span>
           )}
         </div>
+
+        {isClubAdmin && (
+          <div className="mt-5 flex flex-wrap items-end gap-3">
+            <div className="min-w-[260px] flex-1">
+              <label className="mb-1.5 block text-xs font-medium text-slate-300">
+                Vereinsname / Spielgemeinschaft
+              </label>
+              <input
+                type="text"
+                value={clubName}
+                onChange={(e) => setClubName(e.target.value)}
+                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={handleSaveClubName}
+              className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+            >
+              Vereinsname speichern
+            </button>
+            {clubSavedBanner && (
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400">
+                <Check className="h-4 w-4" />
+                Gespeichert
+              </span>
+            )}
+          </div>
+        )}
       </section>
 
       {/* 2. Ebene: Mannschaften & Standard-Trainingszeiten */}
@@ -542,6 +567,17 @@ export function ClubTeamManager({
                             <span className="rounded-full bg-blue-950 px-2.5 py-0.5 text-xs text-blue-300">
                               Saison {team.season}
                             </span>
+                            {!isClubAdmin && (
+                              <span
+                                className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
+                                  assignedTeamIds?.has(team.id)
+                                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-700/40'
+                                    : 'bg-amber-950/70 text-amber-300 border border-amber-700/40'
+                                }`}
+                              >
+                                {assignedTeamIds?.has(team.id) ? 'Dein Team' : 'Nur Lesen'}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="flex flex-wrap items-center gap-1.5">
@@ -556,48 +592,52 @@ export function ClubTeamManager({
                           >
                             {isSelected ? 'Aktive Mannschaft' : 'Auswählen'}
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => handleStartEditTeam(team)}
-                            className="rounded-lg bg-slate-800 p-1.5 text-slate-300 hover:bg-slate-700 hover:text-white"
-                            title="Mannschaft bearbeiten"
-                          >
-                            <Edit3 className="h-3.5 w-3.5" />
-                          </button>
-                          {confirmDeleteTeamId === team.id ? (
-                            <div className="inline-flex items-center gap-1.5 rounded-lg border border-rose-500/50 bg-rose-950/70 px-2.5 py-1 text-xs">
-                              <span className="font-semibold text-rose-200">
-                                Inkl. Pläne löschen?
-                              </span>
+                          {isClubAdmin && (
+                            <>
                               <button
                                 type="button"
-                                onClick={() => void handleDeleteTeam(team.id)}
-                                className="rounded bg-rose-600 px-2 py-0.5 font-bold text-white hover:bg-rose-500"
+                                onClick={() => handleStartEditTeam(team)}
+                                className="rounded-lg bg-slate-800 p-1.5 text-slate-300 hover:bg-slate-700 hover:text-white"
+                                title="Mannschaft bearbeiten"
                               >
-                                Ja
+                                <Edit3 className="h-3.5 w-3.5" />
                               </button>
-                              <button
-                                type="button"
-                                onClick={() => setConfirmDeleteTeamId(null)}
-                                className="rounded bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700"
-                              >
-                                Nein
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              type="button"
-                              disabled={teams.length <= 1}
-                              onClick={() => setConfirmDeleteTeamId(team.id)}
-                              className="rounded-lg bg-slate-800 p-1.5 text-slate-400 hover:bg-rose-950/60 hover:text-rose-400 disabled:opacity-30 disabled:hover:bg-slate-800 disabled:hover:text-slate-400"
-                              title={
-                                teams.length <= 1
-                                  ? 'Mindestens eine Mannschaft muss im Verein bleiben'
-                                  : 'Mannschaft löschen'
-                              }
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
+                              {confirmDeleteTeamId === team.id ? (
+                                <div className="inline-flex items-center gap-1.5 rounded-lg border border-rose-500/50 bg-rose-950/70 px-2.5 py-1 text-xs">
+                                  <span className="font-semibold text-rose-200">
+                                    Inkl. Pläne löschen?
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => void handleDeleteTeam(team.id)}
+                                    className="rounded bg-rose-600 px-2 py-0.5 font-bold text-white hover:bg-rose-500"
+                                  >
+                                    Ja
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setConfirmDeleteTeamId(null)}
+                                    className="rounded bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700"
+                                  >
+                                    Nein
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  type="button"
+                                  disabled={teams.length <= 1}
+                                  onClick={() => setConfirmDeleteTeamId(team.id)}
+                                  className="rounded-lg bg-slate-800 p-1.5 text-slate-400 hover:bg-rose-950/60 hover:text-rose-400 disabled:opacity-30 disabled:hover:bg-slate-800 disabled:hover:text-slate-400"
+                                  title={
+                                    teams.length <= 1
+                                      ? 'Mindestens eine Mannschaft muss im Verein bleiben'
+                                      : 'Mannschaft löschen'
+                                  }
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              )}
+                            </>
                           )}
                         </div>
                       </>
@@ -623,14 +663,16 @@ export function ClubTeamManager({
                           {slot.hallName && (
                             <span className="text-slate-400">({slot.hallName})</span>
                           )}
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveScheduleSlot(team, slot.id)}
-                            className="ml-1 text-slate-500 hover:text-rose-400"
-                            title="Trainingszeit entfernen"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
+                          {isClubAdmin && (
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveScheduleSlot(team, slot.id)}
+                              className="ml-1 text-slate-500 hover:text-rose-400"
+                              title="Trainingszeit entfernen"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -662,133 +704,137 @@ export function ClubTeamManager({
             })}
           </div>
 
-          {/* Neue Hallenzeit hinzufügen */}
-          <form
-            onSubmit={handleAddScheduleSlot}
-            className="mt-6 rounded-xl border border-slate-800 bg-slate-950/80 p-4"
-          >
-            <h4 className="mb-3 text-xs font-semibold tracking-wider text-slate-300 uppercase">
-              Feste Trainingszeit zu Mannschaft hinzufügen
-            </h4>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-5">
-              <select
-                value={scheduleTeamId}
-                onChange={(e) => setScheduleTeamId(e.target.value)}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
-              >
-                {teams.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={slotWeekday}
-                onChange={(e) => setSlotWeekday(Number(e.target.value))}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
-              >
-                {WEEKDAY_OPTIONS.map((w) => (
-                  <option key={w.value} value={w.value}>
-                    {w.label}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="time"
-                value={slotStart}
-                onChange={(e) => setSlotStart(e.target.value)}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
-              />
-              <input
-                type="time"
-                value={slotEnd}
-                onChange={(e) => setSlotEnd(e.target.value)}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
-              />
-              <input
-                type="text"
-                placeholder="Halle (optional)"
-                value={slotHall}
-                onChange={(e) => setSlotHall(e.target.value)}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
-              />
-            </div>
-            <button
-              type="submit"
-              className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-slate-800 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-700"
+          {/* Neue Hallenzeit hinzufügen (nur Vereins-Admin) */}
+          {isClubAdmin && (
+            <form
+              onSubmit={handleAddScheduleSlot}
+              className="mt-6 rounded-xl border border-slate-800 bg-slate-950/80 p-4"
             >
-              <Plus className="h-3.5 w-3.5" />
-              Trainingszeit hinzufügen
-            </button>
-          </form>
+              <h4 className="mb-3 text-xs font-semibold tracking-wider text-slate-300 uppercase">
+                Feste Trainingszeit zu Mannschaft hinzufügen
+              </h4>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-5">
+                <select
+                  value={scheduleTeamId}
+                  onChange={(e) => setScheduleTeamId(e.target.value)}
+                  className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
+                >
+                  {teams.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={slotWeekday}
+                  onChange={(e) => setSlotWeekday(Number(e.target.value))}
+                  className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
+                >
+                  {WEEKDAY_OPTIONS.map((w) => (
+                    <option key={w.value} value={w.value}>
+                      {w.label}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="time"
+                  value={slotStart}
+                  onChange={(e) => setSlotStart(e.target.value)}
+                  className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
+                />
+                <input
+                  type="time"
+                  value={slotEnd}
+                  onChange={(e) => setSlotEnd(e.target.value)}
+                  className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
+                />
+                <input
+                  type="text"
+                  placeholder="Halle (optional)"
+                  value={slotHall}
+                  onChange={(e) => setSlotHall(e.target.value)}
+                  className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-white"
+                />
+              </div>
+              <button
+                type="submit"
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-slate-800 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-700"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Trainingszeit hinzufügen
+              </button>
+            </form>
+          )}
         </section>
 
         {/* Rechte Spalte: Neue Mannschaft & Trainerteam verwalten */}
         <div className="space-y-6 lg:col-span-5">
-          {/* Neue Mannschaft anlegen */}
-          <form
-            onSubmit={handleCreateTeam}
-            className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6"
-          >
-            <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-              <Plus className="h-5 w-5 text-blue-400" />
-              Neue Mannschaft im Verein anlegen
-            </h3>
-            <div className="space-y-3">
-              <div>
-                <label className="mb-1 block text-xs text-slate-300">Mannschaftsname *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="z.B. weibliche C-Jugend oder 2. Herren"
-                  value={newTeamName}
-                  onChange={(e) => setNewTeamName(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
+          {/* Neue Mannschaft anlegen (nur Vereins-Admin) */}
+          {isClubAdmin && (
+            <form
+              onSubmit={handleCreateTeam}
+              className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6"
+            >
+              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                <Plus className="h-5 w-5 text-blue-400" />
+                Neue Mannschaft im Verein anlegen
+              </h3>
+              <div className="space-y-3">
                 <div>
-                  <label htmlFor="new-team-age-group" className="mb-1 block text-xs text-slate-300">
-                    Altersklasse *
-                  </label>
-                  <select
-                    id="new-team-age-group"
-                    required
-                    value={newTeamAgeGroup}
-                    onChange={(e) => setNewTeamAgeGroup(e.target.value as '' | AgeGroup)}
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
-                  >
-                    <option value="" disabled>
-                      Altersklasse wählen...
-                    </option>
-                    {ALL_AGE_GROUPS.map((ag) => (
-                      <option key={ag} value={ag}>
-                        {AGE_GROUP_LABELS[ag]}
-                      </option>
-                    ))}
-                  </select>
-                  <p className="mt-1 text-[11px] text-slate-400">
-                    Wird in der Trainingsplanung als Filter vorbelegt.
-                  </p>
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs text-slate-300">Saison</label>
+                  <label className="mb-1 block text-xs text-slate-300">Mannschaftsname *</label>
                   <input
                     type="text"
-                    value={newTeamSeason}
-                    onChange={(e) => setNewTeamSeason(e.target.value)}
+                    required
+                    placeholder="z.B. weibliche C-Jugend oder 2. Herren"
+                    value={newTeamName}
+                    onChange={(e) => setNewTeamName(e.target.value)}
                     className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
                   />
                 </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label htmlFor="new-team-age-group" className="mb-1 block text-xs text-slate-300">
+                      Altersklasse *
+                    </label>
+                    <select
+                      id="new-team-age-group"
+                      required
+                      value={newTeamAgeGroup}
+                      onChange={(e) => setNewTeamAgeGroup(e.target.value as '' | AgeGroup)}
+                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+                    >
+                      <option value="" disabled>
+                        Altersklasse wählen...
+                      </option>
+                      {ALL_AGE_GROUPS.map((ag) => (
+                        <option key={ag} value={ag}>
+                          {AGE_GROUP_LABELS[ag]}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="mt-1 text-[11px] text-slate-400">
+                      Wird in der Trainingsplanung als Filter vorbelegt.
+                    </p>
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs text-slate-300">Saison</label>
+                    <input
+                      type="text"
+                      value={newTeamSeason}
+                      onChange={(e) => setNewTeamSeason(e.target.value)}
+                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-blue-600 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
+                >
+                  Mannschaft anlegen
+                </button>
               </div>
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-blue-600 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
-              >
-                Mannschaft anlegen
-              </button>
-            </div>
-          </form>
+            </form>
+          )}
 
           {/* 3. Ebene: Trainerteam & Zuordnung */}
           <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6">
@@ -822,90 +868,117 @@ export function ClubTeamManager({
                   {/* Schnell-Zuordnung zu Mannschaften */}
                   <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
                     <span className="text-[11px] text-slate-400">Teams:</span>
-                    {teams.map((t) => {
-                      const isAssigned = teamMembers.some(
-                        (tm) => tm.team_id === t.id && tm.club_member_id === member.id
-                      );
-                      return (
-                        <button
-                          key={t.id}
-                          type="button"
-                          onClick={() => handleToggleTeamAssignment(t.id, member.id)}
-                          className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition ${
-                            isAssigned
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-slate-800/80 text-slate-400 hover:bg-slate-700'
-                          }`}
-                        >
-                          {isAssigned ? '✓ ' : '+ '}
-                          {t.name}
-                        </button>
-                      );
-                    })}
+                    {isClubAdmin ? (
+                      teams.map((t) => {
+                        const isAssigned = teamMembers.some(
+                          (tm) => tm.team_id === t.id && tm.club_member_id === member.id
+                        );
+                        return (
+                          <button
+                            key={t.id}
+                            type="button"
+                            onClick={() => handleToggleTeamAssignment(t.id, member.id)}
+                            className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition ${
+                              isAssigned
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-slate-800/80 text-slate-400 hover:bg-slate-700'
+                            }`}
+                          >
+                            {isAssigned ? '✓ ' : '+ '}
+                            {t.name}
+                          </button>
+                        );
+                      })
+                    ) : (
+                      (() => {
+                        const assignedTeams = teams.filter((t) =>
+                          teamMembers.some(
+                            (tm) => tm.team_id === t.id && tm.club_member_id === member.id
+                          )
+                        );
+                        if (assignedTeams.length === 0) {
+                          return (
+                            <span className="text-[11px] text-slate-500">
+                              Keine Mannschaft zugeordnet
+                            </span>
+                          );
+                        }
+                        return assignedTeams.map((t) => (
+                          <span
+                            key={t.id}
+                            className="rounded-md bg-blue-950/70 border border-blue-700/40 px-2 py-0.5 text-[11px] font-medium text-blue-200"
+                          >
+                            {t.name}
+                          </span>
+                        ));
+                      })()
+                    )}
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Neuen Trainer ins Team aufnehmen */}
-            <form onSubmit={handleAddCoach} className="mt-5 border-t border-slate-800 pt-4 space-y-3">
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-300 uppercase">
-                <UserPlus className="h-4 w-4 text-emerald-400" />
-                Weiteren Trainer in den Verein aufnehmen
-              </div>
-              <input
-                type="text"
-                required
-                placeholder="Name (z.B. Sarah Klein – Co-Trainerin)"
-                value={newCoachName}
-                onChange={(e) => setNewCoachName(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
-              />
-              <div className="grid grid-cols-2 gap-2">
+            {/* Neuen Trainer ins Team aufnehmen (nur Vereins-Admin) */}
+            {isClubAdmin && (
+              <form onSubmit={handleAddCoach} className="mt-5 border-t border-slate-800 pt-4 space-y-3">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-300 uppercase">
+                  <UserPlus className="h-4 w-4 text-emerald-400" />
+                  Weiteren Trainer in den Verein aufnehmen
+                </div>
                 <input
-                  type="email"
-                  placeholder="E-Mail (optional)"
-                  value={newCoachEmail}
-                  onChange={(e) => setNewCoachEmail(e.target.value)}
-                  className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
+                  type="text"
+                  required
+                  placeholder="Name (z.B. Sarah Klein – Co-Trainerin)"
+                  value={newCoachName}
+                  onChange={(e) => setNewCoachName(e.target.value)}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
                 />
-                <select
-                  value={newCoachRole}
-                  onChange={(e) => setNewCoachRole(e.target.value as ClubRole)}
-                  className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="email"
+                    placeholder="E-Mail (optional)"
+                    value={newCoachEmail}
+                    onChange={(e) => setNewCoachEmail(e.target.value)}
+                    className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
+                  />
+                  <select
+                    value={newCoachRole}
+                    onChange={(e) => setNewCoachRole(e.target.value as ClubRole)}
+                    className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
+                  >
+                    <option value="COACH">Mannschafts-Trainer</option>
+                    <option value="CLUB_ADMIN">Vereins-Admin / Koordinator</option>
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <select
+                    value={newCoachInitialTeamId}
+                    onChange={(e) => setNewCoachInitialTeamId(e.target.value)}
+                    className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
+                  >
+                    {teams.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        Team: {t.name}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={newCoachTeamRole}
+                    onChange={(e) => setNewCoachTeamRole(e.target.value as TeamRole)}
+                    className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
+                  >
+                    <option value="HEAD_COACH">Haupttrainer</option>
+                    <option value="ASSISTANT_COACH">Co-Trainer</option>
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-emerald-600 py-2 text-xs font-semibold text-white hover:bg-emerald-500"
                 >
-                  <option value="COACH">Mannschafts-Trainer</option>
-                  <option value="CLUB_ADMIN">Vereins-Admin / Koordinator</option>
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <select
-                  value={newCoachInitialTeamId}
-                  onChange={(e) => setNewCoachInitialTeamId(e.target.value)}
-                  className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
-                >
-                  {teams.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      Team: {t.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={newCoachTeamRole}
-                  onChange={(e) => setNewCoachTeamRole(e.target.value as TeamRole)}
-                  className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
-                >
-                  <option value="HEAD_COACH">Haupttrainer</option>
-                  <option value="ASSISTANT_COACH">Co-Trainer</option>
-                </select>
-              </div>
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-emerald-600 py-2 text-xs font-semibold text-white hover:bg-emerald-500"
-              >
-                Trainer hinzufügen
-              </button>
-            </form>
+                  Trainer hinzufügen
+                </button>
+              </form>
+            )}
           </section>
         </div>
       </div>
@@ -932,6 +1005,7 @@ export function ClubTeamManager({
           plans={clubPlans}
           planWeeks={clubPlanWeeks}
           authUserId={authUserId}
+          isClubAdmin={isClubAdmin}
           onDownloadBackup={onDownloadBackup}
           onResetCompleted={onResetCompleted}
         />

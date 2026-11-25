@@ -45,6 +45,8 @@ interface ExerciseEditorModalProps {
   parentExercise?: Exercise | null;
   clubId: string;
   activeTeamId: string;
+  canCreateTeamExercise?: boolean;
+  currentMemberId?: string;
   onClose: () => void;
   onSave: (exercise: Exercise) => Promise<void>;
 }
@@ -81,6 +83,8 @@ export function ExerciseEditorModal({
   parentExercise,
   clubId,
   activeTeamId,
+  canCreateTeamExercise = true,
+  currentMemberId,
   onClose,
   onSave
 }: ExerciseEditorModalProps) {
@@ -130,7 +134,11 @@ export function ExerciseEditorModal({
       setTitle(
         parentExercise && !initialExercise ? `${source.title} (Variante)` : source.title
       );
-      setVisibility(source.visibility);
+      setVisibility(
+        !canCreateTeamExercise && !initialExercise && source.visibility === 'TEAM'
+          ? 'CLUB'
+          : source.visibility
+      );
       setDurationMin(source.default_duration_min);
       setMinPlayers(source.min_players);
       setMaxPlayers(source.max_players);
@@ -283,14 +291,26 @@ export function ExerciseEditorModal({
 
     setIsSaving(true);
     try {
+      const effectiveVisibility: VisibilityLevel =
+        !canCreateTeamExercise &&
+        visibility === 'TEAM' &&
+        initialExercise?.visibility !== 'TEAM'
+          ? 'CLUB'
+          : visibility;
       const now = new Date().toISOString();
       const exerciseToSave: Exercise = {
         id: initialExercise?.id ?? crypto.randomUUID(),
         club_id: clubId,
+        created_by_member_id: initialExercise
+          ? initialExercise.created_by_member_id
+          : currentMemberId,
         parent_exercise_id:
           initialExercise?.parent_exercise_id ?? parentExercise?.id ?? undefined,
-        visibility,
-        owner_team_id: visibility === 'TEAM' ? activeTeamId : undefined,
+        visibility: effectiveVisibility,
+        owner_team_id:
+          effectiveVisibility === 'TEAM'
+            ? initialExercise?.owner_team_id ?? activeTeamId
+            : undefined,
         title: title.trim(),
         default_duration_min: Number(durationMin) || 15,
         min_players: Number(minPlayers) || 1,
@@ -391,7 +411,12 @@ export function ExerciseEditorModal({
                     className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white"
                   >
                     <option value="CLUB">Vereinsweit (Alle Vereinstrainer)</option>
-                    <option value="TEAM">Intern (Nur mein Trainerteam)</option>
+                    <option
+                      value="TEAM"
+                      disabled={!canCreateTeamExercise && initialExercise?.visibility !== 'TEAM'}
+                    >
+                      Intern (Nur mein Trainerteam)
+                    </option>
                   </select>
                 </div>
 

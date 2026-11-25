@@ -36,6 +36,7 @@ interface AuthClubModalProps {
   onSelectClub: (clubId: string) => void;
   currentMember?: ClubMember;
   isAnyClubAdmin: boolean;
+  adminClubIds?: Set<string>;
   needsClubOnboarding: boolean;
   onNeedsOnboarding: () => void;
   onSyncCompleted: (message: string) => void;
@@ -51,6 +52,7 @@ export function AuthClubModal({
   onSelectClub,
   currentMember,
   isAnyClubAdmin,
+  adminClubIds,
   needsClubOnboarding,
   onNeedsOnboarding,
   onSyncCompleted
@@ -597,10 +599,14 @@ export function AuthClubModal({
                 <span className="font-medium text-white truncate">{userEmail}</span>
                 <span className="text-slate-400">Aktiver Verein:</span>
                 <span className="font-medium text-white">{activeClub?.name ?? '–'}</span>
-                <span className="text-slate-400">Freischaltcode:</span>
-                <span className="font-mono font-semibold text-blue-300">
-                  {activeClub?.invite_code ?? '–'}
-                </span>
+                {currentMember?.club_role === 'CLUB_ADMIN' && (
+                  <>
+                    <span className="text-slate-400">Freischaltcode:</span>
+                    <span className="font-mono font-semibold text-blue-300">
+                      {activeClub?.invite_code ?? '–'}
+                    </span>
+                  </>
+                )}
                 <span className="text-slate-400">Rolle:</span>
                 <span className="font-medium text-white">
                   {currentMember?.club_role === 'CLUB_ADMIN' ? 'Vereins-Admin (Bearbeiter)' : 'Trainer'}
@@ -625,7 +631,7 @@ export function AuthClubModal({
                 >
                   {clubs.map((c) => (
                     <option key={c.id} value={c.id}>
-                      {c.name} (Code: {c.invite_code})
+                      {adminClubIds?.has(c.id) ? `${c.name} (Code: ${c.invite_code})` : c.name}
                     </option>
                   ))}
                 </select>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bot, Check, Copy, FileCode2, Sparkles, Upload, X } from 'lucide-react';
 import type { Exercise, VisibilityLevel } from '../types/domain';
 import {
@@ -11,6 +11,8 @@ interface AiExerciseImporterModalProps {
   isOpen: boolean;
   clubId: string;
   activeTeamId: string;
+  canCreateTeamExercise?: boolean;
+  currentMemberId?: string;
   onClose: () => void;
   onImportExercises: (exercises: Exercise[]) => Promise<void>;
 }
@@ -81,6 +83,8 @@ export function AiExerciseImporterModal({
   isOpen,
   clubId,
   activeTeamId,
+  canCreateTeamExercise = true,
+  currentMemberId,
   onClose,
   onImportExercises
 }: AiExerciseImporterModalProps) {
@@ -92,6 +96,12 @@ export function AiExerciseImporterModal({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [previewList, setPreviewList] = useState<Exercise[]>([]);
 
+  useEffect(() => {
+    if (!canCreateTeamExercise && visibility === 'TEAM') {
+      setVisibility('CLUB');
+    }
+  }, [canCreateTeamExercise, visibility]);
+
   if (!isOpen) return null;
 
   function handleValidateAndPreview(inputText: string, autoAnim = autoGenerateAnimation) {
@@ -101,13 +111,16 @@ export function AiExerciseImporterModal({
       setErrorMsg(null);
       return;
     }
+    const effectiveVisibility: VisibilityLevel =
+      !canCreateTeamExercise && visibility === 'TEAM' ? 'CLUB' : visibility;
     try {
       const parsed = parseAndNormalizeAiExerciseJson(
         inputText,
         clubId,
-        visibility,
+        effectiveVisibility,
         activeTeamId,
-        autoAnim
+        autoAnim,
+        currentMemberId
       );
       setPreviewList(parsed);
       setErrorMsg(null);
@@ -271,7 +284,9 @@ export function AiExerciseImporterModal({
                   <select
                     value={visibility}
                     onChange={(e) => {
-                      const nextVis = e.target.value as VisibilityLevel;
+                      const requestedVis = e.target.value as VisibilityLevel;
+                      const nextVis: VisibilityLevel =
+                        !canCreateTeamExercise && requestedVis === 'TEAM' ? 'CLUB' : requestedVis;
                       setVisibility(nextVis);
                       if (jsonInput.trim()) {
                         try {
@@ -280,7 +295,9 @@ export function AiExerciseImporterModal({
                               jsonInput,
                               clubId,
                               nextVis,
-                              activeTeamId
+                              activeTeamId,
+                              autoGenerateAnimation,
+                              currentMemberId
                             )
                           );
                         } catch {
@@ -291,7 +308,9 @@ export function AiExerciseImporterModal({
                     className="rounded-lg border border-slate-700 bg-slate-950 px-2.5 py-1 text-xs text-white"
                   >
                     <option value="CLUB">Import als: Vereinsweit (CLUB)</option>
-                    <option value="TEAM">Import als: Nur mein Team (TEAM)</option>
+                    <option value="TEAM" disabled={!canCreateTeamExercise}>
+                      Import als: Nur mein Team (TEAM)
+                    </option>
                   </select>
                 </div>
 

@@ -30,6 +30,7 @@ interface ClubResetSectionProps {
   plans: MultiWeekPlan[];
   planWeeks: PlanWeek[];
   authUserId: string | null;
+  isClubAdmin?: boolean;
   onDownloadBackup?: () => Promise<void> | void;
   onResetCompleted?: (summaryMessage: string) => void;
 }
@@ -51,6 +52,7 @@ export function ClubResetSection({
   plans,
   planWeeks,
   authUserId,
+  isClubAdmin = false,
   onDownloadBackup,
   onResetCompleted
 }: ClubResetSectionProps) {
@@ -154,13 +156,18 @@ export function ClubResetSection({
   }
 
   async function handleExecuteReset() {
-    if (!anySelected || !isResetConfirmationValid(confirmText) || isBusy) return;
+    if (!isClubAdmin || !anySelected || !isResetConfirmationValid(confirmText) || isBusy) return;
     setIsBusy(true);
     setErrorMsg(null);
     setSuccessMsg(null);
     try {
       const executedSelection = selection;
-      const result = await executeClubReset({ club, selection: executedSelection, authUserId });
+      const result = await executeClubReset({
+        club,
+        selection: executedSelection,
+        authUserId,
+        isClubAdmin
+      });
       const summary = formatClubResetSummary(result, executedSelection);
       setSuccessMsg(summary);
       setSelection(EMPTY_CLUB_RESET_SELECTION);
@@ -173,6 +180,8 @@ export function ClubResetSection({
       setIsBusy(false);
     }
   }
+
+  if (!isClubAdmin) return null;
 
   return (
     <section className="rounded-2xl border border-rose-500/40 bg-rose-950/10 p-6 shadow-lg">

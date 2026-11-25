@@ -52,6 +52,8 @@ interface HallLiveModeProps {
   members: ClubMember[];
   notes: SessionNote[];
   initialSessionId?: string;
+  canEditTeam?: boolean;
+  currentMemberId?: string;
 }
 
 function formatSeconds(totalSec: number): string {
@@ -69,7 +71,9 @@ export function HallLiveMode({
   exercises,
   members,
   notes,
-  initialSessionId
+  initialSessionId,
+  canEditTeam = true,
+  currentMemberId
 }: HallLiveModeProps) {
   const teamSessions = useMemo(
     () => sortSessionsChronologically(sessions.filter((s) => s.team_id === activeTeam.id)),
@@ -265,7 +269,21 @@ export function HallLiveMode({
 
   // Live Note input state
   const [liveNoteText, setLiveNoteText] = useState('');
-  const [liveNoteAuthorId, setLiveNoteAuthorId] = useState<string>(members[0]?.id ?? '');
+  const [liveNoteAuthorId, setLiveNoteAuthorId] = useState<string>(
+    currentMemberId ?? members[0]?.id ?? ''
+  );
+
+  useEffect(() => {
+    if (currentMemberId) {
+      setLiveNoteAuthorId(currentMemberId);
+    }
+  }, [currentMemberId]);
+
+  useEffect(() => {
+    if (!canEditTeam) {
+      setShowQuickSwap(false);
+    }
+  }, [activeTeam.id, canEditTeam]);
 
   // Wake Lock status
   const [wakeLockActive, setWakeLockActive] = useState(false);
@@ -384,7 +402,7 @@ export function HallLiveMode({
   }, [activeExercise, exercises]);
 
   async function handleQuickSwapExercise(replacementExercise: Exercise) {
-    if (!activeBlock) return;
+    if (!canEditTeam || !activeBlock) return;
     const updated: SessionBlock = {
       ...activeBlock,
       exercise_id: replacementExercise.id,
@@ -400,8 +418,9 @@ export function HallLiveMode({
 
   async function handleAddLiveNote(e: React.FormEvent) {
     e.preventDefault();
-    if (!currentSession || !activeBlock || !liveNoteText.trim()) return;
-    const author = members.find((m) => m.id === liveNoteAuthorId) ?? members[0];
+    if (!canEditTeam || !currentSession || !activeBlock || !liveNoteText.trim()) return;
+    const author =
+      members.find((m) => m.id === (liveNoteAuthorId || currentMemberId)) ?? members[0];
     const now = new Date().toISOString();
     const note: SessionNote = {
       id: crypto.randomUUID(),
@@ -419,7 +438,7 @@ export function HallLiveMode({
   }
 
   async function handleCompleteTrainingSession() {
-    if (!currentSession) return;
+    if (!canEditTeam || !currentSession) return;
     const updated: TrainingSession = {
       ...currentSession,
       status: 'COMPLETED',
@@ -455,6 +474,13 @@ export function HallLiveMode({
 
   return (
     <div className="space-y-5">
+      {!canEditTeam && (
+        <div className="rounded-2xl border border-amber-500/40 bg-amber-950/25 px-4 py-2.5 text-xs text-amber-200">
+          <strong>Nur Lesezugriff ({activeTeam.name}):</strong> Timer, Punktezähler, Packliste
+          und Taktiktafel funktionieren lokal; Änderungen an Übungen, Notizen oder Status sind
+          deaktiviert.
+        </div>
+      )}
       {/* Top Hall Control Header (High Contrast & Large Touch Targets >= 48px) */}
       <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 shadow-xl">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -548,14 +574,16 @@ export function HallLiveMode({
             </div>
 
             {currentSession.status !== 'COMPLETED' ? (
-              <button
-                type="button"
-                onClick={() => void handleCompleteTrainingSession()}
-                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-500"
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                Training abschließen
-              </button>
+              canEditTeam && (
+                <button
+                  type="button"
+                  onClick={() => void handleCompleteTrainingSession()}
+                  className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-500"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  Training abschließen
+                </button>
+              )
             ) : (
               <span className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-emerald-950 border border-emerald-500/40 px-3.5 py-2 text-xs font-bold text-emerald-300">
                 ✓ Training durchgeführt
@@ -1026,14 +1054,16 @@ export function HallLiveMode({
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowQuickSwap((prev) => !prev)}
-                    className="inline-flex min-h-[48px] items-center gap-1.5 rounded-xl border border-blue-500/40 bg-blue-950/50 px-3.5 py-2 text-xs font-bold text-blue-200 hover:bg-blue-900/60"
-                  >
-                    <RefreshCw className="h-4 w-4 text-blue-400" />
-                    Übung tauschen (Quick-Swap)
-                  </button>
+                  {canEditTeam && (
+                    <button
+                      type="button"
+                      onClick={() => setShowQuickSwap((prev) => !prev)}
+                      className="inline-flex min-h-[48px] items-center gap-1.5 rounded-xl border border-blue-500/40 bg-blue-950/50 px-3.5 py-2 text-xs font-bold text-blue-200 hover:bg-blue-900/60"
+                    >
+                      <RefreshCw className="h-4 w-4 text-blue-400" />
+                      Übung tauschen (Quick-Swap)
+                    </button>
+                  )}
 
                   <button
                     type="button"
@@ -1047,7 +1077,7 @@ export function HallLiveMode({
               </div>
 
               {/* Quick-Swap Selection Sheet */}
-              {showQuickSwap && (
+              {canEditTeam && showQuickSwap && (
                 <div className="rounded-xl border border-blue-500/50 bg-slate-950 p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-blue-300 uppercase">
@@ -1192,35 +1222,37 @@ export function HallLiveMode({
                 ))}
               </div>
 
-              <form onSubmit={handleAddLiveNote} className="space-y-2 pt-1">
-                <div className="flex gap-2">
-                  <select
-                    value={liveNoteAuthorId}
-                    onChange={(e) => setLiveNoteAuthorId(e.target.value)}
-                    className="min-h-[44px] rounded-xl border border-slate-700 bg-slate-950 px-2.5 py-1.5 text-xs text-white"
+              {canEditTeam && (
+                <form onSubmit={handleAddLiveNote} className="space-y-2 pt-1">
+                  <div className="flex gap-2">
+                    <select
+                      value={liveNoteAuthorId}
+                      onChange={(e) => setLiveNoteAuthorId(e.target.value)}
+                      className="min-h-[44px] rounded-xl border border-slate-700 bg-slate-950 px-2.5 py-1.5 text-xs text-white"
+                    >
+                      {members.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.display_name.split(' (')[0]}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Notiz für nächstes Training erfassen..."
+                      value={liveNoteText}
+                      onChange={(e) => setLiveNoteText(e.target.value)}
+                      className="min-h-[44px] flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full min-h-[44px] rounded-xl bg-blue-600 py-2 text-xs font-bold text-white hover:bg-blue-500"
                   >
-                    {members.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.display_name.split(' (')[0]}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Notiz für nächstes Training erfassen..."
-                    value={liveNoteText}
-                    onChange={(e) => setLiveNoteText(e.target.value)}
-                    className="min-h-[44px] flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-white"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full min-h-[44px] rounded-xl bg-blue-600 py-2 text-xs font-bold text-white hover:bg-blue-500"
-                >
-                  Live-Notiz speichern (konfliktfrei pro Trainer)
-                </button>
-              </form>
+                    Live-Notiz speichern (konfliktfrei pro Trainer)
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>

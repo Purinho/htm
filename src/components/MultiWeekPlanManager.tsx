@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   AlertTriangle,
   Bookmark,
@@ -41,6 +41,9 @@ interface MultiWeekPlanManagerProps {
   planWeeks: PlanWeek[];
   sessions: TrainingSession[];
   templates: SessionTemplate[];
+  canEditTeam?: boolean;
+  canManageTemplates?: boolean;
+  currentMemberId?: string;
   onOpenSessionInEditor: (sessionId: string) => void;
   onStartHallMode: (sessionId: string) => void;
   onOpenTemplateManager?: () => void;
@@ -55,6 +58,9 @@ export function MultiWeekPlanManager({
   planWeeks,
   sessions,
   templates,
+  canEditTeam = true,
+  canManageTemplates = true,
+  currentMemberId,
   onOpenSessionInEditor,
   onStartHallMode,
   onOpenTemplateManager
@@ -110,6 +116,15 @@ export function MultiWeekPlanManager({
   const [deleteLinkedSessions, setDeleteLinkedSessions] = useState(false);
   const [isDeletingPlan, setIsDeletingPlan] = useState(false);
 
+  useEffect(() => {
+    if (!canEditTeam) {
+      setShowCreateForm(false);
+      setConfirmDeletePlanId(null);
+      setDeleteLinkedSessions(false);
+      setEditingTagsWeekId(null);
+    }
+  }, [activeTeam.id, canEditTeam]);
+
   const activeWeekIds = useMemo(
     () => new Set(activeWeeks.map((week) => week.id)),
     [activeWeeks]
@@ -128,7 +143,7 @@ export function MultiWeekPlanManager({
 
   async function handleGeneratePlan(e: React.FormEvent) {
     e.preventDefault();
-    if (!newTitle.trim()) return;
+    if (!canEditTeam || !newTitle.trim()) return;
 
     const defaultTemplate = templates.find((t) => t.id === effectiveTemplateId);
     const bundle = generateMultiWeekPlanBundle({
@@ -138,7 +153,7 @@ export function MultiWeekPlanManager({
       weekCount: newWeekCount,
       goals: newGoals,
       defaultTemplate,
-      defaultCoachMemberId: members[0]?.id
+      defaultCoachMemberId: currentMemberId ?? members[0]?.id
     });
 
     await db.transaction(
@@ -184,6 +199,7 @@ export function MultiWeekPlanManager({
   }
 
   async function handleUpdateWeek(week: PlanWeek, patch: Partial<PlanWeek>) {
+    if (!canEditTeam) return;
     const updated: PlanWeek = {
       ...week,
       ...patch,
@@ -194,6 +210,7 @@ export function MultiWeekPlanManager({
   }
 
   async function handleToggleWeekTag(week: PlanWeek, tag: HandballFocusTag) {
+    if (!canEditTeam) return;
     const exists = week.focus_tags.includes(tag);
     const nextTags = exists
       ? week.focus_tags.filter((t) => t !== tag)
@@ -202,6 +219,7 @@ export function MultiWeekPlanManager({
   }
 
   async function handleAddExtraSessionToWeek(week: PlanWeek) {
+    if (!canEditTeam) return;
     const slot = activeTeam.default_schedule[0];
     const sessionDate = addDaysIso(week.start_date, 5); // Default Saturday of that week
     const bundle = buildSessionFromTemplate({
@@ -212,7 +230,7 @@ export function MultiWeekPlanManager({
       title: `Zusatztraining (${week.focus_theme.split(':')[0]})`,
       planWeekId: week.id,
       template: templates[0],
-      defaultCoachMemberId: members[0]?.id
+      defaultCoachMemberId: currentMemberId ?? members[0]?.id
     });
 
     await db.transaction(
@@ -238,7 +256,7 @@ export function MultiWeekPlanManager({
   }
 
   async function handleDeletePlan(planId: string) {
-    if (isDeletingPlan) return;
+    if (!canEditTeam || isDeletingPlan) return;
     setIsDeletingPlan(true);
 
     try {
@@ -345,6 +363,15 @@ export function MultiWeekPlanManager({
 
   return (
     <div className="space-y-6">
+      {!canEditTeam && (
+        <div className="rounded-2xl border border-amber-500/40 bg-amber-950/25 px-5 py-3 text-xs text-amber-200">
+          <strong>Nur Lesezugriff:</strong> Du bist der Mannschaft{' '}
+          <strong>{activeTeam.name}</strong> nicht als Trainer zugewiesen. Du kannst die
+          Mehrwochenpläne ansehen, Trainingseinheiten öffnen und den Hallen-Modus starten, aber keine
+          Änderungen speichern oder löschen.
+        </div>
+      )}
+
       {/* Top Header & Plan Selector */}
       <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-lg">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -374,7 +401,7 @@ export function MultiWeekPlanManager({
                         </option>
                       ))}
                     </select>
-                    {activePlan && (
+                    {canEditTeam && activePlan && (
                       <button
                         type="button"
                         onClick={() => {
@@ -399,22 +426,24 @@ export function MultiWeekPlanManager({
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              setShowCreateForm((prev) => !prev);
-              setConfirmDeletePlanId(null);
-              setDeleteLinkedSessions(false);
-            }}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-600/20 hover:bg-blue-500"
-          >
-            <Plus className="h-4 w-4" />
-            Neuen Mehrwochenplan & Trainingstage generieren
-          </button>
+          {canEditTeam && (
+            <button
+              type="button"
+              onClick={() => {
+                setShowCreateForm((prev) => !prev);
+                setConfirmDeletePlanId(null);
+                setDeleteLinkedSessions(false);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-600/20 hover:bg-blue-500"
+            >
+              <Plus className="h-4 w-4" />
+              Neuen Mehrwochenplan & Trainingstage generieren
+            </button>
+          )}
         </div>
 
         {/* Inline Deletion Confirmation */}
-        {activePlan && confirmDeletePlanId === activePlan.id && (
+        {canEditTeam && activePlan && confirmDeletePlanId === activePlan.id && (
           <div className="mt-4 rounded-xl border border-rose-500/40 bg-rose-950/25 p-4 space-y-3">
             <div className="flex items-start gap-2.5">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
@@ -484,7 +513,7 @@ export function MultiWeekPlanManager({
         )}
 
         {/* Generator Form */}
-        {showCreateForm && (
+        {canEditTeam && showCreateForm && (
           <form
             onSubmit={handleGeneratePlan}
             className="mt-5 rounded-xl border border-blue-500/40 bg-blue-950/20 p-5 space-y-4"
@@ -562,7 +591,7 @@ export function MultiWeekPlanManager({
                       className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-400 hover:text-blue-300"
                     >
                       <Bookmark className="h-3 w-3" />
-                      Vorlagen verwalten
+                      {canManageTemplates ? 'Vorlagen verwalten' : 'Vorlagen ansehen'}
                     </button>
                   )}
                 </div>
@@ -646,10 +675,11 @@ export function MultiWeekPlanManager({
                       <input
                         type="color"
                         value={week.color_hex}
+                        disabled={!canEditTeam}
                         onChange={(e) =>
                           void handleUpdateWeek(week, { color_hex: e.target.value })
                         }
-                        className="h-6 w-8 cursor-pointer rounded border border-slate-700 bg-transparent"
+                        className="h-6 w-8 cursor-pointer rounded border border-slate-700 bg-transparent disabled:cursor-not-allowed disabled:opacity-50"
                         title="Wochen-Farbcode wählen"
                       />
                     </div>
@@ -661,10 +691,11 @@ export function MultiWeekPlanManager({
                       <input
                         type="text"
                         value={week.focus_theme}
+                        disabled={!canEditTeam}
                         onChange={(e) =>
                           void handleUpdateWeek(week, { focus_theme: e.target.value })
                         }
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-sm font-bold text-white focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-sm font-bold text-white focus:border-blue-500 focus:outline-none disabled:opacity-75"
                       />
                     </div>
 
@@ -676,10 +707,11 @@ export function MultiWeekPlanManager({
                         type="text"
                         placeholder="z.B. Samstag Topspiel – Donnerstag Belastung dosieren..."
                         value={week.notes}
+                        disabled={!canEditTeam}
                         onChange={(e) =>
                           void handleUpdateWeek(week, { notes: e.target.value })
                         }
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-slate-200"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-slate-200 disabled:opacity-75"
                       />
                     </div>
 
@@ -690,16 +722,18 @@ export function MultiWeekPlanManager({
                           <Sparkles className="h-3 w-3" />
                           Smart-Filter Schwerpunkte ({week.focus_tags.length}):
                         </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setEditingTagsWeekId(isEditingTags ? null : week.id)
-                          }
-                          className="inline-flex items-center gap-1 text-blue-400 hover:underline"
-                        >
-                          <Tag className="h-3 w-3" />
-                          {isEditingTags ? 'Fertig' : 'Tags anpassen'}
-                        </button>
+                        {canEditTeam && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setEditingTagsWeekId(isEditingTags ? null : week.id)
+                            }
+                            className="inline-flex items-center gap-1 text-blue-400 hover:underline"
+                          >
+                            <Tag className="h-3 w-3" />
+                            {isEditingTags ? 'Fertig' : 'Tags anpassen'}
+                          </button>
+                        )}
                       </div>
 
                       <div className="flex flex-wrap gap-1.5">
@@ -713,7 +747,7 @@ export function MultiWeekPlanManager({
                         ))}
                       </div>
 
-                      {isEditingTags && (
+                      {canEditTeam && isEditingTags && (
                         <div className="mt-2.5 flex max-h-36 flex-wrap gap-1 overflow-y-auto rounded-xl border border-slate-800 bg-slate-950 p-2.5">
                           {ALL_FOCUS_TAGS.map((tag) => {
                             const active = week.focus_tags.includes(tag);
@@ -744,19 +778,23 @@ export function MultiWeekPlanManager({
                       <span className="text-xs font-bold text-slate-300 uppercase">
                         Trainingstage in Woche {week.week_number} ({weekSessions.length})
                       </span>
-                      <button
-                        type="button"
-                        onClick={() => void handleAddExtraSessionToWeek(week)}
-                        className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-700"
-                      >
-                        <CalendarPlus className="h-3.5 w-3.5 text-blue-400" />
-                        + Zusatztraining in Woche {week.week_number}
-                      </button>
+                      {canEditTeam && (
+                        <button
+                          type="button"
+                          onClick={() => void handleAddExtraSessionToWeek(week)}
+                          className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-700"
+                        >
+                          <CalendarPlus className="h-3.5 w-3.5 text-blue-400" />
+                          + Zusatztraining in Woche {week.week_number}
+                        </button>
+                      )}
                     </div>
 
                     {weekSessions.length === 0 ? (
                       <div className="rounded-xl border border-dashed border-slate-800 bg-slate-950/50 p-4 text-center text-xs text-slate-400">
-                        Keine Trainingseinheit in dieser Woche – klicke oben auf „+ Zusatztraining".
+                        {canEditTeam
+                          ? 'Keine Trainingseinheit in dieser Woche – klicke oben auf „+ Zusatztraining".'
+                          : 'Keine Trainingseinheit in dieser Woche.'}
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -801,7 +839,7 @@ export function MultiWeekPlanManager({
                                 className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg bg-slate-800 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-700"
                               >
                                 <Edit3 className="h-3.5 w-3.5 text-blue-400" />
-                                Planen
+                                {canEditTeam ? 'Planen' : 'Ansehen'}
                               </button>
                               <button
                                 type="button"

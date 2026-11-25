@@ -16,6 +16,7 @@ interface ExecuteClubResetParams {
   club: Club;
   selection: ClubResetSelection;
   authUserId: string | null;
+  isClubAdmin: boolean;
 }
 
 /**
@@ -26,8 +27,14 @@ interface ExecuteClubResetParams {
 export async function executeClubReset({
   club,
   selection,
-  authUserId
+  authUserId,
+  isClubAdmin
 }: ExecuteClubResetParams): Promise<ClubResetResult> {
+  if (!isClubAdmin) {
+    throw new Error(
+      'Keine Berechtigung: Nur Vereins-Administratoren dürfen den Vereins-Reset ausführen.'
+    );
+  }
   if (!hasAnyResetSelection(selection)) {
     throw new Error('Bitte mindestens einen Bereich zum Zurücksetzen auswählen.');
   }

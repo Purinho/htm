@@ -76,6 +76,14 @@ import {
 import { sortSessionTemplates } from './utils/sessionTemplateUtils';
 import { formatTeamAgeGroupLabel, resolveTeamAgeGroup } from './utils/teamAgeGroupUtils';
 import {
+  canCreateTeamExercise,
+  canEditOrDeleteExercise,
+  canEditTeamContent,
+  canManageSessionTemplates,
+  resolveClubAccessContext,
+  selectDefaultTeamForUser
+} from './utils/rbacUtils';
+import {
   AGE_GROUP_LABELS,
   ALL_AGE_GROUPS,
   ATHLETICS_RECOVERY_FOCUS_TAGS,
@@ -459,11 +467,32 @@ const EXERCISE_PAGE_SIZE = 40;
     [allMembers, authUserId]
   );
 
-  const isCurrentClubAdmin = useMemo(() => {
-    // Local / demo mode: the device owner acts as club admin
-    if (!isSupabaseConfigured() || !authUserId) return true;
-    return members.some((m) => m.user_id === authUserId && m.club_role === 'CLUB_ADMIN');
-  }, [members, authUserId]);
+  const accessContext = useMemo(
+    () =>
+      resolveClubAccessContext({
+        supabaseConfigured: isSupabaseConfigured(),
+        authUserId,
+        activeClubId: activeClub?.id,
+        members,
+        teamMembers
+      }),
+    [authUserId, activeClub?.id, members, teamMembers]
+  );
+
+  const isCurrentClubAdmin = accessContext.isClubAdmin;
+  const currentMember = accessContext.currentMember;
+
+  const adminClubIds = useMemo(
+    () =>
+      new Set(
+        allMembers
+          .filter(
+            (m) => Boolean(authUserId && m.user_id === authUserId && m.club_role === 'CLUB_ADMIN')
+          )
+          .map((m) => m.club_id)
+      ),
+    [allMembers, authUserId]
+  );
 
   const clubTeamIds = useMemo(() => new Set(teams.map((t) => t.id)), [teams]);
   const clubExercises = useMemo(
@@ -503,9 +532,16 @@ const EXERCISE_PAGE_SIZE = 40;
   }
 
   const activeTeam = useMemo(
-    () => teams.find((t) => t.id === activeTeamId) ?? teams[0],
-    [teams, activeTeamId]
+    () => selectDefaultTeamForUser(teams, accessContext, activeTeamId),
+    [teams, accessContext, activeTeamId]
   );
+
+  const canEditActiveTeam = useMemo(
+    () => canEditTeamContent(accessContext, activeTeam?.id),
+    [accessContext, activeTeam?.id]
+  );
+  const canManageTemplates = canManageSessionTemplates(accessContext);
+  const canCreateActiveTeamExercise = canCreateTeamExercise(accessContext, activeTeam?.id);
 
   const activeTeamAgeGroup = useMemo(() => resolveTeamAgeGroup(activeTeam), [activeTeam]);
 
@@ -631,6 +667,11 @@ const EXERCISE_PAGE_SIZE = 40;
     return filteredExercises[0] ?? null;
   }, [selectedExerciseId, exercisesById, filteredExercises]);
 
+  const canEditActiveExercise = useMemo(
+    () => (activeExercise ? canEditOrDeleteExercise(accessContext, activeExercise) : false),
+    [accessContext, activeExercise]
+  );
+
   const relatedVariants = useMemo(() => {
     if (!activeExercise) return [];
     const rootId = activeExercise.parent_exercise_id ?? activeExercise.id;
@@ -670,26 +711,71 @@ const EXERCISE_PAGE_SIZE = 40;
   );
 
   async function handleSaveExercise(exercise: Exercise) {
-    await db.exercises.put(exercise);
-    await queueSyncOperation('exercises', exercise.id, 'UPSERT', exercise);
-    setSelectedExerciseId(exercise.id);
-    setSyncStatusBanner(`✓ Übung „${exercise.title}“ in der Datenbank gespeichert.`);
+    const existing = exercisesById.get(exercise.id);
+    if (existing) {
+      if (!canEditOrDeleteExercise(accessContext, existing)) {
+        setSyncStatusBanner('Keine Berechtigung: Du kannst diese Übung nicht bearbeiten.');
+        setTimeout(() => setSyncStatusBanner(null), 4000);
+        throw new Error('Keine Berechtigung zum Bearbeiten dieser Übung.');
+      }
+    } else if (
+      exercise.visibility === 'TEAM' &&
+      !canCreateTeamExercise(accessContext, exercise.owner_team_id)
+    ) {
+      setSyncStatusBanner(
+        'Keine Berechtigung: Team-Übungen können nur für zugewiesene Teams erstellt werden.'
+      );
+      setTimeout(() => setSyncStatusBanner(null), 4000);
+      throw new Error('Keine Berechtigung für dieses Team.');
+    }
+
+    const exerciseToSave: Exercise =
+      !existing && !exercise.created_by_member_id && currentMember?.id
+        ? { ...exercise, created_by_member_id: currentMember.id }
+        : exercise;
+
+    await db.exercises.put(exerciseToSave);
+    await queueSyncOperation('exercises', exerciseToSave.id, 'UPSERT', exerciseToSave);
+    setSelectedExerciseId(exerciseToSave.id);
+    setSyncStatusBanner(`✓ Übung „${exerciseToSave.title}“ in der Datenbank gespeichert.`);
     setTimeout(() => setSyncStatusBanner(null), 3500);
   }
 
   async function handleImportAiExercises(importedList: Exercise[]) {
-    await db.exercises.bulkPut(importedList);
-    for (const ex of importedList) {
+    const unauthorizedTeamEx = importedList.find(
+      (ex) => ex.visibility === 'TEAM' && !canCreateTeamExercise(accessContext, ex.owner_team_id)
+    );
+    if (unauthorizedTeamEx) {
+      setSyncStatusBanner(
+        'Keine Berechtigung: Team-Übungen können nur für zugewiesene Teams importiert werden.'
+      );
+      setTimeout(() => setSyncStatusBanner(null), 4000);
+      return;
+    }
+
+    const preparedList = importedList.map((ex) =>
+      !ex.created_by_member_id && currentMember?.id
+        ? { ...ex, created_by_member_id: currentMember.id }
+        : ex
+    );
+
+    await db.exercises.bulkPut(preparedList);
+    for (const ex of preparedList) {
       await queueSyncOperation('exercises', ex.id, 'UPSERT', ex);
     }
-    if (importedList[0]) {
-      setSelectedExerciseId(importedList[0].id);
+    if (preparedList[0]) {
+      setSelectedExerciseId(preparedList[0].id);
     }
-    setSyncStatusBanner(`✓ ${importedList.length} Übung(en) erfolgreich in die Datenbank importiert.`);
+    setSyncStatusBanner(`✓ ${preparedList.length} Übung(en) erfolgreich in die Datenbank importiert.`);
     setTimeout(() => setSyncStatusBanner(null), 3500);
   }
 
   async function handleDeleteExercise(ex: Exercise) {
+    if (!canEditOrDeleteExercise(accessContext, ex)) {
+      setSyncStatusBanner('Keine Berechtigung: Du kannst diese Übung nicht löschen.');
+      setTimeout(() => setSyncStatusBanner(null), 4000);
+      return;
+    }
     const updated: Exercise = {
       ...ex,
       is_deleted: true,
@@ -710,7 +796,9 @@ const EXERCISE_PAGE_SIZE = 40;
       updated_at: new Date().toISOString()
     };
     await db.exercises.put(updated);
-    await queueSyncOperation('exercises', updated.id, 'UPSERT', updated);
+    if (canEditOrDeleteExercise(accessContext, ex)) {
+      await queueSyncOperation('exercises', updated.id, 'UPSERT', updated);
+    }
   }
 
   function handleOpenTemplateManager(initialDraft?: SessionTemplate) {
@@ -719,6 +807,11 @@ const EXERCISE_PAGE_SIZE = 40;
   }
 
   async function handleSaveSessionTemplate(template: SessionTemplate) {
+    if (!canManageTemplates) {
+      setSyncStatusBanner('Keine Berechtigung: Nur Vereins-Admins dürfen Vorlagen bearbeiten.');
+      setTimeout(() => setSyncStatusBanner(null), 4000);
+      return;
+    }
     await db.transaction('rw', [db.sessionTemplates, db.syncOutbox], async () => {
       await db.sessionTemplates.put(template);
       await queueSyncOperation('session_templates', template.id, 'UPSERT', template);
@@ -728,6 +821,11 @@ const EXERCISE_PAGE_SIZE = 40;
   }
 
   async function handleDeleteSessionTemplate(templateId: string) {
+    if (!canManageTemplates) {
+      setSyncStatusBanner('Keine Berechtigung: Nur Vereins-Admins dürfen Vorlagen löschen.');
+      setTimeout(() => setSyncStatusBanner(null), 4000);
+      return;
+    }
     await db.transaction('rw', [db.sessionTemplates, db.syncOutbox], async () => {
       await db.sessionTemplates.delete(templateId);
       await queueSyncOperation('session_templates', templateId, 'DELETE', { id: templateId });
@@ -788,7 +886,9 @@ const EXERCISE_PAGE_SIZE = 40;
       <div className="min-h-screen bg-slate-950 p-6 text-slate-100">
         <div className="mx-auto max-w-6xl space-y-6">
           <div className="rounded-2xl border border-amber-500/40 bg-amber-950/30 p-4 text-sm text-amber-200">
-            Aktuell ist keine Mannschaft im Verein vorhanden. Bitte lege unten eine neue Mannschaft an.
+            {isCurrentClubAdmin
+              ? 'Aktuell ist keine Mannschaft im Verein vorhanden. Bitte lege unten eine neue Mannschaft an.'
+              : 'Aktuell ist keine Mannschaft im Verein vorhanden. Bitte wende dich an deinen Vereins-Admin, um eine Mannschaft anzulegen.'}
           </div>
           <ClubTeamManager
             club={activeClub}
@@ -798,6 +898,7 @@ const EXERCISE_PAGE_SIZE = 40;
             activeTeamId=""
             onSelectTeam={(id) => setActiveTeamId(id)}
             isClubAdmin={isCurrentClubAdmin}
+            assignedTeamIds={accessContext.assignedTeamIds}
             authUserId={authUserId}
             clubExercises={clubExercises}
             clubSessions={clubSessions}
@@ -860,6 +961,9 @@ const EXERCISE_PAGE_SIZE = 40;
             {teams.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.name} ({t.season})
+                {!isCurrentClubAdmin && !accessContext.assignedTeamIds.has(t.id)
+                  ? ' · Nur Lesen'
+                  : ''}
               </option>
             ))}
           </select>
@@ -1055,6 +1159,11 @@ const EXERCISE_PAGE_SIZE = 40;
             <span className="rounded-lg bg-blue-600/20 px-2.5 py-1 text-xs font-bold text-blue-400">
               {activeTeam.name}
             </span>
+            {!canEditActiveTeam && (
+              <span className="rounded-lg border border-amber-500/40 bg-amber-950/50 px-2 py-0.5 text-[11px] font-semibold text-amber-300">
+                Nur Lesezugriff
+              </span>
+            )}
             <span className="hidden text-xs text-slate-400 sm:inline">
               {formatTeamAgeGroupLabel(activeTeam.age_group)} · Saison {activeTeam.season}
             </span>
@@ -1069,6 +1178,9 @@ const EXERCISE_PAGE_SIZE = 40;
               {teams.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.name}
+                  {!isCurrentClubAdmin && !accessContext.assignedTeamIds.has(t.id)
+                    ? ' · Nur Lesen'
+                    : ''}
                 </option>
               ))}
             </select>
@@ -1208,7 +1320,12 @@ const EXERCISE_PAGE_SIZE = 40;
                 onSelectSessionId={setPlannerSelectedSessionId}
                 activePhaseId={plannerActivePhaseId}
                 onSelectPhaseId={setPlannerActivePhaseId}
+                canEditTeam={canEditActiveTeam}
+                canManageTemplates={canManageTemplates}
+                canEditExercise={(ex) => canEditOrDeleteExercise(accessContext, ex)}
+                currentMemberId={currentMember?.id}
                 onEditExercise={(ex) => {
+                  if (!canEditOrDeleteExercise(accessContext, ex)) return;
                   setEditingExercise(ex);
                   setVariantParentExercise(null);
                   setEditorModalOpen(true);
@@ -1264,6 +1381,8 @@ const EXERCISE_PAGE_SIZE = 40;
               members={members}
               notes={notes}
               initialSessionId={focusedSessionId}
+              canEditTeam={canEditActiveTeam}
+              currentMemberId={currentMember?.id}
             />
           )}
 
@@ -1613,18 +1732,20 @@ const EXERCISE_PAGE_SIZE = 40;
                           Zurück zur Liste
                         </button>
                         <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditingExercise(activeExercise);
-                              setVariantParentExercise(null);
-                              setEditorModalOpen(true);
-                            }}
-                            className="inline-flex min-h-[44px] items-center gap-1 rounded-xl bg-slate-800 px-2.5 text-xs font-semibold text-white"
-                          >
-                            <Edit3 className="h-3.5 w-3.5 text-blue-400" />
-                            Bearbeiten
-                          </button>
+                          {canEditActiveExercise && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingExercise(activeExercise);
+                                setVariantParentExercise(null);
+                                setEditorModalOpen(true);
+                              }}
+                              className="inline-flex min-h-[44px] items-center gap-1 rounded-xl bg-slate-800 px-2.5 text-xs font-semibold text-white"
+                            >
+                              <Edit3 className="h-3.5 w-3.5 text-blue-400" />
+                              Bearbeiten
+                            </button>
+                          )}
                           {uiFeatures.printExport && (
                             <button
                               type="button"
@@ -1704,18 +1825,20 @@ const EXERCISE_PAGE_SIZE = 40;
                             </button>
                           )}
 
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditingExercise(activeExercise);
-                              setVariantParentExercise(null);
-                              setEditorModalOpen(true);
-                            }}
-                            className="inline-flex items-center gap-1.5 rounded-xl bg-slate-800 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700"
-                          >
-                            <Edit3 className="h-3.5 w-3.5 text-blue-400" />
-                            Bearbeiten
-                          </button>
+                          {canEditActiveExercise && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingExercise(activeExercise);
+                                setVariantParentExercise(null);
+                                setEditorModalOpen(true);
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-slate-800 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700"
+                            >
+                              <Edit3 className="h-3.5 w-3.5 text-blue-400" />
+                              Bearbeiten
+                            </button>
+                          )}
 
                           {uiFeatures.exerciseVariants && (
                             <button
@@ -1732,37 +1855,38 @@ const EXERCISE_PAGE_SIZE = 40;
                             </button>
                           )}
 
-                          {confirmDeleteExerciseId === activeExercise.id ? (
-                            <div className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/50 bg-rose-950/70 px-2.5 py-1 text-xs">
-                              <span className="font-semibold text-rose-200">Löschen?</span>
+                          {canEditActiveExercise &&
+                            (confirmDeleteExerciseId === activeExercise.id ? (
+                              <div className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/50 bg-rose-950/70 px-2.5 py-1 text-xs">
+                                <span className="font-semibold text-rose-200">Löschen?</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    void handleDeleteExercise(activeExercise);
+                                    setConfirmDeleteExerciseId(null);
+                                  }}
+                                  className="rounded bg-rose-600 px-2 py-0.5 font-bold text-white hover:bg-rose-500"
+                                >
+                                  Ja
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setConfirmDeleteExerciseId(null)}
+                                  className="rounded bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700"
+                                >
+                                  Nein
+                                </button>
+                              </div>
+                            ) : (
                               <button
                                 type="button"
-                                onClick={() => {
-                                  void handleDeleteExercise(activeExercise);
-                                  setConfirmDeleteExerciseId(null);
-                                }}
-                                className="rounded bg-rose-600 px-2 py-0.5 font-bold text-white hover:bg-rose-500"
+                                onClick={() => setConfirmDeleteExerciseId(activeExercise.id)}
+                                className="rounded-xl bg-rose-950/60 p-1.5 text-rose-300 hover:bg-rose-900"
+                                title="Übung löschen"
                               >
-                                Ja
+                                <Trash2 className="h-4 w-4" />
                               </button>
-                              <button
-                                type="button"
-                                onClick={() => setConfirmDeleteExerciseId(null)}
-                                className="rounded bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700"
-                              >
-                                Nein
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => setConfirmDeleteExerciseId(activeExercise.id)}
-                              className="rounded-xl bg-rose-950/60 p-1.5 text-rose-300 hover:bg-rose-900"
-                              title="Übung löschen"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          )}
+                            ))}
                         </div>
                       </div>
 
@@ -1955,6 +2079,9 @@ const EXERCISE_PAGE_SIZE = 40;
               planWeeks={planWeeks}
               sessions={sessions}
               templates={templates}
+              canEditTeam={canEditActiveTeam}
+              canManageTemplates={canManageTemplates}
+              currentMemberId={currentMember?.id}
               onOpenTemplateManager={() => handleOpenTemplateManager()}
               onOpenSessionInEditor={(sessionId) => {
                 setFocusedSessionId(sessionId);
@@ -1979,6 +2106,7 @@ const EXERCISE_PAGE_SIZE = 40;
               activeTeamId={activeTeam.id}
               onSelectTeam={setActiveTeamId}
               isClubAdmin={isCurrentClubAdmin}
+              assignedTeamIds={accessContext.assignedTeamIds}
               authUserId={authUserId}
               clubExercises={clubExercises}
               clubSessions={clubSessions}
@@ -2065,8 +2193,9 @@ const EXERCISE_PAGE_SIZE = 40;
         clubs={clubs}
         activeClub={activeClub}
         onSelectClub={handleSelectClub}
-        currentMember={members.find((m) => m.user_id && m.user_id === authUserId)}
+        currentMember={currentMember}
         isAnyClubAdmin={isAnyClubAdmin}
+        adminClubIds={adminClubIds}
         needsClubOnboarding={needsClubOnboarding}
         onNeedsOnboarding={() => setNeedsClubOnboarding(true)}
         onSyncCompleted={(msg) => {
@@ -2082,6 +2211,8 @@ const EXERCISE_PAGE_SIZE = 40;
         parentExercise={variantParentExercise}
         clubId={activeClub.id}
         activeTeamId={activeTeam.id}
+        canCreateTeamExercise={canCreateActiveTeamExercise}
+        currentMemberId={currentMember?.id}
         onClose={() => setEditorModalOpen(false)}
         onSave={handleSaveExercise}
       />
@@ -2090,6 +2221,8 @@ const EXERCISE_PAGE_SIZE = 40;
         isOpen={aiImporterOpen}
         clubId={activeClub.id}
         activeTeamId={activeTeam.id}
+        canCreateTeamExercise={canCreateActiveTeamExercise}
+        currentMemberId={currentMember?.id}
         onClose={() => setAiImporterOpen(false)}
         onImportExercises={handleImportAiExercises}
       />
@@ -2119,6 +2252,7 @@ const EXERCISE_PAGE_SIZE = 40;
         templates={templates}
         exercises={exercises}
         initialDraft={templateManagerInitialDraft}
+        canManageTemplates={canManageTemplates}
         onSaveTemplate={handleSaveSessionTemplate}
         onDeleteTemplate={handleDeleteSessionTemplate}
         onClose={() => {

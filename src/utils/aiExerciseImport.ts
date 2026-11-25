@@ -260,7 +260,8 @@ export function parseAndNormalizeAiExerciseJson(
   clubId: string,
   visibility: VisibilityLevel = 'CLUB',
   ownerTeamId?: string,
-  autoGenerateAnimation = false
+  autoGenerateAnimation = false,
+  createdByMemberId?: string
 ): Exercise[] {
   const trimmed = rawInput
     .trim()
@@ -344,6 +345,7 @@ export function parseAndNormalizeAiExerciseJson(
     return {
       id: crypto.randomUUID(),
       club_id: clubId,
+      ...(createdByMemberId ? { created_by_member_id: createdByMemberId } : {}),
       visibility,
       owner_team_id: visibility === 'TEAM' ? ownerTeamId : undefined,
       title,
