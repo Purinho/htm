@@ -31,7 +31,7 @@ const STEP_TITLES = [
   '1. Dein Trainer-Profil',
   '2. Halle, Planung & Ausdruck',
   '3. Übungsdatenbank & Taktik',
-  '4. Verein, Cloud & Zusammenfassung'
+  '4. Verein, Backup & Zusammenfassung'
 ];
 
 interface TourQuestion {
@@ -93,19 +93,9 @@ const STEP_4_QUESTIONS: TourQuestion[] = [
     hint: 'Aktiviert den Bereich „Verein, Teams & Trainer“.'
   },
   {
-    key: 'cloudSync',
-    question: 'Nutzt du Cloud-Sync / Login zur Synchronisation zwischen Geräten?',
-    hint: 'Zeigt die Cloud-Sync- und Login-Schaltflächen in Sidebar und Topbar.'
-  },
-  {
     key: 'backupExport',
     question: 'Möchtest du einen direkten Button für JSON-Vollbackups sehen?',
     hint: 'Zeigt den „Backup“-Export-Button in der Seitenleiste.'
-  },
-  {
-    key: 'pwaInstall',
-    question: 'Soll die Hilfe zur App-Installation (PWA) angezeigt werden?',
-    hint: 'Zeigt die „PWA App / Installieren“-Buttons.'
   }
 ];
 

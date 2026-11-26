@@ -41,6 +41,7 @@ import { MultiWeekPlanManager } from './components/MultiWeekPlanManager';
 import { HallLiveMode } from './components/HallLiveMode';
 import { FullScreenChalkboardModal } from './components/FullScreenChalkboardModal';
 import { handleOverlayPopState } from './utils/overlayHistory';
+import { INSTALLED_DISPLAY_MODES, detectInstalledPwa } from './utils/pwaDetection';
 import { PrintExportModal, type PrintExportTarget } from './components/PrintExportModal';
 import { UiConfigModal } from './components/UiConfigModal';
 import { UiConfigTourModal } from './components/UiConfigTourModal';
@@ -182,32 +183,34 @@ const EXERCISE_PAGE_SIZE = 40;
   const [templateManagerOpen, setTemplateManagerOpen] = useState(false);
   const [templateManagerInitialDraft, setTemplateManagerInitialDraft] =
     useState<SessionTemplate | null>(null);
-  const [isInstalledPwa, setIsInstalledPwa] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    const nav = window.navigator as Navigator & { standalone?: boolean };
-    return (
-      window.matchMedia('(display-mode: standalone)').matches ||
-      nav.standalone === true ||
-      document.referrer.startsWith('android-app://')
-    );
-  });
+  const [isInstalledPwa, setIsInstalledPwa] = useState<boolean>(() => detectInstalledPwa());
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(display-mode: standalone)');
-    const handleDisplayModeChange = (e: MediaQueryListEvent) => {
-      if (e.matches) setIsInstalledPwa(true);
+    let installedViaEvent = false;
+    const mediaQueries =
+      typeof window.matchMedia === 'function'
+        ? INSTALLED_DISPLAY_MODES.map((mode) =>
+            window.matchMedia(`(display-mode: ${mode})`)
+          )
+        : [];
+    const handleDisplayModeChange = () => {
+      setIsInstalledPwa(installedViaEvent || detectInstalledPwa());
     };
-    const handleAppInstalled = () => setIsInstalledPwa(true);
-    mediaQuery.addEventListener('change', handleDisplayModeChange);
+    const handleAppInstalled = () => {
+      installedViaEvent = true;
+      setIsInstalledPwa(true);
+    };
+    mediaQueries.forEach((mq) => mq.addEventListener('change', handleDisplayModeChange));
     window.addEventListener('appinstalled', handleAppInstalled);
     return () => {
-      mediaQuery.removeEventListener('change', handleDisplayModeChange);
+      mediaQueries.forEach((mq) => mq.removeEventListener('change', handleDisplayModeChange));
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
 
   const uiFeatures = uiPreferences.features;
-  const showPwaInstallButton = uiFeatures.pwaInstall && !isInstalledPwa;
+  const showPwaInstallButton = !isInstalledPwa;
+  const showCloudLoginButton = isSupabaseConfigured();
 
   function handleUpdateUiPreferences(next: UiPreferences) {
     const saved = saveUiPreferences(next);
@@ -1055,59 +1058,57 @@ const EXERCISE_PAGE_SIZE = 40;
 
         {/* Offline / Sync Status & Store-freie PWA Hilfe */}
         <div className="mt-6 space-y-2.5 border-t border-slate-800 pt-4">
-          {uiFeatures.cloudSync && (
-            <>
-              <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/80 px-3 py-2 text-xs">
-                <span className="flex items-center gap-2 font-medium">
-                  {isOnline ? (
-                    <>
-                      <Wifi className="h-4 w-4 text-emerald-400" />
-                      <span className="text-emerald-300">Offline-DB bereit</span>
-                    </>
-                  ) : (
-                    <>
-                      <WifiOff className="h-4 w-4 text-amber-400" />
-                      <span className="text-amber-300">Hallen-Offline aktiv</span>
-                    </>
-                  )}
-                </span>
-                {authUserEmail ? (
-                  <button
-                    type="button"
-                    onClick={() => void handleManualCloudSync()}
-                    className="inline-flex items-center gap-1 rounded bg-blue-950 px-2 py-0.5 text-[10px] font-semibold text-blue-300 hover:bg-blue-900"
-                    title="Outbox synchronisieren"
-                  >
-                    <CloudUpload className="h-3 w-3" />
-                    {pendingSyncCount} Sync
-                  </button>
-                ) : (
-                  <span className="rounded bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-400">
-                    Demo / Lokal
-                  </span>
-                )}
-              </div>
-
+          <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/80 px-3 py-2 text-xs">
+            <span className="flex items-center gap-2 font-medium">
+              {isOnline ? (
+                <>
+                  <Wifi className="h-4 w-4 text-emerald-400" />
+                  <span className="text-emerald-300">Offline-DB bereit</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff className="h-4 w-4 text-amber-400" />
+                  <span className="text-amber-300">Hallen-Offline aktiv</span>
+                </>
+              )}
+            </span>
+            {authUserEmail ? (
               <button
                 type="button"
-                onClick={() => setShowAuthModal(true)}
-                className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold transition ${
-                  authUserEmail
-                    ? 'border-emerald-500/40 bg-emerald-950/30 text-emerald-200 hover:bg-emerald-900/40'
-                    : 'border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-slate-700'
-                }`}
+                onClick={() => void handleManualCloudSync()}
+                className="inline-flex items-center gap-1 rounded bg-blue-950 px-2 py-0.5 text-[10px] font-semibold text-blue-300 hover:bg-blue-900"
+                title="Outbox synchronisieren"
               >
-                <span className="flex items-center gap-2 truncate">
-                  <User className="h-3.5 w-3.5 shrink-0" />
-                  <span className="truncate">
-                    {authUserEmail ? authUserEmail : isSupabaseConfigured() ? 'Cloud-Login' : 'Konto / Sync'}
-                  </span>
-                </span>
-                <span className="text-[10px] opacity-80">
-                  {authUserEmail ? 'Aktiv' : 'Lokal'}
-                </span>
+                <CloudUpload className="h-3 w-3" />
+                {pendingSyncCount} Sync
               </button>
-            </>
+            ) : (
+              <span className="rounded bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-400">
+                Demo / Lokal
+              </span>
+            )}
+          </div>
+
+          {showCloudLoginButton && (
+            <button
+              type="button"
+              onClick={() => setShowAuthModal(true)}
+              className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold transition ${
+                authUserEmail
+                  ? 'border-emerald-500/40 bg-emerald-950/30 text-emerald-200 hover:bg-emerald-900/40'
+                  : 'border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-slate-700'
+              }`}
+            >
+              <span className="flex items-center gap-2 truncate">
+                <User className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">
+                  {authUserEmail ? authUserEmail : 'Cloud-Login'}
+                </span>
+              </span>
+              <span className="text-[10px] opacity-80">
+                {authUserEmail ? 'Aktiv' : 'Lokal'}
+              </span>
+            </button>
           )}
 
           {(showPwaInstallButton || uiFeatures.backupExport) && (
@@ -1220,7 +1221,7 @@ const EXERCISE_PAGE_SIZE = 40;
               </button>
             )}
 
-            {uiFeatures.cloudSync && (
+            {showCloudLoginButton && (
               <button
                 type="button"
                 onClick={() => setShowAuthModal(true)}

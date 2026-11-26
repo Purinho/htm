@@ -65,4 +65,21 @@ describe('uiPreferences', () => {
     expect(getFallbackTabIfDisabled('CLUB_ADMIN', minimal.features)).toBe('DASHBOARD');
     expect(getFallbackTabIfDisabled('EXERCISES', minimal.features)).toBe('EXERCISES');
   });
+
+  it('ignores deprecated pwaInstall and cloudSync keys when loading legacy preferences', () => {
+    const storage = createMemoryStorage();
+    storage.setItem(
+      UI_PREFERENCES_STORAGE_KEY,
+      JSON.stringify({
+        features: { pwaInstall: false, cloudSync: false, aiImport: false },
+        activePreset: 'CUSTOM',
+        tourCompleted: true
+      })
+    );
+    const loaded = loadUiPreferences(storage);
+    expect('pwaInstall' in loaded.features).toBe(false);
+    expect('cloudSync' in loaded.features).toBe(false);
+    expect(loaded.features.aiImport).toBe(false);
+    expect(loaded.tourCompleted).toBe(true);
+  });
 });

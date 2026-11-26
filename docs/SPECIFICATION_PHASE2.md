@@ -150,7 +150,7 @@ export interface TacticBoardAnimationSettings {
   * *Hauptbereiche & Navigation:* `hallLiveMode` (Sporthallen-Modus), `multiWeekPlans` (Mehrwochenplan), `clubAdmin` (Verein, Teams & Trainer)
   * *Werkzeuge & Aktionen:* `aiImport` (KI-JSON Import), `printExport` (Druck- & PDF-Export), `exerciseVariants` (Varianten ableiten), `tacticAnimation` (Animiertes Taktikboard)
   * *Datenbank & Filter:* `advancedFilters` (Detailfilter), `favorites` (Favoriten-Sterne)
-  * *System & Sync:* `cloudSync` (Cloud-Sync & Login), `backupExport` (JSON-Vollbackup), `pwaInstall` (PWA-Installationshilfe)
+  * *System & Sync:* `backupExport` (JSON-Vollbackup) — Cloud-Login (sofern Supabase konfiguriert ist) und die PWA-Installationshilfe (im Webbrowser) werden automatisch angezeigt
 * **Schnell-Profile (Presets):** *Fokus / Minimal*, *Standard (Trainer & Jugend)* und *Alle Funktionen (Profi / Admin)*.
 * **Konfigurations-Menü ([UiConfigModal.tsx](../src/components/UiConfigModal.tsx)):** Über *„UI anpassen“* in Sidebar und Topbar jederzeit erreichbar; automatischer Fallback auf `DASHBOARD`, falls der aktuell geöffnete Tab deaktiviert wird.
 * **Guided-Config-Tour ([UiConfigTourModal.tsx](../src/components/UiConfigTourModal.tsx)):** 4-schrittiger Einrichtungs-Assistent für neue / neu angemeldete Nutzer (und jederzeit über das Konfigurations-Menü erneut startbar).

@@ -8,9 +8,7 @@ export type UiFeatureKey =
   | 'tacticAnimation'
   | 'advancedFilters'
   | 'favorites'
-  | 'cloudSync'
-  | 'backupExport'
-  | 'pwaInstall';
+  | 'backupExport';
 
 export type UiPresetKey = 'MINIMAL' | 'STANDARD' | 'PRO' | 'CUSTOM';
 
@@ -37,7 +35,7 @@ export const UI_FEATURE_CATEGORY_LABELS: Record<UiFeatureCategory, string> = {
   MODULES: 'Hauptbereiche & Navigation',
   TOOLS: 'Werkzeuge & Aktionen',
   CATALOG: 'Übungsdatenbank & Filter',
-  SYSTEM: 'Cloud, Backup & App-System'
+  SYSTEM: 'Backup & Datensicherung'
 };
 
 export const UI_FEATURE_DEFINITIONS: UiFeatureDefinition[] = [
@@ -105,25 +103,11 @@ export const UI_FEATURE_DEFINITIONS: UiFeatureDefinition[] = [
     affectsUi: 'Stern-Buttons in Übungsliste, Detailansicht & Suchleiste'
   },
   {
-    key: 'cloudSync',
-    label: 'Cloud-Sync & Konto / Login',
-    category: 'SYSTEM',
-    description: 'Anmeldung und Synchronisation mit dem Vereins-Cloud-Speicher.',
-    affectsUi: 'Sync-Statusleiste in Sidebar, Login-Buttons in Sidebar & Topbar'
-  },
-  {
     key: 'backupExport',
     label: 'JSON-Vollbackup',
     category: 'SYSTEM',
     description: 'Komplette lokale Vereinsdatenbank als JSON-Datei sichern.',
     affectsUi: 'Button „Backup“ in der Sidebar'
-  },
-  {
-    key: 'pwaInstall',
-    label: 'PWA-Installationshilfe',
-    category: 'SYSTEM',
-    description: 'Anleitung zur Installation als App auf Smartphone, Tablet oder Desktop.',
-    affectsUi: 'Buttons „PWA App“ (Sidebar) & „Installieren“ (Topbar)'
   }
 ];
 
@@ -137,9 +121,7 @@ export const ALL_FEATURES_ENABLED: Record<UiFeatureKey, boolean> = {
   tacticAnimation: true,
   advancedFilters: true,
   favorites: true,
-  cloudSync: true,
-  backupExport: true,
-  pwaInstall: true
+  backupExport: true
 };
 
 export const UI_PRESETS: Record<
@@ -165,9 +147,7 @@ export const UI_PRESETS: Record<
       tacticAnimation: false,
       advancedFilters: false,
       favorites: true,
-      cloudSync: false,
-      backupExport: false,
-      pwaInstall: false
+      backupExport: false
     }
   },
   STANDARD: {
@@ -184,9 +164,7 @@ export const UI_PRESETS: Record<
       tacticAnimation: true,
       advancedFilters: true,
       favorites: true,
-      cloudSync: true,
-      backupExport: false,
-      pwaInstall: false
+      backupExport: false
     }
   },
   PRO: {
